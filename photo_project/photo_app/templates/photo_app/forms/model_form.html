@@ -1,0 +1,28 @@
+<form id="model-form" method="post" action="{% url 'photo_app:model_form' %}" autocomplete="off" class="form">
+{% csrf_token %}
+    <div class="row">
+            <div class="input-group input-group-md">
+                {{ form.street }}
+            </div>
+    </div>
+
+    <div class="row">
+            <div class="input-group input-group-md">
+                {{ form.city }}
+                {{ form.state }}
+                {{ form.post_code }}
+            </div>
+    </div>
+
+    <div class="row">
+        <div class="input-group input-group-md">
+            {{ form.phone }}
+        </div>
+    </div>
+        <div class="row">
+        <div class="input-group input-group-md">
+            {{ form.dob }}
+        </div>
+    </div>
+<button id="btn-family-form" class="btn btn-primary" type="submit">Update</button>
+</form>

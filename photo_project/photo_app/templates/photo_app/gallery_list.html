@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Gallery List
+{% endblock %}
+
+{% block script %}
+    {% load static %}
+    <script src="{% static 'js/gallery_list.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+
+  <div class="row">
+    {% if gallery_list %}
+    <div class="col">
+      {% for gallery in gallery_list %}
+        <div class="row">
+          <div class="col">
+            <a href="{% url 'photo_app:gallery_view' gallery.id %}">
+              {{ gallery.name }}</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    {% else %}
+      <p>There are no galleries.</p>
+    {% endif %}
+  </div>
+  <div class="row">
+    <div class="col">
+      <button id="btn-add-gallery" class="btn btn-primary" type="button" name="button">
+            Add Gallery
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col" id="div-add-gallery"></div>
+  </div>
+{% endblock %}
+
