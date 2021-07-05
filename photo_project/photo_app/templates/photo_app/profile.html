@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %} Profile {% endblock %}
+{% block script %}
+    {% load static %}
+    <script src="{% static 'js/profile.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+    <div class="row p-3 align-items-center mx-auto">
+        <div class="col-12">
+            <h2> Profile Page </h2>
+        </div>
+    </div>
+
+    <div class="row px-3 align-items-center mx-auto">
+        <div class="col-12">
+            <h3 id="model-name"> {{ user.first_name }} {{ user.last_name }} </h3>
+        </div>
+    </div>
+    <div class="row px-3 align-items-center mx-auto">
+        <div class="col-12">
+            <h4> Address </h4>
+        </div>
+    </div>
+    <div id="photo-model-form" class="row px-3"></div>
+    <div id="photo-model-address" class="row px-3">
+        <div class="col">
+            <div id="address1" class="row">{{ photo_model.street }} </div>
+            <div id="address2" class="row">
+                {{ photo_model.city }} {{ photo_model.state }} {{ photo_model.post_code }}
+            </div>
+            <div id="phone" class="row">{{ photo_model.phone }}</div>
+            <div class="row">
+                <button id="btn-address-edit" class="btn btn-primary" type="button" name="button"
+                        model_id="{{ photo_model.id }}">
+                    Edit Address
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row px-3 pt-3 align-items-center mx-auto">
+        <div class="col-12">
+            <h3> Galleries </h3>
+        </div>
+    </div>
+    {% if gallery_list %}
+    <div class="col">
+      {% for gallery in gallery_list %}
+        <div class="row">
+          <div class="col">
+            <a href="{% url 'photo_app:gallery_view' gallery.id %}">
+              {{ gallery.name }}</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    {% else %}
+      <p>There are no galleries.</p>
+    {% endif %}
+
+{% endblock %}

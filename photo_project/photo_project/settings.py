@@ -139,7 +139,7 @@ LOGGING = {
         'level': 'DEBUG',
     },
 }
-# LOGIN_REDIRECT_URL = "index"
+LOGIN_REDIRECT_URL = "photo_app:profile"
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

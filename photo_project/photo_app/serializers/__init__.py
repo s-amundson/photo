@@ -1,2 +1,3 @@
 from .gallery_serializer import GallerySerializer
 from .image_serializer import ImageSerializer
+from .photo_model_serializer import PhotoModelSerializer

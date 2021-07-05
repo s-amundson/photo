@@ -1,27 +1,33 @@
-<form id="model-form" method="post" action="{% url 'photo_app:model_form' %}" autocomplete="off" class="form">
+<form id="model-form" method="post" autocomplete="off" class="form">
 {% csrf_token %}
     <div class="row">
+        <div class="input-group input-group-md">
+            First Name: {{ form.first_name }}
+            Last Name: {{ form.last_name }}
+        </div>
+    </div>
+    <div class="row">
             <div class="input-group input-group-md">
-                {{ form.street }}
+                Street: {{ form.street }}
             </div>
     </div>
 
     <div class="row">
             <div class="input-group input-group-md">
-                {{ form.city }}
-                {{ form.state }}
-                {{ form.post_code }}
+                City: {{ form.city }}
+                State: {{ form.state }}
+                Zip: {{ form.post_code }}
             </div>
     </div>
 
     <div class="row">
         <div class="input-group input-group-md">
-            {{ form.phone }}
+            Phone: {{ form.phone }}
         </div>
     </div>
         <div class="row">
         <div class="input-group input-group-md">
-            {{ form.dob }}
+            Date of Birth: {{ form.dob }}
         </div>
     </div>
 <button id="btn-family-form" class="btn btn-primary" type="submit">Update</button>

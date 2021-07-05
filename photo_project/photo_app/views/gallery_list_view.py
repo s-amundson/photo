@@ -19,5 +19,8 @@ class GalleryListView(LoginRequiredMixin, generic.ListView):
     # context_object_name = 'gallery_list'
 
     def get(self, request):
-        queryset = Gallery.objects.filter(owner=request.user.id)
+        if request.user.is_staff:
+            queryset = Gallery.objects.all()
+        else:
+            queryset = Gallery.objects.filter(owner=request.user.id)
         return render(request, self.template_name, context={'gallery_list': queryset})

@@ -9,4 +9,7 @@ urlpatterns = [
     path('gallery_form_api', GalleryFormApiView.as_view(), name='gallery_form_api'),
     path('gallery_view/<int:gallery_id>/', GalleryView.as_view(), name='gallery_view'),
     path('image_upload', ImageApiView.as_view(), name='image_upload'),
+    path('model_info', ModelInfoView.as_view(), name='model_info'),
+    path('model_info_api', PhotoModelApiView.as_view(), name='model_info'),
+    path('profile', ProfileView.as_view(), name='profile'),
 ]
