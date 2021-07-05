@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.views.generic.base import View
 import logging
 
-from ..forms import PhotoModelForm
+# from ..forms import PhotoModelForm
 from ..models import Gallery, PhotoModel
 logger = logging.getLogger(__name__)
 
@@ -16,5 +16,5 @@ class ProfileView(LoginRequiredMixin, View):
         except PhotoModel.DoesNotExist:
             pm = None
             gallery_list = None
-        form = PhotoModelForm(initial=pm)
-        return render(request, 'photo_app/profile.html', {'form': form, 'gallery_list': gallery_list})
+        # form = PhotoModelForm(initial=pm)
+        return render(request, 'photo_app/profile.html', {'photo_model': pm, 'gallery_list': gallery_list})

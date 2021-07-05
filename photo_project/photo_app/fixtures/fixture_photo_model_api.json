@@ -1,0 +1,39 @@
+[
+{
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$jchh3p6ZY6WAHftiXrvE7o$pHyU4dpbPTpBlzDef4By8nFpRyTKr8ablPRTxbNyeIA=",
+        "last_login": "2021-07-05T13:00:12.430Z",
+        "is_superuser": false,
+        "username": "emilynconlan",
+        "first_name": "",
+        "last_name": "",
+        "email": "EmilyNConlan@einrot.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2021-07-05T12:59:38.023Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+
+{
+    "model": "sites.site",
+    "pk": 1,
+    "fields": {
+        "domain": "example.com",
+        "name": "example.com"
+    }
+},
+{
+    "model": "account.emailaddress",
+    "pk": 1,
+    "fields": {
+        "user": 1,
+        "email": "EmilyNConlan@einrot.com",
+        "verified": true,
+        "primary": true
+    }
+}
+]

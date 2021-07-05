@@ -23,7 +23,9 @@
             <h4> Address </h4>
         </div>
     </div>
-    <div id="photo-model-form" class="row px-3"></div>
+    <div id="photo-model-form" class="row px-3">
+        {% include "photo_app/forms/model_form.html" %}
+    </div>
     <div id="photo-model-address" class="row px-3">
         <div class="col">
             <div id="address1" class="row">{{ photo_model.street }} </div>

@@ -10,7 +10,7 @@ from ..models import Images, Gallery
 logger = logging.getLogger(__name__)
 
 
-class TestsCosts(TestCase):
+class TestsImage(TestCase):
     # fixtures = ['f1']
 
     def setUp(self):
@@ -22,7 +22,7 @@ class TestsCosts(TestCase):
         self.client.force_login(self.test_user)
 
 
-    def test_costs_get_page_forbidden(self):
+    def test_post_image(self):
         g = Gallery(can_public=False, name='test', owner=self.test_user, photo_model=None,
                     public_date=None, shoot_date='2021-06-26')
         # with open() as f:

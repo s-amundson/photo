@@ -1,25 +1,31 @@
 "use strict";
 $(document).ready(function() {
     if ($("#btn-address-edit").attr("model_id") == "") {
-        load_address_form($("#btn-address-edit").attr("model_id"));
+        $("#photo-model-address").hide();
+        $("#photo-model-form").show();
+//        load_address_form($("#btn-address-edit").attr("model_id"));
+        $("#model-form").submit(function(e){
+            e.preventDefault();
+            post_model_function($("#btn-address-edit").attr("model_id") == "");
+        });
     }
 });
 
-function load_address_form(model_id) {
-    console.log(model_id);
-    $("#photo-model-address").hide();
-
-    $.get("model_info", function(data, status){
-        $("#photo-model-form").html(data);
-        $("#photo-model-form").show();
-
-        $("#model-form").submit(function(e){
-            e.preventDefault();
-            post_model_function(model_id)
-        });
-
-    });
-}
+//function load_address_form(model_id) {
+//    console.log(model_id);
+//    $("#photo-model-address").hide();
+//
+//    $.get("model_info", function(data, status){
+//        $("#photo-model-form").html(data);
+//        $("#photo-model-form").show();
+//
+//        $("#model-form").submit(function(e){
+//            e.preventDefault();
+//            post_model_function(model_id)
+//        });
+//
+//    });
+//}
 
 async function post_model_function(model_id) {
     console.log('on submit')

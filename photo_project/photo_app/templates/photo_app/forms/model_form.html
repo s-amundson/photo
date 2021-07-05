@@ -2,32 +2,42 @@
 {% csrf_token %}
     <div class="row">
         <div class="input-group input-group-md">
-            First Name: {{ form.first_name }}
-            Last Name: {{ form.last_name }}
+            <div class="col-6">
+                <input type="text" placeholder="First Name" autocomplete="off" required id="id_first_name" class="form-control m-2">
+            </div>
+            <div class="col-6">
+                <input type="text" placeholder="Last Name" autocomplete="off" required id="id_last_name" class="form-control m-2">
+            </div>
         </div>
     </div>
     <div class="row">
-            <div class="input-group input-group-md">
-                Street: {{ form.street }}
-            </div>
-    </div>
-
-    <div class="row">
-            <div class="input-group input-group-md">
-                City: {{ form.city }}
-                State: {{ form.state }}
-                Zip: {{ form.post_code }}
-            </div>
+        <div class="col-12 input-group input-group-md">
+            <input type="text" placeholder="Street" autocomplete="off" required id="id_street" class="form-control m-2">
+        </div>
     </div>
 
     <div class="row">
         <div class="input-group input-group-md">
-            Phone: {{ form.phone }}
+            <div class="col-4">
+                <input type="text" placeholder=City" autocomplete="off" required id="id_city" class="form-control m-2">
+            </div>
+            <div class="col-4">
+                <input type="text" placeholder="State" autocomplete="off" required id="id_state" class="form-control m-2">
+            </div>
+            <div class="col-4">
+                <input type="text" placeholder="Zip" autocomplete="off" required id="id_post_code" class="form-control m-2">
+            </div>
         </div>
     </div>
-        <div class="row">
-        <div class="input-group input-group-md">
-            Date of Birth: {{ form.dob }}
+
+    <div class="row">
+        <div class="col-6 input-group input-group-md">
+            <input type="text" placeholder="Phone" autocomplete="off" required id="id_phone" class="form-control m-2">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6 input-group input-group-md">
+            <input type="text" placeholder="Date of Birth YYYY-MM-DD" autocomplete="off" required id="id_dob" class="form-control m-2">
         </div>
     </div>
 <button id="btn-family-form" class="btn btn-primary" type="submit">Update</button>

@@ -6,7 +6,7 @@ from ..fields import PhoneField
 
 # Create your models here.
 class PhotoModel(models.Model):
-    dob = models.DateField(name='Date of Birth', null=False)
+    dob = models.DateField()
     city = models.CharField(max_length=150)
     post_code = models.CharField(max_length=10)
     phone = PhoneField(max_length=20)
