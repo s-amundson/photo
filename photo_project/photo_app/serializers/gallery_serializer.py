@@ -1,6 +1,4 @@
 from rest_framework import serializers
-from django.template.loader import get_template
-from ..forms import GalleryForm
 from ..models import Gallery
 import logging
 logger = logging.getLogger(__name__)

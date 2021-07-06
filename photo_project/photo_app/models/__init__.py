@@ -1,3 +1,3 @@
 from .gallery_model import Gallery
-from .images import Images
-from .photo_model import PhotoModel
+from .image_model import Images
+from .user import User
