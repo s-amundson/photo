@@ -22,7 +22,7 @@ class GalleryView(LoginRequiredMixin, View):
         images = gallery.images_set.all()
         form = ImageForm()
         # context = self.get_gallery(request, gallery_id)
-        return render(request, 'photo_app/gallery.html', {'form': form, 'images': images})
+        return render(request, 'photo_app/gallery.html', {'form': form, 'images': images, 'gallery': gallery})
 
     # def get_gallery(self, request, gallery_id, image_size=0):
     #     logging.warning(request.user.id)

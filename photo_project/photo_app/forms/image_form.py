@@ -1,6 +1,6 @@
-from django.forms import TextInput, ModelForm, DateField, IntegerField, ChoiceField
+from django.forms import ModelForm
 
-from ..models import Images, PhotoModel
+from ..models import Images
 
 
 class ImageForm(ModelForm):
@@ -10,5 +10,5 @@ class ImageForm(ModelForm):
 
     class Meta:
         model = Images
-        fields = ['image', 'gallery']
+        fields = ['image']
 

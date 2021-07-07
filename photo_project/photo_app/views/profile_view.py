@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.shortcuts import render
 from django.views.generic.base import View
 import logging
@@ -11,7 +12,7 @@ logger = logging.getLogger(__name__)
 class ProfileView(LoginRequiredMixin, View):
     def get(self, request):
         try:
-            gallery_list = Gallery.objects.filter(photo_model=request.user)
+            gallery_list = Gallery.objects.filter(Q(photo_model=request.user) | Q(owner=request.user))
         except Gallery.DoesNotExist:
             gallery_list = []
         # form = PhotoModelForm(initial=pm)

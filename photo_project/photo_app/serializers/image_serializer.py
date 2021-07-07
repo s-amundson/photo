@@ -11,7 +11,8 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Images
         # exclude = []
-        fields = ['image', 'gallery']
+        fields = ['image', 'gallery', 'height', 'width', 'thumb_width']
+        extra_kwargs = {'height': {'required': False}, 'width': {'required': False}, 'thumb_width': {'required': False}}
 
     def save(self, *args, **kwargs):
         if self.instance is not None:
@@ -26,9 +27,11 @@ class ImageSerializer(serializers.ModelSerializer):
         logging.debug(f'width= {w}, height= {h}')
         exif = img.getexif()
         logging.debug(exif)
-        taken = datetime.strptime(exif[306], '%Y:%m:%d %H:%M:%S') #“2017:09:29 17:36:00”
+        taken = exif.get(306, None)
+        if taken is not None:
+            taken = datetime.strptime(taken, '%Y:%m:%d %H:%M:%S') #“2017:09:29 17:36:00”
         g = self.validated_data.get('gallery')
         logging.debug(g)
 
-        return super().save(image=image, height=h, width=w, thumb_width=100, orientation=exif[274], taken=taken,
-                            camera_make=exif[271], camera_model=exif[272], *args, **kwargs)
+        return super().save(image=image, height=h, width=w, thumb_width=100, orientation=exif.get(274, 0), taken=taken,
+                            camera_make=exif.get(271, 'None'), camera_model=exif.get(272, 'None'), *args, **kwargs)

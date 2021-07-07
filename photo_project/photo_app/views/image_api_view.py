@@ -21,8 +21,8 @@ logger = logging.getLogger(__name__)
 class ImageApiView(LoginRequiredMixin, APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request):
-        logging.debug('here')
+    def post(self, request, gallery_id):
+        logging.debug(request.data)
 
         serializer = ImageSerializer(data=request.data)
         if serializer.is_valid():

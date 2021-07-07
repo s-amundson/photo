@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import get_template
+from django.urls import reverse
 from django.views.generic.base import View
 from django.http import JsonResponse
 import logging
@@ -59,9 +60,11 @@ class GalleryFormView(LoginRequiredMixin, View):
         # logging.debug(form.cleaned_data)
 
         if form.is_valid():
+            logging.debug(form.cleaned_data)
             gallery = form.save(commit=False)
             gallery.owner = request.user
             gallery.save()
-            return JsonResponse({'status': "SUCCESS"})
+            url = reverse('photo_app:gallery_view', kwargs={'gallery_id': gallery.id})
+            return JsonResponse({'status': "SUCCESS", 'url': url})
         else:
             return JsonResponse({'status': 'ERROR', 'errors': form.errors})

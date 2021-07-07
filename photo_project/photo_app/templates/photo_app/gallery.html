@@ -4,7 +4,7 @@
     <script src="{% static 'js/gallery.js' %}"></script>
 {% endblock %}
 {% block title %}
-    Gallery List
+    Gallery
 {% endblock %}
 
 {% block main %}
@@ -12,23 +12,23 @@
   {% load static %}
     <div class="row">
       <div class="col">
-        <h2 align="center">{{ gallery.directory }}</h2>
+        <h2 align="center">{{ gallery.name }}</h2>
       </div>
     </div>
     <div class="row">
        <div class="mx-auto">
-        <form id="image-form" action="{% url 'photo_app:image_upload'%}" method="post">
+        <form id="image-form" action="#" method="post" role="form" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form }}
-            <input type="hidden" name="gallery" value="{{ gallery.id }}">
+            <input type="hidden" id="id_gallery" value="{{ gallery.id }}">
             <input type="submit" value="Submit" >
 
         </form>
       </div>
     </div>
 
-    {% if images %}
-      <div class="row">
+    <div class="row" id="images-div">
+      {% if images %}
         {% for image in images%}
           <div class="col border mx-auto">
             <a target="_blank" href="{{ image.image.url }}">
@@ -37,11 +37,9 @@
             </a>
           </div>
         {% endfor %}
-      </div>
-
-
-  {% else %}
-    <p>There are no images.</p>
-  {% endif %}
+      {% else %}
+        <p id="no-image">There are no images.</p>
+      {% endif %}
+    </div>
 {% endblock %}
 

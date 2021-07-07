@@ -12,8 +12,9 @@
 {% block main %}
 
   <div class="row">
+    <div class="col" id="gallery-list">
     {% if gallery_list %}
-    <div class="col">
+
       {% for gallery in gallery_list %}
         <div class="row">
           <div class="col">
@@ -22,10 +23,11 @@
           </div>
         </div>
       {% endfor %}
-    </div>
     {% else %}
-      <p>There are no galleries.</p>
+      <p id="no-gallery">There are no galleries.</p>
+
     {% endif %}
+    </div>
   </div>
   <div class="row">
     <div class="col">

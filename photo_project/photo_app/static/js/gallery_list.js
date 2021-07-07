@@ -19,8 +19,10 @@ function load_gallery_form(gallery_id) {
     console.log(url_string)
     $.get(url_string, function(data, status){
         $("#div-add-gallery").html(data);
+        $("#btn-gallery-form").html("Add")
     });
     $("#gallery-form").submit(post_gallery_form);
+
 }
 
 async function post_gallery_form(e) {
@@ -28,4 +30,9 @@ async function post_gallery_form(e) {
     $("#gallery-form").unbind();
     let data = await $("#gallery-form").submit();
     console.log(data);
+    if ($("#no-gallery").length) {
+        $("#no-gallery").remove();
+    }
+    let h = '<div class="row"><div class="col"><a href="' + data['url'] + ">" + $("#id_name").val() + "</a></div></div>"
+    $("#gallery_list").append(h);
 }

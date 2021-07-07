@@ -11,46 +11,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         # exclude = []
-        fields = ['first_name', 'last_name', 'city', 'nickname', 'post_code', 'phone', 'state', 'street',
+        fields = ['first_name', 'last_name', 'city', 'post_code', 'phone', 'state', 'street', 'dob', 'nickname',
                   'is_model', 'is_photographer']
-
-
-    # first_name = serializers.CharField(required=True)
-    # last_name = serializers.CharField(required=True)
-    # dob = serializers.DateField(required=True)
-    # city = serializers.CharField(required=True)
-    # post_code = serializers.CharField(required=True)
-    # phone = serializers.CharField(required=True)
-    # state = serializers.CharField(required=True)
-    # street = serializers.CharField(required=True)
-    #
-    # # def __init__(self, request, *args, **kwargs):
-    # #     self.fields['first_name'].initial = request.user.first_name
-    # #     self.fields['last_name'].initial = request.user.last_name
-    # #     super().__init__(*args, **kwargs)
-    #
-    # def create(self, validated_data):
-    #     logging.debug(validated_data)
-    #     user = validated_data['user']
-    #     # user = User.objects.get(pk=user.id)
-    #     user.first_name = validated_data.pop('first_name')
-    #     user.last_name = validated_data.pop('last_name')
-    #     user.save()
-    #     validated_data['user'] = user
-    #
-    #     pm = PhotoModel.objects.create(**validated_data)
-    #     return pm
-    #
-    # def update(self, instance, validated_data):
-    #     instance.user = validated_data.get('user', instance.user)
-    #     instance.user.first_name = validated_data.get('first_name', instance.user.first_name)
-    #     instance.user.last_name = validated_data.get('last_name', instance.user.last_name)
-    #     instance.dob = validated_data.get('dob', instance.dob)
-    #     instance.city = validated_data.get('city', instance.city)
-    #     instance.post_code = validated_data.get('post_code', instance.post_code)
-    #     instance.phone = validated_data.get('phone', instance.phone)
-    #     instance.state = validated_data.get('state', instance.state)
-    #     instance.street = validated_data.get('street', instance.street)
-    #     instance.save()
-    #
-    #     return instance
+        extra_kwargs = {}
+        for field in fields[:-3]:
+            extra_kwargs[field] = {'required': True}

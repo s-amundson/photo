@@ -1,6 +1,8 @@
 import logging
+import os
 
 from PIL import Image
+from django.conf import settings
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -23,10 +25,13 @@ class TestsImage(TestCase):
 
 
     def test_post_image(self):
-        g = Gallery(can_public=False, name='test', owner=self.test_user, photo_model=None,
+        g = Gallery(is_public=False, name='test', owner=self.test_user, photo_model=None,
                     public_date=None, shoot_date='2021-06-26')
         # with open() as f:
-        img = Image.open('/home/sam/Pictures/20210624/DSC_0001.JPG')
+        p = os.path.join(settings.BASE_DIR, 'photo_app', 'fixtures', '1.jpeg')
+        # p = "/home/sam/PycharmProjects/photo/photo_project/photo_app/static/images/target2.png"
+        logging.debug(p)
+        img = Image.open(p)
 
         response = self.client.post(reverse('photo:image_upload'), {'image': img, 'gallery': g}, secure=True)
         self.assertEqual(response.status_code, 200)

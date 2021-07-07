@@ -1,13 +1,16 @@
 "use strict";
 $(document).ready(function() {
-    if ($("#btn-address-edit").attr("model_id") == "") {
-        $("#photo-model-address").hide();
-        $("#photo-model-form").show();
+    if ($("#address1").html() == " ") {
+        $("#profile-address").hide();
+        $("#profile-form-div").show();
 //        load_address_form($("#btn-address-edit").attr("model_id"));
-        $("#model-form").submit(function(e){
+        $("#profile-form").submit(function(e){
             e.preventDefault();
-            post_model_function($("#btn-address-edit").attr("model_id") == "");
+            post_address_function($("#btn-address-edit").attr("model_id") == "");
         });
+    }
+    else {
+        $("#profile-form-div").hide();
     }
 });
 
@@ -27,11 +30,11 @@ $(document).ready(function() {
 //    });
 //}
 
-async function post_model_function(model_id) {
+async function post_address_function(model_id) {
     console.log('on submit')
-    let url_string = "model_info_api";
+    let url_string = "profile_info_api";
     if (model_id != "") {
-        url_string = url_string + "/" + family_id + "/";
+        url_string = url_string + "/" + model_id + "/";
     }
     let data = await $.post(url_string, {
         csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
@@ -42,7 +45,9 @@ async function post_model_function(model_id) {
         'state': $("#id_state").val(),
         'post_code': $("#id_post_code").val(),
         'phone': $("#id_phone").val(),
-        'dob': $("#id_dob").val()
+        'dob': $("#id_dob").val(),
+        'is_model': $("#id_is_model").prop('checked'),
+        'nickname': $("#id_nickname").val()
     }, function(data, status){
         console.log(data)
         return data;
@@ -52,6 +57,6 @@ async function post_model_function(model_id) {
     $("#address2").html($("#id_city").val() + " " + $("#id_state").val() + " " + $("#id_post_code").val())
     $("#phone").html($("#id_phone").val())
 
-    $("#photo-model-address").show();
-    $("#photo-model-form").hide();
+    $("#profile-address").show();
+    $("#profile-form-div").hide();
 }
