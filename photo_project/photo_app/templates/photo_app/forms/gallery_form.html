@@ -1,24 +1,26 @@
-<form id="gallery-form" method="post" action="{% url 'photo_app:gallery_form' %}" autocomplete="off" class="form">
+<form id="gallery-form" method="post" action="#" autocomplete="off" class="form">
 {% csrf_token %}
     <div class="row">
         <div class="col">Gallery Name:</div>
         <div class="col input-group input-group-md">
             {{ form.name }}
         </div>
+        <div class="col"></div>
     </div>
 
-    <div class="row">
-        <div class="col">Model:</div>
-        <div class="col input-group input-group-md">
-            {{ form.photo_model }}
-        </div>
-    </div>
+<!--    <div class="row">-->
+<!--        <div class="col">Model:</div>-->
+<!--        <div class="col input-group input-group-md">-->
+<!--            {{ form.photo_model }}-->
+<!--        </div>-->
+<!--    </div>-->
 
     <div class="row">
         <div class="col">Shoot Date:</div>
         <div class="col input-group input-group-md">
             {{ form.shoot_date }}
         </div>
+        <div class="col"></div>
     </div>
 
     <div class="row">
@@ -26,12 +28,14 @@
         <div class="col input-group input-group-md">
             {{ form.can_public }}
         </div>
+        <div class="col"></div>
     </div>
     <div class="row">
         <div class="col">Public Date:</div>
         <div class="col input-group input-group-md">
             {{ form.public_date }}
         </div>
+        <div class="col"></div>
     </div>
 
 <button id="btn-gallery-form" class="btn btn-primary" type="submit">Update</button>

@@ -1,4 +1,5 @@
 "use strict";
+var url_string = "gallery_form"
 $(document).ready(function(){
     $("#div-add-gallery").hide();
     $("#btn-add-gallery").click(function(){
@@ -20,19 +21,23 @@ function load_gallery_form(gallery_id) {
     $.get(url_string, function(data, status){
         $("#div-add-gallery").html(data);
         $("#btn-gallery-form").html("Add")
+        $("#gallery-form").submit(post_gallery_form);
     });
-    $("#gallery-form").submit(post_gallery_form);
-
 }
 
 async function post_gallery_form(e) {
     e.preventDefault();
-    $("#gallery-form").unbind();
-    let data = await $("#gallery-form").submit();
-    console.log(data);
-    if ($("#no-gallery").length) {
-        $("#no-gallery").remove();
-    }
-    let h = '<div class="row"><div class="col"><a href="' + data['url'] + ">" + $("#id_name").val() + "</a></div></div>"
-    $("#gallery_list").append(h);
+    let data = await $.post(url_string, $("#gallery-form").serialize()).done(function( data ) {
+        console.log(data);
+
+        if ($("#no-gallery").length) {
+            $("#no-gallery").remove();
+        }
+        let h = '<div class="row"><div class="col"><a href="' + data['url'] + '">' + $("#id_name").val() + '</a></div></div>'
+        console.log(h)
+        $("#gallery-list").append(h);
+        $("#div-add-gallery").hide();
+        $("#btn-add-gallery").show();
+        return data;
+    }, "json");
 }
