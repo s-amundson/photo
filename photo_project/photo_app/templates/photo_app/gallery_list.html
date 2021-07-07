@@ -29,15 +29,17 @@
     {% endif %}
     </div>
   </div>
-  <div class="row">
-    <div class="col">
-      <button id="btn-add-gallery" class="btn btn-primary" type="button" name="button">
-            Add Gallery
-      </button>
+  {% if user.is_authenticated %}
+    <div class="row">
+      <div class="col">
+        <button id="btn-add-gallery" class="btn btn-primary" type="button" name="button">
+              Add Gallery
+        </button>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col" id="div-add-gallery"></div>
-  </div>
+    <div class="row">
+      <div class="col" id="div-add-gallery"></div>
+    </div>
+  {% endif %}
 {% endblock %}
 

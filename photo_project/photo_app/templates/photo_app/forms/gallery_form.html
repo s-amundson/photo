@@ -1,10 +1,11 @@
 <form id="gallery-form" method="post" action="#" autocomplete="off" class="form">
 {% csrf_token %}
     <div class="row">
-        <div class="col">Gallery Name:</div>
+        <div class="col-2">Gallery Name:</div>
         <div class="col input-group input-group-md">
-            {{ form.name }}
+                <input type="text" placeholder="Name" autocomplete="off" required id="id_name" class="form-control m-2">
         </div>
+        <div class="col">Will be public after this date if above checkbox is selected</div>
         <div class="col"></div>
     </div>
 
@@ -16,25 +17,49 @@
 <!--    </div>-->
 
     <div class="row">
-        <div class="col">Shoot Date:</div>
+        <div class="col-2">Shoot Date:</div>
         <div class="col input-group input-group-md">
-            {{ form.shoot_date }}
+            <input type="text" placeholder="Shoot Date YYYY-MM-DD" autocomplete="off" required id="id_shoot_date"
+                   class="form-control m-2">
         </div>
-        <div class="col"></div>
     </div>
 
     <div class="row">
-        <div class="col">Can be Public:</div>
+        <div class="col-2"></div>
         <div class="col input-group input-group-md">
-            {{ form.can_public }}
+            <div class="custom-control custom-checkbox m-2">
+                <input type="checkbox" class="custom-control-input m-2" id="id_is_mature">
+                <label class="custom-control-label" for="id_is_mature">This gallery is for mature audiences only</label>
+            </div>
         </div>
-        <div class="col"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col input-group input-group-md">
+            <div class="custom-control custom-checkbox m-2">
+                <input type="checkbox" class="custom-control-input m-2" id="id_is_public">
+                <label class="custom-control-label" for="id_is_public">This gallery can be made public</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col input-group input-group-md">
+            <div class="custom-control custom-checkbox m-2">
+                <input type="checkbox" class="custom-control-input m-2" id="id_is_public">
+                <label class="custom-control-label" for="id_is_public">This gallery can be made public</label>
+            </div>
+        </div>
     </div>
     <div class="row">
-        <div class="col">Public Date:</div>
+        <div class="col-2">Public Date:</div>
         <div class="col input-group input-group-md">
-            {{ form.public_date }}
+            <input type="text" placeholder="Public Date YYYY-MM-DD" autocomplete="off" id="id_public_date"
+                   class="form-control m-2">
         </div>
+        <div class="col">Will be public after this date if above checkbox is selected</div>
         <div class="col"></div>
     </div>
 

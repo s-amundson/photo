@@ -20,14 +20,31 @@ function load_gallery_form(gallery_id) {
     console.log(url_string)
     $.get(url_string, function(data, status){
         $("#div-add-gallery").html(data);
-        $("#btn-gallery-form").html("Add")
+        $("#btn-gallery-form").html("Add");
         $("#gallery-form").submit(post_gallery_form);
+        $("#id_is_mature").change(function() {
+            if (this.checked) {
+                $("#id_is_public").prop('checked', false);
+                $("#id_is_public").attr("disabled", true);
+                $("#id_public_date").attr("disabled", true);
+            }
+            else {
+                $("#id_public_date").attr("disabled", false);
+            }
+        });
     });
 }
 
 async function post_gallery_form(e) {
     e.preventDefault();
-    let data = await $.post(url_string, $("#gallery-form").serialize()).done(function( data ) {
+    let data = await $.post(url_string, {
+            csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
+            'name': $("#id_name").val(),
+            'shoot_date': $("#id_shoot_date").val(),
+            'is_mature': $("#id_is_mature").prop('checked'),
+            'is_public': $("#id_is_public").prop('checked'),
+            'public_date': $("#id_public_date").val(),
+        }).done(function( data ) {
         console.log(data);
 
         if ($("#no-gallery").length) {
