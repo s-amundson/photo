@@ -8,6 +8,6 @@ rm -r ../photo_project/photo_app/media/images/
 docker exec -it \django_photo_dev python manage.py makemigrations photo_app
 docker exec -it \django_photo_dev python manage.py migrate
 
-chown $USER:$USER ../photo_project/db.sqlite3
+chown -R $USER:$USER .
 
 docker exec -it \django_photo_dev python manage.py loaddata f1.json

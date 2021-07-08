@@ -9,8 +9,8 @@ def content_file_name(instance, filename):
 
 class ReleaseTemplate(models.Model):
     add_date = models.DateTimeField(default=datetime.now)
+    description = models.CharField(max_length=100)
     file = models.FileField(upload_to='release_template')
-    name = models.CharField(max_length=100)
     update_date = models.DateTimeField(auto_now=True)
     # photographer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
     # photo_model = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, default=None)
