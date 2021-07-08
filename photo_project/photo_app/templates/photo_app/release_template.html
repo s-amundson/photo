@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block main %}
+    <div class="row" message_text="{{ message }}" hidden id="message"><h3>"{{ message }}"</h3></div>
+    <div class="row p-2">
+        <form>
+            {{ templates.template_choice.errors }}
+            <label for="{{ templates.template_choice.id_for_label }}">Template Choice:</label>
+            {{ templates.template_choice }}
+
+        </form>
+    </div>
+    <hr />
+    <div class="row p-2" id="template-form-div">
+        <form method="post" enctype="multipart/form-data" id="template-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+    <hr />
+    <div class="row p-2" id="template-view"></div>
+{% endblock %}

@@ -1,6 +1,6 @@
 from django.forms import ModelForm, DateField, ChoiceField
 
-from ..models import Release
+from ..models import Release, ReleaseTemplate
 
 
 class ReleaseForm(ModelForm):
@@ -45,3 +45,20 @@ class ReleasePhotographerForm(ReleaseForm):
         for f in optional_fields:
             self.fields[f].required = False
         self.Meta.fields = required_fields + optional_fields
+
+
+class ReleaseTemplateForm(ModelForm):
+
+    class Meta:
+        model = ReleaseTemplate
+        fields = ['description', 'file']
+
+
+class ReleaseTemplateChoiceForm(ReleaseTemplateForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        choices = []
+        rt = ReleaseTemplate.objects.all()
+        for t in rt:
+            choices.append((t.id, f'{t.id} {t.description}'))
+        self.fields['template_choice'] = ChoiceField(choices=choices)
