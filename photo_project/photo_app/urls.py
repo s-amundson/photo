@@ -9,9 +9,10 @@ urlpatterns = [
     path('gallery_form_api', GalleryFormApiView.as_view(), name='gallery_form_api'),
     path('gallery_view/<int:gallery_id>/', GalleryView.as_view(), name='gallery_view'),
     path('image_upload/<int:gallery_id>/', ImageApiView.as_view(), name='image_upload'),
-    path('model_release_photographer', GalleryListView.as_view(), name='model_release_photographer'),
+    path('model_release/<int:release>/', GalleryListView.as_view(), name='model_release'),
     path('profile_info_api', PhotoModelApiView.as_view(), name='profile_info_api'),
     path('profile', ProfileView.as_view(), name='profile'),
+    path('release_preview/<int:release>/', ReleaseTemplateView.as_view(), name='release_preview'),
     path('release_template/<int:release>/', ReleaseTemplateFormView.as_view(), name='release_template'),
     path('release_template', ReleaseTemplateFormView.as_view(), name='release_template'),
 ]

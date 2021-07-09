@@ -10,4 +10,4 @@ docker exec -it \django_photo_dev python manage.py migrate
 
 chown -R sam:sam .
 
-docker exec -it \django_photo_dev python manage.py loaddata f1.json
+#docker exec -it \django_photo_dev python manage.py loaddata f1.json

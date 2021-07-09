@@ -2,15 +2,33 @@
 
 {% block title %} {{ title }} {% endblock %}
 
+{% block script %}
+    {% load static %}
+    <script src="{% static 'js/release.js' %}"></script>
+{% endblock %}
+
 {% block main %}
     <div class="row" message_text="{{ message }}" hidden id="message"><h3>"{{ message }}"</h3></div>
     <div class="row p-2">
-        <form>
-            {{ templates.template_choice.errors }}
-            <label for="{{ templates.template_choice.id_for_label }}">Template Choice:</label>
-            {{ templates.template_choice }}
-
-        </form>
+        <div class="col">
+            <form>
+                {{ templates.template_choice.errors }}
+                <label for="{{ templates.template_choice.id_for_label }}">
+                    Choose a template from the list to preview:
+                </label>
+                {{ templates.template_choice }}
+            </form>
+        </div>
+<!--        <div class="col">-->
+<!--            <button id="btn-edit-template" class="btn btn-primary" type="button">-->
+<!--                Add Template-->
+<!--            </button>-->
+<!--        </div>-->
+        <div class="col">
+            <button id="btn-add-template" class="btn btn-primary" type="button">
+                Add Template
+            </button>
+        </div>
     </div>
     <hr />
     <div class="row p-2" id="template-form-div">
@@ -19,7 +37,16 @@
             {{ form.as_p }}
             <input type="submit" value="Submit">
         </form>
+        <hr />
     </div>
-    <hr />
+
     <div class="row p-2" id="template-view"></div>
+
+    <div class="row p-2" id="use-template-div">
+        <form>
+            {% csrf_token %}
+            {{ use_form.as_p }}
+            <input type="submit" value="Submit">
+        </form>
+    </div>
 {% endblock %}

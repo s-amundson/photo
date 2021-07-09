@@ -18,7 +18,7 @@ function add_image(data) {
 
 function post_image(event) {
     event.preventDefault();
-    var file_data = $('#id_image').prop('files')[0];
+//    var file_data = $('#id_image').prop('files')[0];
     var form_data = new FormData($("#image-form")[0]);
     console.log(form_data);
 //    form_data.append('image', file_data);
