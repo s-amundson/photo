@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 class ProfileView(LoginRequiredMixin, View):
     def get(self, request):
+        logging.debug(request.user)
         try:
             gallery_list = Gallery.objects.filter(Q(photo_model=request.user) | Q(owner=request.user))
         except Gallery.DoesNotExist:

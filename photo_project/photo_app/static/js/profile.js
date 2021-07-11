@@ -1,24 +1,45 @@
 "use strict";
 $(document).ready(function() {
-    if ($("#address1").html() == " ") {
+    get_profile_info()
+    $("#btn-address-edit").click(function () {
         $("#profile-address").hide();
         $("#profile-form-div").show();
-//        load_address_form($("#btn-address-edit").attr("model_id"));
-        $("#profile-form").submit(function(e){
-            e.preventDefault();
-            post_address_function($("#btn-address-edit").attr("model_id") == "");
-        });
-    }
-    else {
-        $("#profile-form-div").hide();
-    }
+    });
 });
 
+async function get_profile_info() {
+    await $.get("profile_info_api", function(data, status){
+        console.log(data);
+        $("#id_first_name").val(data['first_name']);
+        $("#id_last_name").val(data['last_name']);
+        $("#id_street").val(data['street']);
+        $("#id_city").val(data['city']);
+        $("#id_state").val(data['state']);
+        $("#id_post_code").val(data['post_code']);
+        $("#id_phone").val(data['phone']);
+        $("#id_dob").val(data['dob']);
+        $("#id_is_model").prop('checked', data['is_model']);
+        $("#id_nickname").val(data['nickname']);
+
+        if (data['first_name'] == "") {
+            $("#profile-address").hide();
+            $("#profile-form-div").show();
+            $("#profile-form").submit(function(e){
+                e.preventDefault();
+                post_address_function($("#btn-address-edit").attr("model_id") == "");
+            });
+        }
+        else {
+            $("#profile-form-div").hide();
+            $("#profile-address").show();
+        }
+    });
+}
 //function load_address_form(model_id) {
 //    console.log(model_id);
 //    $("#photo-model-address").hide();
 //
-//    $.get("model_info", function(data, status){
+//    $.get("profile_info_api", function(data, status){
 //        $("#photo-model-form").html(data);
 //        $("#photo-model-form").show();
 //

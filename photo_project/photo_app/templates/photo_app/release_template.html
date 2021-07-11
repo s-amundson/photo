@@ -19,11 +19,7 @@
                 {{ templates.template_choice }}
             </form>
         </div>
-<!--        <div class="col">-->
-<!--            <button id="btn-edit-template" class="btn btn-primary" type="button">-->
-<!--                Add Template-->
-<!--            </button>-->
-<!--        </div>-->
+
         <div class="col">
             <button id="btn-add-template" class="btn btn-primary" type="button">
                 Add Template
@@ -37,16 +33,13 @@
             {{ form.as_p }}
             <input type="submit" value="Submit">
         </form>
-        <hr />
     </div>
-
-    <div class="row p-2" id="template-view"></div>
-
+    <hr />
+    <div class="row p-2">
+        <div class="col" id="template-view"></div>
+    </div>
+    <hr />
     <div class="row p-2" id="use-template-div">
-        <form>
-            {% csrf_token %}
-            {{ use_form.as_p }}
-            <input type="submit" value="Submit">
-        </form>
+        {% include "photo_app/forms/model_release_form.html" %}
     </div>
 {% endblock %}

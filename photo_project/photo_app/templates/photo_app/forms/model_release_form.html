@@ -1,0 +1,5 @@
+<form method="post" autocomplete="off" class="form" id="model-release" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ use_form.as_p }}
+    <input type="submit" value="Submit">
+</form>

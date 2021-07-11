@@ -15,7 +15,9 @@ class PhotoModelApiView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):
-        serializer = ProfileSerializer(instance=request.user)
+        logging.debug(request.user)
+        get_object_or_404(User, pk=request.user.pk)
+        serializer = ProfileSerializer(instance=get_object_or_404(User, pk=request.user.pk))
         return Response(serializer.data)
 
     def post(self, request, format=None):

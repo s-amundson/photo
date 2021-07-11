@@ -1,0 +1,48 @@
+This Model Release Form relates to the use of personal media and images utilized for an artistic or commercial endeavor by and between the following parties:
+
+{{ photographer.first_name }} {{ photographer.last_name }}, a photographer, with an address at the following:
+{{ photographer.street }}
+{{ photographer.city }} {{ photographer.state }} {{ photographer.post_code }}
+{{ photographer.phone }}
+{{ photographer.email }}
+
+and
+{{ model.first_name }} {{ model.last_name }} ("Model"), with an address at the following:
+{{ model.street }}
+{{ model.city }} {{ model.state }} {{ model.post_code }}
+{{ model.phone }}
+{{ model.email }}
+
+I , {{ model.first_name }} {{ model.last_name }} for other good and valuable consideration herein acknowledged as received, hereby absolutely and irrevocably authorize {{ photographer }} as well as their legal representatives, assignees, and transferees to use, publish, reuse, republish, distribute, disseminate or otherwise make publicly available for any artistic or commercial use, including advertising, publication, or illustration images of me and/or my property, of the following description:
+
+{{ description }}
+
+taken on {{ date }}, in whole or in part, whether individually or collectively with any other material in any and all forms of media now or hereinafter known and/or developed, including, but not limited to, in print media, in digital media, on the Internet, in composite images, or distorted images or for any other lawful use as may be determined by {{ photographer }} in their sole and exclusive discretion. The photographer shall specifically be permitted to use fictitious names in conjunction with the images.
+
+I further completely release and discharge {{ photographer }} from any and all demands or claims that may arise out of or otherwise be connected with the use of the photographs featuring me, my image, or my property, including, without limitation, and any/all claims for the violation of a right of publicity, a right of privacy, or libel. I also waive and and all right to approve or otherwise review any uses of the photographs featuring me, my image or my property.
+
+This authorization and release shall inure to the benefit of the legal representatives, licensees, heirs, and assignees of {{ photographer }} and shall also be binding upon me. my heirs, assignees, and legal representatives.
+
+{% if is_mature %}
+Model specifically acknowledge and agree that the nature of the work may include full or partial nudity. I herby consent and agree to appear fully or partially nude in the work.
+
+{% else %}
+Photographer agrees not to make any alterations to the Photographs that would make the images appear to be pornographic, defamatory, or illegal
+
+{% endif %}
+{% if use_full_name %}
+Model specifically acknowledge and agree, that the photographer may use my full name in connection with the Photographs.
+
+{% endif %}
+{% if use_first_name %}
+Model specifically acknowledge and agree, that the photographer may use my first name in connection with the Photographs.
+
+{% endif %}
+
+In exchange for the releases given above in this Model Release Agreement, Model is being paid the following compensation: {{ compensation }}
+
+I am legally competent adult of full legal age and have the right to contract in my own name. I have read this document thoroughly and understand the entirety of its contents in full.
+
+Model specifically agrees that this Model Release shall be governed and interpreted in accordance with the laws of the state of California and should any provision of the Model Release be judged by an appropriate court of competent jurisdiction as invaid, it shall not affect any of the remaining provisions in any way, to the extent possible.
+
+{{ model_name }}
