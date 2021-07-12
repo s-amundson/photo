@@ -25,6 +25,7 @@ class ReleaseForm(ModelForm):
 
 class ReleaseModelForm(ReleaseForm):
     agree = BooleanField(label="I agree with this release")
+
     class Meta(ReleaseForm.Meta):
         hidden_fields = ['template']
         read_fields = []
@@ -67,10 +68,28 @@ class ReleasePhotographerForm(ReleaseForm):
 
 
 class ReleaseSignedForm(ReleaseForm):
-    send_email = BooleanField()
+    send_email = BooleanField(required=False)
 
     class Meta(ReleaseForm.Meta):
-        fields = ['file']
+        hidden_fields = ['template']
+        required_fields = ['file']
+        exclude = ['compensation', 'name', 'photographer', 'photo_model', 'shoot_date', 'use_first_name',
+                   'use_full_name', 'use_nickname']
+        fields = required_fields + hidden_fields
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        instance = kwargs.get('instance', None)
+        if instance is not None:
+            for f in self.Meta.required_fields:
+                self.fields[f].required = False
+        else:
+            for f in self.Meta.required_fields:
+                self.fields[f].required = True
+
+        for f in self.Meta.hidden_fields:
+            self.fields[f].required = False
+            self.fields[f].widget.attrs.update({'class': 'form-control m-2', 'disabled': 'disabled'})
 
 
 class ReleaseTemplateForm(ModelForm):

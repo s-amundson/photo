@@ -35,21 +35,6 @@ async function get_profile_info() {
         }
     });
 }
-//function load_address_form(model_id) {
-//    console.log(model_id);
-//    $("#photo-model-address").hide();
-//
-//    $.get("profile_info_api", function(data, status){
-//        $("#photo-model-form").html(data);
-//        $("#photo-model-form").show();
-//
-//        $("#model-form").submit(function(e){
-//            e.preventDefault();
-//            post_model_function(model_id)
-//        });
-//
-//    });
-//}
 
 async function post_address_function(model_id) {
     console.log('on submit')

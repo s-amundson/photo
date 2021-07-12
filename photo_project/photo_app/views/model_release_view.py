@@ -1,14 +1,12 @@
-import os
-from PIL import Image
 
-from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponseNotAllowed, HttpResponse, HttpResponseRedirect
+from django.forms import model_to_dict
+from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponseBadRequest
 
 # Create your views here.
-from django.template.loader import get_template
-from django.views import generic, View
+
+from django.views import View
 from ..models import Release
 from ..forms import ReleasePhotographerForm, ReleaseModelForm, ReleaseSignedForm
 import logging
@@ -21,7 +19,7 @@ class ModelReleaseView(LoginRequiredMixin, View):
     def get(self, request, release=None):
         logging.debug(release)
         request.session['model_release'] = release
-        if request.user.is_photographer and release == 0:
+        if request.user.is_photographer and release is None:
             form = ReleasePhotographerForm()
         else:
             r = get_object_or_404(Release, pk=release)
@@ -34,7 +32,8 @@ class ModelReleaseView(LoginRequiredMixin, View):
 
             elif request.user.id == r.photo_model.id:
                 form = ReleaseModelForm(instance=r)
-
+            else:
+                return HttpResponseBadRequest()
         return render(request, 'photo_app/model_release.html', {'use_form': form})
 
     def post(self, request, release=0):
@@ -46,15 +45,19 @@ class ModelReleaseView(LoginRequiredMixin, View):
             form = ReleasePhotographerForm(request.POST)
         else:
             instance = get_object_or_404(Release, pk=release)
+            logging.debug(instance.photo_model.id)
             if request.user.id == instance.photographer.id:
-                logging.debug('ReleasePhotographerForm')
-                form = ReleasePhotographerForm(request.POST, instance=instance)
+                if instance.state == 'pending':
+                    logging.debug('ReleasePhotographerForm')
+                    form = ReleasePhotographerForm(request.POST, instance=instance)
+                else:
+                    form = ReleaseSignedForm(request.POST, request.FILES, instance=instance)
             elif request.user.id == instance.photo_model.id:
                 logging.debug('ReleaseModelForm')
                 form = ReleaseModelForm(request.POST, instance=instance)
             else:
-                return HttpResponseNotAllowed
-
+                return HttpResponseBadRequest()
+        # logging.debug(model_to_dict(instance))
         if form.is_valid():
             logging.debug(form.cleaned_data)
             if release == 0:
@@ -75,9 +78,11 @@ class ModelReleaseView(LoginRequiredMixin, View):
                     mr.model_full_name = f'{request.user.first_name} {request.user.last_name}'
                     mr.model_nickname = request.user.nickname
                     mr.save()
-            elif form.state == 'agreed':
-                instance.file = form.file
-                instance.save()
+            elif instance.state == 'agreed':
+                logging.debug(model_to_dict(instance))
+                mr = form.save()
+                mr.state = 'complete'
+                mr.save()
             if form.cleaned_data.get('send_email', False):
                 return render(request, 'photo_app/message.html', {'message': 'Release Saved'})
             return render(request, 'photo_app/model_release.html', {'use_form': form})
@@ -85,5 +90,3 @@ class ModelReleaseView(LoginRequiredMixin, View):
         else:
             logging.debug(form.errors)
         return render(request, 'photo_app/model_release.html', {'form': form, 'title': 'Model Release'})
-
-

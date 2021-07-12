@@ -4,7 +4,7 @@ from .release_template_model import ReleaseTemplate
 
 
 def content_file_name(instance, filename):
-    return '/'.join(['release', str(instance.release.id), filename])
+    return '/'.join(['release', str(instance.id), filename])
 
 
 class Release(models.Model):

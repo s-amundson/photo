@@ -5,16 +5,29 @@ from django.views.generic.base import View
 import logging
 
 # from ..forms import PhotoModelForm
-from ..models import Gallery
+from ..models import Gallery, Release
 logger = logging.getLogger(__name__)
 
 
 class ProfileView(LoginRequiredMixin, View):
     def get(self, request):
         logging.debug(request.user)
+        gallery_list = []
         try:
-            gallery_list = Gallery.objects.filter(Q(photo_model=request.user) | Q(owner=request.user))
+            gl = Gallery.objects.filter(Q(photo_model=request.user) | Q(owner=request.user) |
+                                                  Q(photographer=request.user))
+            for g in gl:
+                if g not in gallery_list:
+                    gallery_list.append(g)
         except Gallery.DoesNotExist:
-            gallery_list = []
+            pass
+        release_list = []
+        rl = Release.objects.filter(Q(photo_model=request.user) | Q(photographer=request.user))
+        for r in rl:
+            if r not in release_list:
+                release_list.append(r)
+
+        logging.debug(release_list)
+
         # form = PhotoModelForm(initial=pm)
-        return render(request, 'photo_app/profile.html', {'gallery_list': gallery_list})
+        return render(request, 'photo_app/profile.html', {'gallery_list': gallery_list, 'release_list': release_list})

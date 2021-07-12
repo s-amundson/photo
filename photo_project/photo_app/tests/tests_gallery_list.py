@@ -32,7 +32,7 @@ class TestsGalleryList(TestCase):
     def test_get_auth1(self):
         self.client.force_login(self.test_user)
         response = self.client.get(reverse('photo:index'), secure=True)
-        self.assertEqual(len(response.context['gallery_list']), 4)
+        self.assertEqual(len(response.context['gallery_list']), 5)
         self.assertEqual(response.status_code, 200)
 
     def test_get_auth2(self):

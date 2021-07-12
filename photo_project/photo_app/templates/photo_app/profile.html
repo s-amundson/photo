@@ -62,4 +62,29 @@
       <p>There are no galleries with your photos.</p>
     {% endif %}
 
+    <div class="row px-3 pt-3 align-items-center mx-auto">
+        <div class="col-12">
+            <h3> Releases </h3>
+        </div>
+    </div>
+    {% if release_list %}
+    <div class="col">
+      {% for release in release_list %}
+        <div class="row">
+          <div class="col">
+            <a href="{% url 'photo_app:model_release' release.id %}">
+              {{ release.name }}</a>
+          </div>
+          <div class="col">
+              {{ release.shoot_date }}
+          </div>
+          <div class="col">
+              {{ release.state }}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    {% else %}
+      <p>There are no galleries with your photos.</p>
+    {% endif %}
 {% endblock %}

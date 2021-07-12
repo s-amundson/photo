@@ -26,7 +26,11 @@ class GalleryListView(generic.ListView):
         elif request.user.is_authenticated:
             queryset = Gallery.objects.filter(
                 Q(Q(is_public=True, public_date__lte=date.today())) | Q(owner=request.user.id) |
-                Q(photo_model__id=request.user.id))
+                Q(photo_model__id=request.user.id) | Q(photographer=request.user))
         else:
             queryset = Gallery.objects.filter(is_public=True, public_date__lte=date.today())
-        return render(request, self.template_name, context={'gallery_list': queryset})
+        gallery_list = []
+        for g in queryset:
+            if g not in gallery_list:
+                gallery_list.append(g)
+        return render(request, self.template_name, context={'gallery_list': gallery_list})
