@@ -4,3 +4,5 @@ Commands:
     docker exec -it \django_photo_dev python manage.py dumpdata > f2.json
     docker exec -it \django_photo_dev python manage.py loaddata f2.json
     docker exec -it \django_photo_dev python manage.py test photo_app --pattern temp_tests.py
+
+    docker exec -it \django_photo_dev coverage run --source='.' manage.py test photo_app && coverage html

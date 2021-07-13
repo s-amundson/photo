@@ -1,0 +1,6 @@
+# .coveragerc to control coverage.py
+[run]
+omit=
+    photo_project/*
+    manage.py
+    *temp_tests.py

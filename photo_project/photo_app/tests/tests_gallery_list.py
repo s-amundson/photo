@@ -38,7 +38,7 @@ class TestsGalleryList(TestCase):
     def test_get_auth2(self):
         self.client.force_login(self.User.objects.get(pk=2))
         response = self.client.get(reverse('photo:index'), secure=True)
-        self.assertEqual(len(response.context['gallery_list']), 2)
+        self.assertEqual(len(response.context['gallery_list']), 3)
         self.assertEqual(response.status_code, 200)
 
 

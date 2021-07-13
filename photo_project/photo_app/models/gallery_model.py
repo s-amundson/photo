@@ -12,5 +12,5 @@ class Gallery(models.Model):
     # blank=True, null=True, default=None)
     photo_model = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='models')
     public_date = models.DateField(null=True, default=None)
-    photographer = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='photographers')
+    photographer = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='photographers', default=None)
     shoot_date = models.DateField(null=True, default=None)

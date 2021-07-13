@@ -60,9 +60,9 @@ class ReleasePhotographerForm(ReleaseForm):
         logging.debug(kwargs)
         for f in self.Meta.required_fields:
             self.fields[f].required = True
-        for f in self.Meta.read_fields:
-            self.fields[f].required = False
-            self.fields[f].widget.attrs.update({'class': 'form-control m-2', 'readonly': 'readonly'})
+        # for f in self.Meta.read_fields:
+        #     self.fields[f].required = False
+        #     self.fields[f].widget.attrs.update({'class': 'form-control m-2', 'readonly': 'readonly'})
         for f in self.Meta.optional_fields:
             self.fields[f].required = False
 
@@ -99,11 +99,11 @@ class ReleaseTemplateForm(ModelForm):
         fields = ['description', 'file']
 
 
-class ReleaseTemplateChoiceForm(ReleaseTemplateForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        choices = []
-        rt = ReleaseTemplate.objects.all()
-        for t in rt:
-            choices.append((t.id, f'{t.id} {t.description}'))
-        self.fields['template_choice'] = ChoiceField(choices=choices)
+# class ReleaseTemplateChoiceForm(ReleaseTemplateForm):
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         choices = []
+#         rt = ReleaseTemplate.objects.all()
+#         for t in rt:
+#             choices.append((t.id, f'{t.id} {t.description}'))
+#         self.fields['template_choice'] = ChoiceField(choices=choices)
