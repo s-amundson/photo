@@ -1,0 +1,50 @@
+version: "3.7"
+
+services:
+#  db:
+#    container_name: postgresdb
+#    image: postgres:latest
+#    restart: 'no' #always
+#    env_file:
+#      - project.env
+#    ports:
+#      - 5432:5432
+#    volumes:
+#      - postgres-data:/var/lib/postgresql/data
+
+  photo:
+    container_name: photo_django
+    build:
+      context: ..
+      dockerfile: docker_photo_deploy/Dockerfile
+    command: gunicorn photo_project.wsgi:application --bind 0.0.0.0:8080 --workers=4
+
+    ports:
+      - 8080:8080
+#    depends_on:
+#      - db
+    volumes:
+      - staticfiles:/home/app/web/staticfiles
+
+#  nginx:
+#    container_name: nginx
+#
+#    image: nginx:mainline-alpine
+#    restart: 'no' #always
+#    ports:
+#      - 80:80
+#      - 443:443
+#    volumes:
+#      - ../nginx:/etc/nginx/conf.d
+#      - staticfiles:/app/static/
+#    depends_on:
+#      - web
+
+networks:
+  default:
+    name: my-app-net
+    external: true
+
+volumes:
+  postgres-data:
+  staticfiles:
