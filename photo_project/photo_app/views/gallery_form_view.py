@@ -66,9 +66,11 @@ class GalleryFormView(LoginRequiredMixin, View):
             g = self.get_instance(request, gallery_id)
         except PermissionDenied:
             return HttpResponseBadRequest()
+        logging.debug(g)
         form = GalleryForm(instance=g)
 
-        return render(request, 'photo_app/forms/gallery_form.html', {'form': form})
+        return render(request, 'photo_app/forms/gallery_form.html',
+                      {'form': form, 'update': False if g is None else True})
 
     def post(self, request, gallery_id=None):
         logging.debug(request.POST)

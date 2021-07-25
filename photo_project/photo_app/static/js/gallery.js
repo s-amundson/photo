@@ -1,6 +1,8 @@
 "use strict";
 $(document).ready(function() {
     $("#image-form").submit(post_image);
+    load_gallery_form($("#id_gallery").val());
+
 
 });
 function add_image(data) {

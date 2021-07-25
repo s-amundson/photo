@@ -1,12 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.forms import model_to_dict
 
 # Create your views here.
 from django.db.models import Q
 from django.shortcuts import render
 from django.utils.datetime_safe import date
 from django.views import generic, View
-from ..models import Gallery
+from ..models import Gallery, Images
 
 import logging
 
@@ -32,5 +32,8 @@ class GalleryListView(generic.ListView):
         gallery_list = []
         for g in queryset:
             if g not in gallery_list:
-                gallery_list.append(g)
+                d = model_to_dict(g)
+                if g.display_image is not None:
+                    d['image'] = Images.objects.get(pk=g.display_image)
+                gallery_list.append(d)
         return render(request, self.template_name, context={'gallery_list': gallery_list})

@@ -17,10 +17,11 @@
     </div>
     <div class="row">
        <div class="mx-auto">
-        <form id="image-form" action="#" method="post" role="form" enctype="multipart/form-data">
+        <form id="image-form" action="" method="post" role="form" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form }}
             <input type="hidden" id="id_gallery" value="{{ gallery.id }}">
+            <input type="hidden" id="id_form_url" value="{% url 'photo_app:gallery_form' %}">
             <input type="submit" value="Submit" >
 
         </form>
@@ -29,9 +30,9 @@
 
     <div class="row" id="images-div">
       {% if images %}
-        {% for image in images%}
+        {% for image in images %}
           <div class="col border mx-auto">
-            <a target="_blank" href="{{ image.image.url }}">
+            <a target="_blank" href="{% url 'photo_app:image' image.id %}">
               <img width="{{ image.thumb_width }}px" src="{{ image.image.url }}"><br/>
                 {{ image.width }} x {{ image.height }}
             </a>
@@ -41,5 +42,10 @@
         <p id="no-image">There are no images.</p>
       {% endif %}
     </div>
+    <div class="row p-3"><hr/></div>
+    <div id="div-add-gallery"></div>
 {% endblock %}
 
+{% block right %}
+
+{% endblock right %}

@@ -20,10 +20,9 @@
 
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        {% block script %}{% endblock %}
 
 
-        <title>Photo: {% block title %}{% endblock %}</title>
+        <title>Photo: Image</title>
 
     </head>
     <body class="bg-dark text-white">
@@ -32,31 +31,27 @@
 
             <input type="hidden" id="alert-message" value="{{ alert_message }}">
             <div class="row">
-                <div class="col-md-2" id="block-left">
-                    {% if messages %}
-                    <ul class="messages">
-                        {% for message in messages %}
-                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-                    {% block left %}{% endblock %}
-                </div>
-
                 <div class="col-md bg-dark text-white" id="block-main">
+                    <div class="row">
+                       <div class="mx-auto">
+                           <a target="_blank" href="{{ image.image.url }}">
+                            <img src="{{ image.image.url }}" alt="{{ image.image.url }}" class="img-fluid">
+                           </a>
+                      </div>
+                    </div>
 
-                    {% block main %}{% endblock %}
                 </div>
                 <div class="col-md-2" id="block-right">
-                    {% block right %}{% endblock %}
+                    {% for key, values in image_data.items %}
+                        <p>{{ key }}: {{ values }}</p>
+                    {% endfor %}
                 </div>
             </div>
         </div>
 
         <footer class="small text-center text-muted">
-
         </footer>
-        {% block end_script %}
-        {% endblock %}
+
     </body>
 </html>
+
