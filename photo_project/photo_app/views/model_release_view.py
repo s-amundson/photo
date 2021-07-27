@@ -9,6 +9,7 @@ from django.http import HttpResponseBadRequest
 from django.views import View
 from ..models import Release
 from ..forms import ReleasePhotographerForm, ReleaseModelForm, ReleaseSignedForm
+from ..src.email import EmailMessage
 import logging
 
 # Get an instance of a logger
@@ -23,7 +24,7 @@ class ModelReleaseView(LoginRequiredMixin, View):
             form = ReleasePhotographerForm()
         else:
             r = get_object_or_404(Release, pk=release)
-            logging.debug(r)
+            logging.debug(r.state)
             if request.user.id == r.photographer.id:
                 if r.state == 'pending':
                     form = ReleasePhotographerForm(instance=r)
@@ -68,8 +69,9 @@ class ModelReleaseView(LoginRequiredMixin, View):
                 logging.debug(mr)
 
             elif instance.state == 'pending' and instance.photographer.id == request.user.id:
-                r = form.save()
-                logging.debug(r)
+                mr = form.save()
+                logging.debug(mr)
+                EmailMessage().release_modified(instance.photo_model, mr)
             elif instance.state in ['pending', 'agreed'] and instance.photo_model.id == request.user.id:
                 mr = form.save()
                 if form.cleaned_data['agree']:
@@ -78,12 +80,14 @@ class ModelReleaseView(LoginRequiredMixin, View):
                     mr.model_full_name = f'{request.user.first_name} {request.user.last_name}'
                     mr.model_nickname = request.user.nickname
                     mr.save()
+                EmailMessage().release_modified(instance.photographer, mr)
             elif instance.state == 'agreed':
                 logging.debug(model_to_dict(instance))
                 mr = form.save()
                 mr.state = 'complete'
                 mr.save()
             if form.cleaned_data.get('send_email', False):
+                EmailMessage().release_notification(instance.photo_model, mr)
                 return render(request, 'photo_app/message.html', {'message': 'Release Saved'})
             return render(request, 'photo_app/model_release.html', {'use_form': form})
 

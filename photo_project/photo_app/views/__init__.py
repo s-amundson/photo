@@ -9,4 +9,5 @@ from .profile_info_api_view import PhotoModelApiView
 from .profile_view import ProfileView
 from .terms_view import TermsView
 # from .release_template_view import ReleaseTemplateFormView, ReleaseTemplateView
+from .release_template_view import ReleaseTemplateView
 

@@ -14,8 +14,14 @@
     </div>
     <hr />
     <div class="row p-2 hidden-print d-print-none">
-        Updating the choices below will update the agreement above. Then click submit to save the changes.
-        {% include "photo_app/forms/model_release_form.html" %}
+        <div class="col">
+            <div class="row">
+                Updating the choices below will update the agreement above. Then click submit to save the changes.
+            </div>
+            <div class="row p-3">
+                {% include "photo_app/forms/model_release_form.html" %}
+            </div>
+        </div>
     </div>
 
 

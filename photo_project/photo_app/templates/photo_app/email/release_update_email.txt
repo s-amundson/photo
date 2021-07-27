@@ -1,0 +1,5 @@
+Hi {{ name }},
+
+Model release named "{{ release.name }}" for a shoot on {{ release.shoot_date }} has been updated to state of {{ release.state }}.
+
+{{ site_domain }}

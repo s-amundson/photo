@@ -1,0 +1,5 @@
+Hi {{ name }},
+
+You have a model release {{ release.name }} for a shoot on {{ release.shoot_date }} to review. Please sign into your account to review, approve or reject.
+
+{{ site_domain }}

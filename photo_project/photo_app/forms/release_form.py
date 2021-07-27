@@ -1,4 +1,4 @@
-from django.forms import ModelForm, BooleanField, ChoiceField
+from django.forms import ModelForm, BooleanField, ChoiceField, model_to_dict
 
 from ..models import Release, ReleaseTemplate
 import logging
@@ -58,6 +58,7 @@ class ReleasePhotographerForm(ReleaseForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         logging.debug(kwargs)
+        logging.debug(model_to_dict(kwargs['instance']))
         for f in self.Meta.required_fields:
             self.fields[f].required = True
         # for f in self.Meta.read_fields:
