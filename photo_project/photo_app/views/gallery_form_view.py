@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 from rest_framework import permissions, status
 from rest_framework.response import Response
 
-from ..forms import GalleryForm
+from ..forms import GalleryCreateForm, GalleryForm
 from ..models import Gallery
 from ..serializers import GallerySerializer
 
@@ -62,24 +62,31 @@ class GalleryFormView(LoginRequiredMixin, View):
 
     def get(self, request, gallery_id=None):
         logging.debug('here')
-        try:
-            g = self.get_instance(request, gallery_id)
-        except PermissionDenied:
-            return HttpResponseBadRequest()
-        logging.debug(g)
-        form = GalleryForm(instance=g)
-
+        if gallery_id is None:
+            form = GalleryCreateForm()
+            update = False
+        else:
+            try:
+                g = self.get_instance(request, gallery_id)
+            except PermissionDenied:
+                return HttpResponseBadRequest()
+            logging.debug(g)
+            form = GalleryForm(instance=g)
+            update = True
         return render(request, 'photo_app/forms/gallery_form.html',
-                      {'form': form, 'update': False if g is None else True})
+                      {'form': form, 'update': update})
 
     def post(self, request, gallery_id=None):
         logging.debug(request.POST)
         logging.debug(gallery_id)
-        try:
-            g = self.get_instance(request, gallery_id)
-        except PermissionDenied:
-            return HttpResponseBadRequest()
-        form = GalleryForm(request.POST, instance=g)
+        if gallery_id is None:
+            form = GalleryCreateForm(request.POST)
+        else:
+            try:
+                g = self.get_instance(request, gallery_id)
+            except PermissionDenied:
+                return HttpResponseBadRequest()
+            form = GalleryForm(request.POST, instance=g)
         # form.clean()
         # logging.debug(form.cleaned_data)
 

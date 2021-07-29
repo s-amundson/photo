@@ -8,15 +8,6 @@
         <div class="col"></div>
     </div>
 
-    {% if update %}
-        <div class="row">
-            <div class="col-2">Display Image:</div>
-            <div class="col input-group input-group-md">
-                {{ form.display_image }}
-            </div>
-        </div>
-    {% endif %}
-
     <div class="row">
         <div class="col-2">Shoot Date:</div>
         <div class="col input-group input-group-md">
@@ -45,6 +36,26 @@
         </div>
     </div>
 
+    {% if update %}
+        <div class="row">
+            <div class="col-2">Display Image:</div>
+            <div class="col input-group input-group-md">
+                {{ form.display_image }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">Model:</div>
+            <div class="col input-group input-group-md">
+                {{ form.photo_model }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">Photographer:</div>
+            <div class="col input-group input-group-md">
+                {{ form.photographer }}
+            </div>
+        </div>
+    {% endif %}
 <!--    <div class="row">-->
 <!--        <div class="col-2"></div>-->
 <!--        <div class="col input-group input-group-md">-->
