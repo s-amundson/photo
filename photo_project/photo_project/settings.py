@@ -29,7 +29,10 @@ def get_secret(setting, secrets=secret_settings):
     except KeyError:
         raise ImproperlyConfigured("Set the {} setting".format(setting))
 
+
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # ACCOUNT_FORMS = {'signup': 'student_app.forms.SignUpForm'}
@@ -86,8 +89,8 @@ DEBUG = get_secret("DEBUG")
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DEFAULT_FROM_EMAIL = get_secret('DEFAULT_FROM_EMAIL')
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_DEBUG = get_secret("EMAIL_DEBUG")
 EMAIL_DEBUG_ADDRESSES = get_secret('EMAIL_DEBUG_ADDRESSES')
 EMAIL_USE_TLS = True

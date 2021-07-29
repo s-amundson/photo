@@ -37,12 +37,7 @@ async function get_profile_info() {
 }
 
 async function post_address_function(model_id) {
-    console.log('on submit')
-    let url_string = "profile_info_api";
-    if (model_id != "") {
-        url_string = url_string + "/" + model_id + "/";
-    }
-    let data = await $.post(url_string, {
+    let data = await $.post("profile_info_api", {
         csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
         'first_name': $("#id_first_name").val(),
         'last_name': $("#id_last_name").val(),
