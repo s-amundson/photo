@@ -58,7 +58,7 @@ class ReleasePhotographerForm(ReleaseForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         logging.debug(kwargs)
-        logging.debug(model_to_dict(kwargs['instance']))
+        # logging.debug(model_to_dict(kwargs['instance']))
         for f in self.Meta.required_fields:
             self.fields[f].required = True
         # for f in self.Meta.read_fields:

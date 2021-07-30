@@ -8,12 +8,14 @@ ENV PYTHONDONTWRITEBYTECODE 1
 RUN apt-get update && apt-get install -y netcat
 
 # Create an app user in the app group.
-RUN useradd --user-group --create-home --no-log-init --shell /bin/bash app
+#RUN useradd --user-group --create-home --no-log-init --shell /bin/bash app
+RUN mkdir -p /home/app/web
 
 ENV APP_HOME=/home/app/web
 
 # Create the staticfiles directory. This avoids permission errors.
 RUN mkdir -p $APP_HOME/staticfiles
+RUN mkdir -p $APP_HOME/media
 
 # Change the workdir.
 WORKDIR $APP_HOME
@@ -29,8 +31,8 @@ RUN pip install -r requirements.txt
 
 # Copy the rest of the code.
 COPY ./photo_project $APP_HOME
-RUN chown -R app:app $APP_HOME
-USER app:app
+#RUN chown -R app:app $APP_HOME
+#USER app:app
 
 ENTRYPOINT ["/home/app/web/entrypoint.sh"]
 

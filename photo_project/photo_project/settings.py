@@ -32,7 +32,6 @@ def get_secret(setting, secrets=secret_settings):
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
-ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # ACCOUNT_FORMS = {'signup': 'student_app.forms.SignUpForm'}
@@ -161,7 +160,7 @@ MIDDLEWARE = [
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'photo_app', 'media')
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 
 ROOT_URLCONF = 'photo_project.urls'
 

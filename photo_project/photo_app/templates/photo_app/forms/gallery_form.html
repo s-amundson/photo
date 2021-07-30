@@ -19,20 +19,20 @@
     <div class="row">
         <div class="col-2"></div>
         <div class="col input-group input-group-md">
-            <div class="custom-control custom-checkbox m-2">
+            <div class="custom-checkbox">
                 {{ form.is_mature }}
-                <label class="custom-control-label" for="id_is_mature">This gallery is for mature audiences only</label>
+                <label for="id_is_mature">This gallery is for mature audiences only</label>
             </div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-2"></div>
-        <div class="col input-group input-group-md">
-            <div class="custom-control custom-checkbox m-2">
+        <div class="col custom-checkbox">
+
                 {{ form.is_public }}
-                <label class="custom-control-label" for="id_is_public">This gallery can be made public</label>
-            </div>
+                <label for="id_is_public">This gallery can be made public</label>
+
         </div>
     </div>
 

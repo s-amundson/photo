@@ -21,8 +21,7 @@ class GalleryForm(ModelForm):
                                            'data-error-msg': "Please enter date in format YYYY-MM-DD"}),
                    'shoot_date': TextInput(attrs={'placeholder': 'YYYY-MM-DD', 'autocomplete': 'off',
                                            'class': 'form-control m-2 member-required',
-                                           'data-error-msg': "Please enter date in format YYYY-MM-DD"}),
-                   'is_mature': CheckboxInput(attrs={'class': "m-2"}), }
+                                           'data-error-msg': "Please enter date in format YYYY-MM-DD"})}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

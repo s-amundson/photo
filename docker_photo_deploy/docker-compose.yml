@@ -25,6 +25,7 @@ services:
 #      - db
     volumes:
       - staticfiles:/home/app/web/staticfiles
+      - media:/home/app/web/photo_app/media
 
 #  nginx:
 #    container_name: nginx
@@ -46,6 +47,8 @@ networks:
     external: true
 
 volumes:
+  media:
+    name: photo-media
   postgres-data:
   staticfiles:
     name: photo-static
