@@ -18,8 +18,10 @@ function add_image(data) {
     $("#images-div").append(h);
 }
 
-function post_image(event) {
+async function post_image(event) {
     event.preventDefault();
+    $("#btn-image").prop("disabled",true)
+
 //    var file_data = $('#id_image').prop('files')[0];
     var form_data = new FormData($("#image-form")[0]);
     console.log(form_data);
@@ -28,7 +30,7 @@ function post_image(event) {
     form_data.append('gallery', $("#id_gallery").val());
     console.log(form_data);
 
-    $.ajax({
+    await $.ajax({
         url: "/image_upload/" + $("#id_gallery").val() + "/", // point to server-side controller method
         dataType: 'json', // what to expect back from the server
         cache: false,
@@ -45,4 +47,5 @@ function post_image(event) {
             alert(response); // display error response from the server
         }
     });
+    $("#btn-image").prop("disabled",false)
 }

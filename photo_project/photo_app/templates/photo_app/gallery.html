@@ -22,7 +22,7 @@
             {{ form }}
             <input type="hidden" id="id_gallery" value="{{ gallery.id }}">
             <input type="hidden" id="id_form_url" value="{% url 'photo_app:gallery_form' %}">
-            <input type="submit" value="Submit" >
+            <input type="submit" id="btn-image" value="Submit" >
 
         </form>
       </div>
@@ -33,7 +33,7 @@
         {% for image in images %}
           <div class="col border mx-auto">
             <a target="_blank" href="{% url 'photo_app:image' image.id %}">
-              <img width="{{ image.thumb_width }}px" src="{{ image.image.url }}"><br/>
+                <img src="{{ image.thumb.url }}"><br/>
                 {{ image.width }} x {{ image.height }}
             </a>
           </div>
