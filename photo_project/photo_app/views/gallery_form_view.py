@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.views.generic.base import View
 from django.http import JsonResponse
 import logging
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest
 
 from rest_framework.views import APIView
 from rest_framework import permissions, status
@@ -52,6 +52,7 @@ class GalleryFormView(LoginRequiredMixin, View):
     def get_instance(self, request, gallery_id):
         if gallery_id is not None:
             g = get_object_or_404(Gallery, pk=gallery_id)
+            logging.debug(request.user)
             if request.user == g.owner or request.user.is_superuser:
                 pass
             else:
@@ -61,18 +62,18 @@ class GalleryFormView(LoginRequiredMixin, View):
         return g
 
     def get(self, request, gallery_id=None):
-        logging.debug('here')
+        update = False
         if gallery_id is None:
             form = GalleryCreateForm()
-            update = False
         else:
             try:
                 g = self.get_instance(request, gallery_id)
             except PermissionDenied:
-                return HttpResponseBadRequest()
+                return HttpResponse("")
             logging.debug(g)
             form = GalleryForm(instance=g)
             update = True
+
         return render(request, 'photo_app/forms/gallery_form.html',
                       {'form': form, 'update': update})
 

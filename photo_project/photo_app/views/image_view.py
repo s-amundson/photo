@@ -47,7 +47,8 @@ class ImageView(LoginRequiredMixin, View):
                       'Focal Length': exif.get('FocalLength', ''),
                       'Film Focal Length': exif.get('FocalLengthIn35mmFilm', ''),
                       'Height': exif.get('ExifImageHeight',''),
-                      'Width': exif.get('ExifImageWidth', '')
+                      'Width': exif.get('ExifImageWidth', ''),
+                      'Filename': image.image.name.split('/')[-1]
                       }
 
         return render(request, 'photo_app/image.html', {'image': image, 'image_data': image_data})

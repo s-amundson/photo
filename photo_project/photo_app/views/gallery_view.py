@@ -23,6 +23,8 @@ class GalleryView(LoginRequiredMixin, View):
         form = ImageForm()
         logging.debug(gallery_id)
         gallery_form = GalleryForm(instance=gallery)
+        owner = gallery.owner == request.user
+        logging.debug(owner)
         # context = self.get_gallery(request, gallery_id)
         return render(request, 'photo_app/gallery.html', {'form': form, 'images': images, 'gallery': gallery,
-                                                          'gallery_form': gallery_form, 'update': True})
+                                                          'gallery_form': gallery_form, 'update': True, 'owner': owner})

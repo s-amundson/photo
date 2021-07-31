@@ -11,33 +11,25 @@
 
 {% block main %}
   {% load static %}
-  <div class="row">
-    <div class="col" id="gallery-list">
+  <div class="row mx-auto"><h3>Galleries</h3></div>
+  <div class="row" id="gallery-list">
     {% if gallery_list %}
 
       {% for gallery in gallery_list %}
-        <div class="row">
-          <div class="col-2">
-            <a href="{% url 'photo_app:gallery_view' gallery.id %}">
-              {{ gallery.name }}</a>
-          </div>
-          {% if gallery.display_image %}
-            <div class="col-1 mx-auto">
-              <a target="_blank" href="{% url 'photo_app:image' gallery.image.id %}">
-                <img width="{{ gallery.image.thumb_width }}px" src="{{ gallery.image.image.url }}"><br/>
-              </a>
-            </div>
-          {% else %}
-            <div class="col mx-auto"></div>
-          {% endif %}
-          <div class="col mx-auto"></div>
+        <div class="col border mx-auto">
+          <a href="{% url 'photo_app:gallery_view' gallery.id %}">
+            {% if gallery.display_image %}
+              <img src="{{ gallery.image.thumb.url }}"><br/>
+            {% endif %}
+            {{ gallery.name }}
+          </a>
         </div>
       {% endfor %}
+
     {% else %}
       <p id="no-gallery">There are no galleries.</p>
 
     {% endif %}
-    </div>
   </div>
   {% if user.is_authenticated %}
     <div class="row">

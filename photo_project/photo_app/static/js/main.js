@@ -1,4 +1,5 @@
 "use strict";
+var url_string = "/gallery_form"
 $(document).ready(function(){
     if ($("#alert-message").val() != "") {
         alert($("#alert-message").val());
@@ -9,11 +10,8 @@ function load_gallery_form(gallery_id) {
     console.log(gallery_id);
     $("#div-add-gallery").show();
     $("#btn-add-gallery").hide();
-    var url_string = "/gallery_form"
-//    var url_string = $("#id_form_url").val();
     if(gallery_id) {
-        url_string = url_string + "/" + gallery_id + "/";
-//        $("#student-row-" + student_id).hide()
+        url_string = "/gallery_form/" + gallery_id + "/";
     }
     console.log('load form')
     console.log(url_string)
@@ -31,25 +29,33 @@ function load_gallery_form(gallery_id) {
                 $("#id_public_date").attr("disabled", false);
             }
         });
+        if(gallery_id) {
+            $("#btn-gallery-form").html("Edit")
+        }
     });
 }
 
-async function post_gallery_form(e) {
+async function post_gallery_form(e, gallery_id) {
     e.preventDefault();
+    var url_string = "/gallery_form"
+    if($("#id_gallery").val()) {
+        url_string = "/gallery_form/" + $("#id_gallery").val() + "/";
+    }
     let data = await $.post(url_string, {
-            csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
-            'name': $("#id_name").val(),
-            'shoot_date': $("#id_shoot_date").val(),
-            'is_mature': $("#id_is_mature").prop('checked'),
-            'is_public': $("#id_is_public").prop('checked'),
-            'public_date': $("#id_public_date").val(),
-        }).done(function( data ) {
+        csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
+        'name': $("#id_name").val(),
+        'shoot_date': $("#id_shoot_date").val(),
+        'is_mature': $("#id_is_mature").prop('checked'),
+        'is_public': $("#id_is_public").prop('checked'),
+        'public_date': $("#id_public_date").val(),
+        'display_image': $("#id_display_image").val(),
+    }).done(function( data ) {
         console.log(data);
 
         if ($("#no-gallery").length) {
             $("#no-gallery").remove();
         }
-        let h = '<div class="row"><div class="col"><a href="' + data['url'] + '">' + $("#id_name").val() + '</a></div></div>'
+        let h = '<div class="col border mx-auto"><a href="' + data['url'] + '">' + $("#id_name").val() + '</a></div>'
         console.log(h)
         $("#gallery-list").append(h);
         $("#div-add-gallery").hide();

@@ -8,6 +8,7 @@ urlpatterns = [
     path('gallery_form_api/<int:gallery_id>/', GalleryFormApiView.as_view(), name='gallery_form_api'),
     path('gallery_form_api', GalleryFormApiView.as_view(), name='gallery_form_api'),
     path('gallery_view/<int:gallery_id>/', GalleryView.as_view(), name='gallery_view'),
+    path('image', ImageView.as_view(), name='image'),
     path('image/<int:image_id>/', ImageView.as_view(), name='image'),
     path('image_upload/<int:gallery_id>/', ImageApiView.as_view(), name='image_upload'),
     path('model_release/<int:release>/', ModelReleaseView.as_view(), name='model_release'),

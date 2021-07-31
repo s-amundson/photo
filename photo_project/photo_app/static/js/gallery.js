@@ -1,18 +1,20 @@
 "use strict";
 $(document).ready(function() {
     $("#image-form").submit(post_image);
-    load_gallery_form($("#id_gallery").val());
-
-
+    $("#btn-gallery-edit").click(function () {
+        $(this).hide();
+        load_gallery_form($("#id_gallery").val());
+    });
 });
+
 function add_image(data) {
     if ($("#no-image").length) {
         $("#no-image").remove()
     }
     console.log(data["image"])
     let h = '<div class="col border mx-auto">';
-    h = h + '<a target="_blank" href="' + data['image'] + '">';
-    h = h + '<img width="' + data['thumb_width'] + 'px" src="' + data['image'] + '"><br/>';
+    h = h + '<a target="_blank" href="' + $("#id_image_base_url").val() + "/" + data['id'] + '">';
+    h = h + '<img width="' + data['thumb_width'] + 'px" src="' + data['thumb'] + '"><br/>';
     h = h + data['width'] + ' x ' + data['height'] + '</a></div>';
 
     $("#images-div").append(h);

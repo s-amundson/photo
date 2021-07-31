@@ -43,48 +43,22 @@
                 {{ form.display_image }}
             </div>
         </div>
-        <div class="row">
-            <div class="col-2">Model:</div>
-            <div class="col input-group input-group-md">
-                {{ form.photo_model }}
+        {% if user.is_photographer %}
+            <div class="row">
+                <div class="col-2">Model:</div>
+                <div class="col input-group input-group-md">
+                    {{ form.photo_model }}
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-2">Photographer:</div>
-            <div class="col input-group input-group-md">
-                {{ form.photographer }}
+            <div class="row">
+                <div class="col-2">Photographer:</div>
+                <div class="col input-group input-group-md">
+                    {{ form.photographer }}
+                </div>
             </div>
-        </div>
+        {% endif %}
     {% endif %}
-<!--    <div class="row">-->
-<!--        <div class="col-2"></div>-->
-<!--        <div class="col input-group input-group-md">-->
-<!--            <div class="custom-control custom-checkbox m-2">-->
-<!--                <input type="checkbox" class="custom-control-input m-2" id="id_is_public">-->
-<!--                <label class="custom-control-label" for="id_is_public">This gallery can be made public</label>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
 
-<!--    <div class="row">-->
-<!--        <div class="col-2"></div>-->
-<!--        <div class="col input-group input-group-md">-->
-<!--            <div class="custom-control custom-checkbox m-2">-->
-<!--                <input type="checkbox" class="custom-control-input m-2" id="id_is_public">-->
-<!--                <label class="custom-control-label" for="id_is_public">This gallery can be made public</label>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    <div class="row">-->
-<!--        <div class="col-2"></div>-->
-<!--        <div class="col input-group input-group-md">-->
-<!--            <div class="custom-control custom-checkbox m-2">-->
-<!--                <input type="checkbox" class="custom-control-input m-2" id="id_is_public">-->
-<!--                <label class="custom-control-label" for="id_is_public">This gallery can be made public</label>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
     <div class="row">
         <div class="col-2">Public Date:</div>
         <div class="col input-group input-group-md">
@@ -95,5 +69,5 @@
         <div class="col"></div>
     </div>
 
-<button id="btn-gallery-form" class="btn btn-primary" type="submit">Update</button>
+    <button id="btn-gallery-form" class="btn btn-primary" type="submit">Update</button>
 </form>

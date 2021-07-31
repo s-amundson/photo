@@ -11,12 +11,15 @@ logger = logging.getLogger(__name__)
 
 
 class ImageSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()
+    filename = serializers.ReadOnlyField()
 
     class Meta:
         model = Images
         # exclude = []
-        fields = ['image', 'gallery', 'height', 'width', 'thumb_width']
-        extra_kwargs = {'height': {'required': False}, 'width': {'required': False}, 'thumb_width': {'required': False}}
+        fields = ['filename', 'id', 'image', 'gallery', 'height', 'width', 'thumb', 'thumb_width']
+        extra_kwargs = {'height': {'required': False}, 'width': {'required': False}, 'thumb': {'required': False},
+                        'thumb_width': {'required': False}}
 
     def save(self, *args, **kwargs):
         if self.instance is not None:
@@ -58,14 +61,8 @@ class ImageSerializer(serializers.ModelSerializer):
 
         ir = super().save(image=image, height=h, width=w, thumb_width=200, orientation=exif.get(274, 0), taken=taken,
                           camera_make=exif.get(271, 'None'), camera_model=exif.get(272, 'None'), thumb=img_file,
-                          *args, **kwargs)
+                          filename=image.name, *args, **kwargs)
         ir.save()
-        # logging.debug(ir.image.path)
-
-        # ip = ir.image.path.split('.')
-        # img.save(f'{ip[0]}_thumb.{ip[1]}')
-        # ir.thumb_path = f'{ip[0]}_thumb.{ip[1]}'
-        # ir.save()
         return ir
 
     def image_to_byte_array(self, img):
