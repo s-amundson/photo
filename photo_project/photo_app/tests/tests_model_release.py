@@ -24,7 +24,7 @@ class TestsModelRelease(TestCase):
                              'name': 'name',
                              'is_mature': False,
                              'photographer': 1,
-                             'photo_model': 2,
+                             'talent': 2,
                              'shoot_date': "2020-02-02",
                              # 'state': 'pending',
                              'template': 1,
@@ -50,9 +50,9 @@ class TestsModelRelease(TestCase):
 
     def test_get_photographer_return(self):
         r = Release(id=1, compensation=2, file=None, name='name', is_mature=False, photographer=User.objects.get(pk=1),
-                    photo_model=User.objects.get(pk=2), shoot_date="2020-02-02", state='pending',
+                    talent=User.objects.get(pk=2), shoot_date="2020-02-02", state='pending',
                     template=ReleaseTemplate.objects.get(pk=1), use_first_name=True, use_nickname=True,
-                    model_first_name='firstname', model_nickname='nick', model_full_name='full')
+                    talent_first_name='firstname', talent_nickname='nick', talent_full_name='full')
         r.save()
         self.client.force_login(self.test_user)  # this user is photographer
         response = self.client.get(reverse('photo:model_release', kwargs={'release': r.id}), secure=True)
@@ -60,9 +60,9 @@ class TestsModelRelease(TestCase):
 
     def test_get_photographer_return_complete(self):
         r = Release(id=1, compensation=2, file=None, name='name', is_mature=False, photographer=User.objects.get(pk=1),
-                    photo_model=User.objects.get(pk=2), shoot_date="2020-02-02", state='complete',
+                    talent=User.objects.get(pk=2), shoot_date="2020-02-02", state='complete',
                     template=ReleaseTemplate.objects.get(pk=1), use_first_name=True, use_nickname=True,
-                    model_first_name='firstname', model_nickname='nick', model_full_name='full')
+                    talent_first_name='firstname', talent_nickname='nick', talent_full_name='full')
         r.save()
         self.client.force_login(self.test_user)  # this user is photographer
         response = self.client.get(reverse('photo:model_release', kwargs={'release': r.id}), secure=True)
@@ -71,9 +71,9 @@ class TestsModelRelease(TestCase):
     def test_get_as_model(self):
         self.client.force_login(self.User.objects.get(pk=2))
         r = Release(id=1, compensation=2, file=None, name='name', is_mature=False, photographer=User.objects.get(pk=1),
-                    photo_model=User.objects.get(pk=2), shoot_date="2020-02-02", state='pending',
+                    talent=User.objects.get(pk=2), shoot_date="2020-02-02", state='pending',
                     template=ReleaseTemplate.objects.get(pk=1), use_first_name=True, use_nickname=True,
-                    model_first_name='firstname', model_nickname='nick', model_full_name='full')
+                    talent_first_name='firstname', talent_nickname='nick', talent_full_name='full')
         r.save()
 
         response = self.client.get(reverse('photo:model_release', kwargs={'release': r.id}), secure=True)
@@ -84,9 +84,9 @@ class TestsModelRelease(TestCase):
     def test_get_as_different_model(self):
         self.client.force_login(self.User.objects.get(pk=3))
         r = Release(id=1, compensation=2, file=None, name='name', is_mature=False, photographer=User.objects.get(pk=1),
-                    photo_model=User.objects.get(pk=2), shoot_date="2020-02-02", state='pending',
+                    talent=User.objects.get(pk=2), shoot_date="2020-02-02", state='pending',
                     template=ReleaseTemplate.objects.get(pk=1), use_first_name=True, use_nickname=True,
-                    model_first_name='firstname', model_nickname='nick', model_full_name='full')
+                    talent_first_name='firstname', talent_nickname='nick', talent_full_name='full')
         r.save()
 
         response = self.client.get(reverse('photo:model_release', kwargs={'release': r.id}), secure=True)
@@ -98,8 +98,8 @@ class TestsModelRelease(TestCase):
         response = self.client.post(reverse('photo:model_release'), self.release_dict, secure=True)
         self.assertEqual(response.status_code, 200)
         ml = Release.objects.all()
-        self.assertEqual(len(ml), 1)
-        ml = ml[0]
+        self.assertEqual(len(ml), 2)
+        ml = ml[1]
         self.assertEqual(ml.state, 'pending')
 
     def test_post_photographer_start_error(self):
@@ -109,13 +109,13 @@ class TestsModelRelease(TestCase):
         response = self.client.post(reverse('photo:model_release'), self.release_dict, secure=True)
         self.assertEqual(response.status_code, 200)
         ml = Release.objects.all()
-        self.assertEqual(len(ml), 0)
+        self.assertEqual(len(ml), 1)
 
     def test_post_photographer_update(self):
-        r = Release(id=1, compensation=2, file=None, name='name', is_mature=False, photographer=User.objects.get(pk=1),
-                    photo_model=User.objects.get(pk=2), shoot_date="2020-02-02", state='pending',
+        r = Release(id=2, compensation=2, file=None, name='name', is_mature=False, photographer=User.objects.get(pk=1),
+                    talent=User.objects.get(pk=2), shoot_date="2020-02-02", state='pending',
                     template=ReleaseTemplate.objects.get(pk=1), use_first_name=True, use_nickname=True,
-                    model_first_name='firstname', model_nickname='nick', model_full_name='full')
+                    talent_first_name='firstname', talent_nickname='nick', talent_full_name='full')
         r.save()
         self.release_dict['shoot_date'] = '2020-04-04'
         self.client.force_login(self.test_user) # this user is photographer
@@ -123,8 +123,8 @@ class TestsModelRelease(TestCase):
         response = self.client.post(reverse('photo:model_release', kwargs={'release': r.id}), self.release_dict, secure=True)
         self.assertEqual(response.status_code, 200)
         ml = Release.objects.all()
-        self.assertEqual(len(ml), 1)
-        ml = ml[0]
+        self.assertEqual(len(ml), 2)
+        ml = ml[1]
         self.assertEqual(ml.state, 'pending')
         self.assertEqual(ml.shoot_date.month, 4)
 
@@ -132,39 +132,39 @@ class TestsModelRelease(TestCase):
         user = self.User.objects.get(pk=2)
         self.client.force_login(user)
         r = Release(compensation=2, name='name', is_mature=False, photographer=User.objects.get(pk=1),
-                    photo_model=User.objects.get(pk=2), shoot_date="2020-02-02", state='pending',
+                    talent=User.objects.get(pk=2), shoot_date="2020-02-02", state='pending',
                     template=ReleaseTemplate.objects.get(pk=1), use_first_name=True, use_nickname=True)
         r.save()
         d = {'use_first_name': False, 'use_full_name': False, 'use_nickname': True, 'agree': True, 'template': 1}
         response = self.client.post(reverse('photo:model_release', kwargs={'release': r.id}), d, secure=True)
         self.assertEqual(response.status_code, 200)
         ml = Release.objects.all()
-        self.assertEqual(len(ml), 1)
-        ml = ml[0]
+        self.assertEqual(len(ml), 2)
+        ml = ml[1]
         self.assertEqual(ml.state, 'agreed')
         self.assertFalse(ml.use_first_name)
         self.assertFalse(ml.use_full_name)
-        self.assertEqual(ml.model_first_name, user.first_name)
+        self.assertEqual(ml.talent_first_name, user.first_name)
 
     def test_post_different_model_pending(self):
         user = self.User.objects.get(pk=3)
         self.client.force_login(user)
         r = Release(compensation=2, name='name', is_mature=False, photographer=User.objects.get(pk=1),
-                    photo_model=User.objects.get(pk=2), shoot_date="2020-02-02", state='pending',
+                    talent=User.objects.get(pk=2), shoot_date="2020-02-02", state='pending',
                     template=ReleaseTemplate.objects.get(pk=1), use_first_name=True, use_nickname=True)
         r.save()
         d = {'use_first_name': False, 'use_full_name': False, 'use_nickname': True, 'agree': True, 'template': 1}
         response = self.client.post(reverse('photo:model_release', kwargs={'release': r.id}), d, secure=True)
         self.assertEqual(response.status_code, 400)
         ml = Release.objects.all()
-        self.assertEqual(len(ml), 1)
-        ml = ml[0]
+        self.assertEqual(len(ml), 2)
+        ml = ml[1]
         self.assertEqual(ml.state, 'pending')
 
     def test_post_photographer_agreed(self):
         self.client.force_login(self.test_user)  # this user is photographer
         r = Release(compensation=2, name='name', is_mature=False, photographer=User.objects.get(pk=1),
-                    photo_model=User.objects.get(pk=2), shoot_date="2020-02-02", state='agreed',
+                    talent=User.objects.get(pk=2), shoot_date="2020-02-02", state='agreed',
                     template=ReleaseTemplate.objects.get(pk=1), use_first_name=True, use_nickname=True)
         r.save()
 
@@ -174,7 +174,7 @@ class TestsModelRelease(TestCase):
                                         {'file': f, 'template': 1}, secure=True)
         self.assertEqual(response.status_code, 200)
         ml = Release.objects.all()
-        self.assertEqual(len(ml), 1)
-        ml = ml[0]
+        self.assertEqual(len(ml), 2)
+        ml = ml[1]
         self.assertNotEquals(ml.file, None)
         self.assertEqual(ml.state, 'complete')

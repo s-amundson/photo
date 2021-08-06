@@ -11,25 +11,25 @@
             </div>
             <div class="col-1"> and </div>
             <div class="col">
-                <span class="pl-3">{{ model.first_name }} {{ model.last_name }} ("Model"):</span><br>
-                <span class="pl-3">{{ model.street }}</span><br>
-                <span class="pl-3">{{ model.city }} {{ model.state }} {{ model.post_code }}</span><br>
-                <span class="pl-3">{{ model.phone }}</span><br>
-                <span class="pl-3">{{ model.email }}</span>
+                <span class="pl-3">{{ talent.first_name }} {{ talent.last_name }} ("Model"):</span><br>
+                <span class="pl-3">{{ talent.street }}</span><br>
+                <span class="pl-3">{{ talent.city }} {{ talent.state }} {{ talent.post_code }}</span><br>
+                <span class="pl-3">{{ talent.phone }}</span><br>
+                <span class="pl-3">{{ talent.email }}</span>
             </div>
         </div>
     </div>
 </div>
 
 <div class="row p-2">
-    I , {{ model.first_name }} {{ model.last_name }} , hereby absolutely and irrevocably authorize
+    I , {{ talent.first_name }} {{ talent.last_name }} , hereby absolutely and irrevocably authorize
     {{ photographer.first_name }} {{ photographer.last_name }} as well as their legal representatives,
     assignees, and transferees to use, publish, reuse, republish, distribute, disseminate or otherwise make publicly
     available for any artistic or commercial use, including advertising, publication, or illustration images of me
     and/or my property taken on {{ date }}, in whole or in part, whether individually or collectively with any other
     material in any and all forms of media now or hereinafter known and/or developed, including, but not limited to,
     in print media, in digital media, on the Internet, in composite images, or distorted images or for any other
-    lawful use as may be determined by Photographer in their sole and exclusive discretion. The photographer
+    lawful use as may be determined by Photographer in their sole and exclusive discretion. The Photographer
     shall specifically be permitted to use fictitious names in conjunction with the images.
 </div>
 
@@ -52,26 +52,26 @@
         Model specifically acknowledge and agree that the nature of the work may include full or partial nudity.
         I herby consent and agree to appear fully or partially nude in the work.
     {% else %}
-        Photographer agrees not to make any alterations to the Photographs that would make the images appear to be
+        Photographer agrees not to make any alterations to the photographs that would make the images appear to be
         pornographic, defamatory, or illegal.
     {% endif %}
 </div>
 
 {% if use_full_name %}
     <div class="row p-2">
-        Model specifically acknowledge and agree, that the photographer may use my full name in connection with the Photographs.
+        Model specifically acknowledge and agree, that the Photographer may use my full name in connection with the photographs.
     </div>
 {% endif %}
 
 {% if use_first_name %}
     <div class="row p-2">
-        Model specifically acknowledge and agree, that the photographer may use my first name in connection with the Photographs.
+        Model specifically acknowledge and agree, that the Photographer may use my first name in connection with the photographs.
     </div>
 {% endif %}
 
 {% if use_nickname %}
     <div class="row p-2">
-        Model specifically acknowledge and agree, that the photographer may use "{{ model.nickname }}" name in connection with the Photographs.
+        Model specifically acknowledge and agree, that the Photographer may use "{{ talent.nickname }}" name in connection with the photographs.
     </div>
 {% endif %}
 <div class="row p-2">
@@ -102,7 +102,7 @@
     </div>
     <div class="col pt-4">
         <hr />
-        {{ model.first_name }} {{ model.last_name }}
+        {{ talent.first_name }} {{ talent.last_name }}
     </div>
 </div>
 

@@ -1,6 +1,10 @@
 from django.forms import ModelForm, DateField, ChoiceField, TextInput, CheckboxInput
 
-from ..models import Gallery, User
+from ..models import Gallery, Release, User
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 
 class GalleryForm(ModelForm):
@@ -9,7 +13,7 @@ class GalleryForm(ModelForm):
         model = Gallery
         required_fields = ['name']
         read_fields = []
-        optional_fields = ['display_image', 'is_mature', 'is_public', 'photo_model', 'public_date', 'photographer',
+        optional_fields = ['display_image', 'is_mature', 'is_public', 'release', 'public_date', 'photographer',
                            'shoot_date']
         fields = required_fields + read_fields + optional_fields
 
@@ -25,17 +29,18 @@ class GalleryForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
         # self.fields['public_date'] = DateField(required=False)
         for f in self.Meta.optional_fields:
             self.fields[f].required = False
-        self.fields['photo_model'].choices = self.model_choices()
+        self.fields['release'].choices = self.release_choices()
         self.fields['photographer'].choices = self.photographer_choices()
 
-    def model_choices(self):
-        pm = User.objects.filter(is_model=True)
+    def release_choices(self):
+        pm = Release.objects.filter(state='complete')
         choices = []
         for m in pm:
-            choices.append((m.id, f'{m.first_name} {m.last_name}'))
+            choices.append((m.id, m.shoot_date))
         return choices
 
     def photographer_choices(self):
@@ -51,7 +56,7 @@ class GalleryCreateForm(GalleryForm):
     class Meta(GalleryForm.Meta):
         required_fields = ['name']
         read_fields = []
-        optional_fields = ['is_mature', 'is_public', 'photo_model', 'public_date', 'photographer',
+        optional_fields = ['is_mature', 'is_public', 'release', 'public_date', 'photographer',
                            'shoot_date']
         fields = required_fields + read_fields + optional_fields
 

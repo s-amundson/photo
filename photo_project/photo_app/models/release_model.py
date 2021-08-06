@@ -18,8 +18,8 @@ class Release(models.Model):
     is_mature = models.BooleanField(default=False)
     photographer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1,
                                      related_name='release_photographer')
-    photo_model = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, default=None,
-                                    related_name='release_model')
+    talent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, default=None,
+                               related_name='release_talent')
     shoot_date = models.DateField(null=True, default=None)
     state = models.CharField(max_length=20, null=True, choices=states)
     template = models.ForeignKey(ReleaseTemplate, on_delete=models.DO_NOTHING)
@@ -27,8 +27,9 @@ class Release(models.Model):
     use_first_name = models.BooleanField(default=True)
     use_full_name = models.BooleanField(default=True)
     use_nickname = models.BooleanField(default=True)
-    model_first_name = models.CharField(max_length=50, null=True, default=None)
-    model_nickname = models.CharField(max_length=100, null=True, default=None)
-    model_full_name = models.CharField(max_length=100, null=True, default=None)
+    #  TODO add use links
+    talent_first_name = models.CharField(max_length=50, null=True, default=None)
+    talent_nickname = models.CharField(max_length=100, null=True, default=None)
+    talent_full_name = models.CharField(max_length=100, null=True, default=None)
 
 

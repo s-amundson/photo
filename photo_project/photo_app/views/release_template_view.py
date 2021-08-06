@@ -54,7 +54,7 @@ logger = logging.getLogger(__name__)
 #
 #
 class ReleaseTemplateView(LoginRequiredMixin, View):
-    model = {'first_name': 'MODEL', 'last_name': '', 'street': 'STREET', 'city': 'CITY', 'state': 'STATE',
+    talent = {'first_name': 'MODEL', 'last_name': '', 'street': 'STREET', 'city': 'CITY', 'state': 'STATE',
              'post_code': 'ZIP', 'nickname': 'NICKNAME', 'phone': 'PHONE', 'email': 'EMAIL'}
 
     def dict_from_release(self, request, release):
@@ -62,29 +62,30 @@ class ReleaseTemplateView(LoginRequiredMixin, View):
         d = {'photographer': self.user_dict(mr.photographer),
              'date': mr.shoot_date,
              'is_mature': mr.is_mature,
-             'model': self.model,
+             'talent': self.talent,
              'use_full_name': mr.use_full_name,
              'use_first_name': mr.use_first_name,
              'use_nickname': mr.use_nickname,
              'compensation': mr.compensation,
              }
-        if request.user.id == mr.photo_model.id or \
+        if request.user.id == mr.talent.id or \
                 (request.user.id == mr.photographer.id and mr.state not in [None, 'pending']):
-            d['model'] = self.user_dict(mr.photo_model)
+            d['talent'] = self.user_dict(mr.talent)
         return d
 
     def get(self, request, template):
         # check to see if we are working on a release
         release = request.session.get('model_release', None)
+        logging.debug(release)
         if release is None:
             if not request.user.is_photographer:
                 return HttpResponseNotAllowed
             d = {'photographer': request.user, 'date': 'DATE', 'is_mature': True,
-                 'model': self.model, 'use_full_name': True, 'use_first_name': True, 'use_nickname': True,
+                 'talent': self.talent, 'use_full_name': True, 'use_first_name': True, 'use_nickname': True,
                  'compensation': '$$$'}
         else:
             d = self.dict_from_release(request, release)
-
+        logging.debug(d)
         rt = get_object_or_404(ReleaseTemplate, pk=template)
         return HttpResponse(render(request, f'photo_app/release/{rt.file}.html', d))
 
@@ -106,7 +107,7 @@ class ReleaseTemplateView(LoginRequiredMixin, View):
             d = {'photographer': request.user,
                  'date': request.POST.get('date', 'DATE'),
                  'is_mature': get_bool('is_mature'),
-                 'model': self.model,
+                 'talent': self.talent,
                  'use_full_name': get_bool('use_full_name'),
                  'use_first_name': get_bool('use_first_name'),
                  'use_nickname': get_bool('use_nickname'),

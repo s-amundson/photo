@@ -84,11 +84,14 @@ async function post_gallery_form(e, gallery_id) {
     let data = await $.post(url_string, {
         csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
         'name': $("#id_name").val(),
+        'description': $("#id_description").val(),
         'shoot_date': $("#id_shoot_date").val(),
         'is_mature': $("#id_is_mature").prop('checked'),
         'is_public': $("#id_is_public").prop('checked'),
         'public_date': $("#id_public_date").val(),
         'display_image': $("#id_display_image").val(),
+        'release': $("#id_release").val(),
+        'photographer': $("#id_photographer").val(),
     }).done(function( data ) {
         console.log(data);
 

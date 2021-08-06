@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from ..models import Images, Gallery
+from ..models import Images, Gallery, Release
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ class TestsImage(TestCase):
         g = Gallery(is_public=False, name='test', owner=self.test_user,
                     public_date=None, shoot_date='2021-06-26')
         g.save()
-        g.photo_model.add(self.User.objects.get(pk=2))
+        g.release.add(Release.objects.get(pk=1))
 
         # pic = SimpleUploadedFile("1.jpg", "file_content", content_type="video/mp4")
         # with open() as f:
