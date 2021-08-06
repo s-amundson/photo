@@ -1,0 +1,15 @@
+
+{% for link in links %}
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col"> {{ link.category.category }} </div>
+        <div class="col"> <a href="{{ link.url }}">{{ link.url }}</a> </div>
+        <div class="col">
+            {% if owner %}
+                <button id="btn-edit-{{ link.id }}" class="btn btn-primary m-1" type="button" link-id="{{ link.id }}">
+                    Edit
+                </button>
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}

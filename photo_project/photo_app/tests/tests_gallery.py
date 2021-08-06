@@ -22,4 +22,7 @@ class TestsGallery(TestCase):
     def test_get(self):
         response = self.client.get(reverse('photo:gallery_view', kwargs={'gallery_id': 3}), secure=True)
         self.assertTemplateUsed(response, 'photo_app/gallery.html')
+        self.assertFalse(response.context['owner'])
+        self.assertTrue(response.context['update'])
+        self.assertEqual(len(response.context['models']), 1)
         self.assertEqual(response.status_code, 200)

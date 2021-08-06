@@ -4,8 +4,8 @@ from django.shortcuts import render
 from django.views.generic.base import View
 import logging
 
-# from ..forms import PhotoModelForm
-from ..models import Gallery, Release
+from ..forms import LinkForm
+from ..models import Gallery, Links, Release
 logger = logging.getLogger(__name__)
 
 
@@ -29,5 +29,9 @@ class ProfileView(LoginRequiredMixin, View):
 
         logging.debug(release_list)
 
+        links = Links.objects.filter(user=request.user)
+        link_form = LinkForm()
+
         # form = PhotoModelForm(initial=pm)
-        return render(request, 'photo_app/profile.html', {'gallery_list': gallery_list, 'release_list': release_list})
+        return render(request, 'photo_app/profile.html', {'gallery_list': gallery_list, 'release_list': release_list,
+                      'links': links, 'link_form':link_form})

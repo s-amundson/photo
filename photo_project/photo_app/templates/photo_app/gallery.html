@@ -45,6 +45,37 @@
         <p id="no-image">There are no images.</p>
         {% endif %}
     </div>
+
+    <div class="row pt-3">
+      <div class="col">
+        <h4>Description</h4>
+      </div>
+    </div>
+    <div class="row px-5">{{ gallery.description }}</div>
+    {% if models %}
+        <div class="row pt-3">
+          <div class="col">
+            <h4>Models</h4>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col px-5">
+                {% for model in models %}
+                    <div class="row px-3">
+                        <h5>{{ model.first_name }} {{ model.last_name }}</h5>
+                    </div>
+
+                    <div class="row px-3">
+                    {% for link in model.links_set.all %}
+                        <div class="col-2">
+                            <a class="px-3" href="{{ link.url }}">{{ link.category.category }}</a>
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
     <div class="row p-3"><hr/></div>
     {% if owner %}
         <div class="row ">

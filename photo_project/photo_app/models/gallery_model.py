@@ -3,6 +3,7 @@ from django.db import models
 
 
 class Gallery(models.Model):
+    description = models.CharField(max_length=255, default='')
     display_image = models.IntegerField(null=True)  # id of the image to display in gallery list
     is_mature = models.BooleanField(default=False)
     is_public = models.BooleanField(default=False)

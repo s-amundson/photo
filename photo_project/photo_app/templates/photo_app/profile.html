@@ -7,13 +7,13 @@
 {% endblock %}
 
 {% block main %}
-    <div class="row p-3 align-items-center mx-auto">
+    <div class="row p-2 align-items-center mx-auto">
         <div class="col-12">
             <h2> Profile Page </h2>
         </div>
     </div>
 
-    <div class="row px-3 align-items-center mx-auto">
+    <div class="row px-2 align-items-center mx-auto">
         <div class="col-12">
             <h3 id="model-name"> {{ user.first_name }} {{ user.last_name }} </h3>
         </div>
@@ -33,13 +33,28 @@
                 {{ photo_model.city }} {{ photo_model.state }} {{ photo_model.post_code }}
             </div>
             <div id="phone" class="row">{{ photo_model.phone }}</div>
-            <div class="row">
+            <div class="row px-5">
                 <button id="btn-address-edit" class="btn btn-primary" type="button" name="button"
                         model_id="{{ user.id }}">
                     Edit Info
                 </button>
             </div>
         </div>
+    </div>
+
+    <div class="row px-3 pt-3">
+        <div class="col-12">
+            <h3> Links</h3>
+        </div>
+    </div>
+    <div id="links" class="px-3"></div>
+    <div class="row px-3" id="link-form-div">
+        {% include "photo_app/forms/link_form.html" %}
+    </div>
+    <div class="row">
+        <button id="btn-add-link" class="btn btn-primary" type="button" name="button">
+            Add Link
+        </button>
     </div>
 
     <div class="row px-3 pt-3 align-items-center mx-auto">

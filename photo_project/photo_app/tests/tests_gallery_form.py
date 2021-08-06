@@ -26,12 +26,15 @@ class TestsGalleryForm(TestCase):
         response = self.client.get(reverse('photo:gallery_form'), secure=True)
         self.assertTemplateUsed(response, 'photo_app/forms/gallery_form.html')
         self.assertEqual(response.status_code, 200)
+        self.assertIsNotNone(response.context)
 
     def test_get_exists_not_owner(self):
         self.client.force_login(self.User.objects.get(pk=2))
         response = self.client.get(reverse('photo:gallery_form', kwargs={'gallery_id': 3}), secure=True)
         # self.assertTemplateUsed(response, 'photo_app/forms/gallery_form.html')
-        self.assertEqual(response.status_code, 400)
+        self.assertIsNone(response.context)
+        logging.debug(response)
+        self.assertEqual(response.status_code, 200)
 
     def test_get_exists_owner(self):
         response = self.client.get(reverse('photo:gallery_form', kwargs={'gallery_id': 4}), secure=True)

@@ -25,6 +25,9 @@ class GalleryView(LoginRequiredMixin, View):
         gallery_form = GalleryForm(instance=gallery)
         owner = gallery.owner == request.user
         logging.debug(owner)
+        logging.debug(gallery.photo_model.all())
+        models = gallery.photo_model.all()  # TODO make this dependent on release
         # context = self.get_gallery(request, gallery_id)
-        return render(request, 'photo_app/gallery.html', {'form': form, 'images': images, 'gallery': gallery,
-                                                          'gallery_form': gallery_form, 'update': True, 'owner': owner})
+        d = {'form': form, 'images': images, 'gallery': gallery, 'gallery_form': gallery_form, 'update': True,
+             'owner': owner, 'models': models}
+        return render(request, 'photo_app/gallery.html', d)

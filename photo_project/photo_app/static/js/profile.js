@@ -5,6 +5,7 @@ $(document).ready(function() {
         $("#profile-address").hide();
         $("#profile-form-div").show();
     });
+    get_links($("#btn-address-edit").attr("model_id"));
 });
 
 async function get_profile_info() {

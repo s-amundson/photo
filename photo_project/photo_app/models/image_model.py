@@ -9,6 +9,7 @@ def content_file_name(instance, filename):
 def thumb_file_name(instance, filename):
     return '/'.join(['images', str(instance.gallery.id), 'thumb', filename])
 
+
 # Create your models here.
 class Images(models.Model):
     active = models.BooleanField(default=True)
@@ -19,6 +20,7 @@ class Images(models.Model):
     image = models.ImageField(upload_to=content_file_name)
     height = models.IntegerField()
     orientation = models.IntegerField()
+    private = models.BooleanField(default=False)
     tags = models.CharField(max_length=255)
     taken = models.DateTimeField(default=None, blank=True, null=True)
     thumb = models.ImageField(upload_to=thumb_file_name)
