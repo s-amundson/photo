@@ -19,7 +19,10 @@ class GalleryView(LoginRequiredMixin, View):
 
     def get(self, request, gallery_id, *args, **kwargs):
         gallery = get_object_or_404(Gallery, pk=gallery_id)
-        images = gallery.images_set.all()
+        if request.user.is_staff or request.user.is_superuser:
+            images = gallery.images_set.all()
+        else:
+            images = gallery.images_set.filter(private=False)
         form = ImageForm()
         logging.debug(gallery_id)
         gallery_form = GalleryForm(instance=gallery)

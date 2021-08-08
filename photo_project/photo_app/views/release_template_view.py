@@ -1,8 +1,3 @@
-# import os
-# from PIL import Image
-# from allauth.account.models import EmailAddress
-#
-# from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponseNotAllowed, HttpResponse
@@ -21,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 class ReleaseTemplateView(LoginRequiredMixin, View):
     talent = {'first_name': 'MODEL', 'last_name': '', 'street': 'STREET', 'city': 'CITY', 'state': 'STATE',
-             'post_code': 'ZIP', 'nickname': 'NICKNAME', 'phone': 'PHONE', 'email': 'EMAIL'}
+              'post_code': 'ZIP', 'nickname': 'NICKNAME', 'phone': 'PHONE', 'email': 'EMAIL'}
 
     def dict_from_release(self, request, release):
         mr = get_object_or_404(Release, pk=release)
