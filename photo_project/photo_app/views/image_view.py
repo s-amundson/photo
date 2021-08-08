@@ -22,22 +22,26 @@ class ImageView(LoginRequiredMixin, View):
         image = get_object_or_404(Images, pk=image_id)
         # image_data = model_to_dict(image, exclude=['image'])
         i = Image.open(image.image)
-
-        exif = {
-            PIL.ExifTags.TAGS[k]: v
-            for k, v in i._getexif().items()
-            if k in PIL.ExifTags.TAGS
-        }
-        del exif['MakerNote']
-        logging.debug(exif)
-        o = exif.get('Orientation', '')
-        if o == 1 or o == 3:
-            orientation = "Landscape"
-        elif o == 8 or o == 6:
-            orientation = "Portrait"
+        logging.debug(i._getexif())
+        edata = i._getexif()
+        if edata is not None:
+            exif = {
+                PIL.ExifTags.TAGS[k]: v
+                for k, v in i._getexif().items()
+                if k in PIL.ExifTags.TAGS
+            }
+            del exif['MakerNote']
+            logging.debug(exif)
+            o = exif.get('Orientation', '')
+            if o == 1 or o == 3:
+                orientation = "Landscape"
+            elif o == 8 or o == 6:
+                orientation = "Portrait"
+            else:
+                orientation = o
         else:
-            orientation = o
-
+            exif = {}
+            orientation = ''
         image_data = {'Camera': exif.get('Model', ''),
                       'Orientation': orientation,
                       'Taken': exif.get('DateTimeOriginal', ''),
@@ -52,17 +56,3 @@ class ImageView(LoginRequiredMixin, View):
                       }
 
         return render(request, 'photo_app/image.html', {'image': image, 'image_data': image_data})
-
-
-        # {'GPSInfo': {0: b'\x02\x03\x00\x00'}, 'ResolutionUnit': 2, 'ExifOffset': 228, 'Make': 'NIKON CORPORATION',
-        # 'Model': 'NIKON D3200', 'Software': 'Ver.1.01 ', 'Orientation': 1, 'DateTime': '2021:07:13 08:52:15',
-        # 'YCbCrPositioning': 2, 'XResolution': 300.0, 'YResolution': 300.0, 'ExifVersion': b'0230',
-        # 'ComponentsConfiguration': b'\x01\x02\x03\x00', 'CompressedBitsPerPixel': 4.0, 'DateTimeOriginal': '2021:07:13 08:52:15',
-        # 'DateTimeDigitized': '2021:07:13 08:52:15', 'ExposureBiasValue': 0.0, 'MaxApertureValue': 5.0, 'MeteringMode': 5,
-        # 'LightSource': 0, 'Flash': 0, 'FocalLength': 55.0, 'UserComment': b'ASCII\x00\x00\x00 ', 'ColorSpace': 1,
-        # 'ExifImageWidth': 6016, 'ExifInteroperabilityOffset': 37526, 'SceneCaptureType': 0, 'SubsecTime': '90',
-        # 'SubsecTimeOriginal': '90', 'SubsecTimeDigitized': '90', 'ExifImageHeight': 4000, 'SubjectDistanceRange': 0,
-        # 'SensingMethod': 2, 'FileSource': b'\x03', 'ExposureTime': 0.01, 'FNumber': 5.6, 'SceneType': b'\x01',
-        # 'ExposureProgram': 3, 'CFAPattern': b'\x00\x02\x00\x02\x00\x01\x01\x02', 'CustomRendered': 0, 'ISOSpeedRatings': 900,
-        # 'ExposureMode': 0, 'FlashPixVersion': b'0100', 'SensitivityType': 2, 'WhiteBalance': 0, 'DigitalZoomRatio': 1.0,
-        # 'FocalLengthIn35mmFilm': 82, 'GainControl': 2, 'Contrast': 0, 'Saturation': 0, 'Sharpness': 0}
