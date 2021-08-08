@@ -26,7 +26,7 @@ class GalleryListView(generic.ListView):
         elif request.user.is_authenticated:
             queryset = Gallery.objects.filter(
                 Q(Q(is_public=True, public_date__lte=date.today())) | Q(owner=request.user.id) |
-                Q(photo_model__id=request.user.id) | Q(photographer=request.user))
+                Q(release__talent__id=request.user.id) | Q(photographer=request.user))
         else:
             queryset = Gallery.objects.filter(is_public=True, public_date__lte=date.today())
         gallery_list = []

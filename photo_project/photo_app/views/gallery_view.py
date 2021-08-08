@@ -19,14 +19,28 @@ class GalleryView(LoginRequiredMixin, View):
 
     def get(self, request, gallery_id, *args, **kwargs):
         gallery = get_object_or_404(Gallery, pk=gallery_id)
-        images = gallery.images_set.all()
+        if request.user.is_staff or request.user.is_superuser:
+            images = gallery.images_set.all()
+        else:
+            images = gallery.images_set.filter(private=False)
         form = ImageForm()
         logging.debug(gallery_id)
         gallery_form = GalleryForm(instance=gallery)
         owner = gallery.owner == request.user
         logging.debug(owner)
-        logging.debug(gallery.photo_model.all())
-        models = gallery.photo_model.all()  # TODO make this dependent on release
+        logging.debug(gallery.release.all())
+        releases = gallery.release.all()
+        models = []
+        for release in releases:
+            d = {}
+            if release.use_full_name:
+                d['name'] = release.talent_full_name
+                d['links'] = release.talent.links_set.all()
+            elif release.use_first_name:
+                d['name'] = release.talent_first_name
+            elif release.use_nickname:
+                d['name'] = release.talent_nickname
+            models.append(d)
         # context = self.get_gallery(request, gallery_id)
         d = {'form': form, 'images': images, 'gallery': gallery, 'gallery_form': gallery_form, 'update': True,
              'owner': owner, 'models': models}

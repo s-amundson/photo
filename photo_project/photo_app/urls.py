@@ -21,6 +21,4 @@ urlpatterns = [
     path('profile', ProfileView.as_view(), name='profile'),
     path('terms', TermsView.as_view(), name='terms'),
     path('release_preview/<int:template>/', ReleaseTemplateView.as_view(), name='release_preview'),
-    # path('release_template/<int:template>/', ReleaseTemplateFormView.as_view(), name='release_template'),
-    # path('release_template', ReleaseTemplateFormView.as_view(), name='release_template'),
 ]

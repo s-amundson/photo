@@ -31,54 +31,48 @@ class ModelReleaseView(LoginRequiredMixin, View):
                 else:
                     form = ReleaseSignedForm(instance=r)
 
-            elif request.user.id == r.photo_model.id:
+            elif request.user.id == r.talent.id:
                 form = ReleaseModelForm(instance=r)
             else:
                 return HttpResponseBadRequest()
         return render(request, 'photo_app/model_release.html', {'use_form': form})
 
     def post(self, request, release=0):
-        logging.debug(release)
-        logging.debug(request.POST)
         request.session['model_release'] = release
         if release == 0:
-
             form = ReleasePhotographerForm(request.POST)
         else:
             instance = get_object_or_404(Release, pk=release)
-            logging.debug(instance.photo_model.id)
             if request.user.id == instance.photographer.id:
                 if instance.state == 'pending':
                     logging.debug('ReleasePhotographerForm')
                     form = ReleasePhotographerForm(request.POST, instance=instance)
                 else:
                     form = ReleaseSignedForm(request.POST, request.FILES, instance=instance)
-            elif request.user.id == instance.photo_model.id:
+            elif request.user.id == instance.talent.id:
                 logging.debug('ReleaseModelForm')
                 form = ReleaseModelForm(request.POST, instance=instance)
             else:
                 return HttpResponseBadRequest()
         # logging.debug(model_to_dict(instance))
         if form.is_valid():
-            logging.debug(form.cleaned_data)
             if release == 0:
                 mr = form.save()
                 mr.state = 'pending'
                 mr.photographer = request.user
                 mr.save()
-                logging.debug(mr)
 
             elif instance.state == 'pending' and instance.photographer.id == request.user.id:
                 mr = form.save()
-                logging.debug(mr)
-                EmailMessage().release_modified(instance.photo_model, mr)
-            elif instance.state in ['pending', 'agreed'] and instance.photo_model.id == request.user.id:
+                EmailMessage().release_modified(instance.talent, mr)
+
+            elif instance.state in ['pending', 'agreed'] and instance.talent.id == request.user.id:
                 mr = form.save()
                 if form.cleaned_data['agree']:
                     mr.state = 'agreed'
-                    mr.model_first_name = request.user.first_name
-                    mr.model_full_name = f'{request.user.first_name} {request.user.last_name}'
-                    mr.model_nickname = request.user.nickname
+                    mr.talent_first_name = request.user.first_name
+                    mr.talent_full_name = f'{request.user.first_name} {request.user.last_name}'
+                    mr.talent_nickname = request.user.nickname
                     mr.save()
                 EmailMessage().release_modified(instance.photographer, mr)
             elif instance.state == 'agreed':
@@ -87,7 +81,7 @@ class ModelReleaseView(LoginRequiredMixin, View):
                 mr.state = 'complete'
                 mr.save()
             if form.cleaned_data.get('send_email', False):
-                EmailMessage().release_notification(instance.photo_model, mr)
+                EmailMessage().release_notification(instance.talent, mr)
                 return render(request, 'photo_app/message.html', {'message': 'Release Saved'})
             return render(request, 'photo_app/model_release.html', {'use_form': form})
 

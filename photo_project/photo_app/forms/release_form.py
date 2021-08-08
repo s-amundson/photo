@@ -11,7 +11,7 @@ class ReleaseForm(ModelForm):
 
     class Meta:
         model = Release
-        fields = ['compensation', 'file', 'is_mature', 'name', 'photographer', 'photo_model', 'shoot_date', 'template',
+        fields = ['compensation', 'file', 'is_mature', 'name', 'photographer', 'talent', 'shoot_date', 'template',
                   'use_first_name', 'use_full_name', 'use_nickname']
 
     def __init__(self, *args, **kwargs):
@@ -29,7 +29,7 @@ class ReleaseModelForm(ReleaseForm):
     class Meta(ReleaseForm.Meta):
         hidden_fields = ['template']
         read_fields = []
-        exclude = ['compensation', 'file', 'name', 'photographer', 'photo_model', 'shoot_date']
+        exclude = ['compensation', 'file', 'name', 'photographer', 'talent', 'shoot_date']
         optional_fields = ['use_first_name', 'use_full_name', 'use_nickname', 'agree']
         fields = read_fields + optional_fields + hidden_fields
 
@@ -50,7 +50,7 @@ class ReleasePhotographerForm(ReleaseForm):
     send_email = BooleanField()
 
     class Meta(ReleaseForm.Meta):
-        required_fields = ['name', 'photo_model', 'shoot_date', 'template']
+        required_fields = ['name', 'talent', 'shoot_date', 'template']
         read_fields = []
         optional_fields = ['compensation', 'is_mature', 'send_email', 'use_first_name', 'use_full_name', 'use_nickname']
         fields = required_fields + read_fields + optional_fields
@@ -74,7 +74,7 @@ class ReleaseSignedForm(ReleaseForm):
     class Meta(ReleaseForm.Meta):
         hidden_fields = ['template']
         required_fields = ['file']
-        exclude = ['compensation', 'name', 'photographer', 'photo_model', 'shoot_date', 'use_first_name',
+        exclude = ['compensation', 'name', 'photographer', 'talent', 'shoot_date', 'use_first_name',
                    'use_full_name', 'use_nickname']
         fields = required_fields + hidden_fields
 

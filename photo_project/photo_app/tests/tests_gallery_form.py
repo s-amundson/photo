@@ -93,7 +93,7 @@ class TestsGalleryFormApi(TestCase):
         self.test_user = self.User.objects.get(email='EmilyNConlan@einrot.com')
         self.client.force_login(self.test_user)
         self.test_dict = {'name': 'name', 'shoot_date': '2020-02-02', 'is_mature': False, 'is_public': True,
-                          'photographer': self.test_user.id, 'photo_model': 2, 'public_date': '2020-03-03'}
+                          'photographer': self.test_user.id, 'release': 1, 'public_date': '2020-03-03'}
         # self.test_user = self.User.objects.create_user(username='fred', password='secret')
 
     def test_post_new(self):

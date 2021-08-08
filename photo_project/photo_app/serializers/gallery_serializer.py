@@ -10,4 +10,4 @@ class GallerySerializer(serializers.ModelSerializer):
     class Meta:
         model = Gallery
         # exclude = []
-        fields = ['id', 'is_public', 'name', 'owner', 'photographer', 'photo_model', 'public_date', 'shoot_date']
+        fields = ['id', 'is_public', 'name', 'owner', 'photographer', 'release', 'public_date', 'shoot_date']

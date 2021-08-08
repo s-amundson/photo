@@ -27,19 +27,19 @@ class TestsProfile(TestCase):
         response = self.client.get(reverse('photo:profile'), secure=True)
         logging.debug(response.context['gallery_list'])
         self.assertEqual(len(response.context['gallery_list']), 3)
-        self.assertEqual(len(response.context['release_list']), 0)
+        self.assertEqual(len(response.context['release_list']), 1)
         self.assertEqual(response.status_code, 200)
 
     def test_get_auth2(self):
         self.client.force_login(self.User.objects.get(pk=2))
-        r = Release(id=1, compensation=2, file=None, name='name', is_mature=False, photographer=User.objects.get(pk=1),
-                    photo_model=User.objects.get(pk=2), shoot_date="2020-02-02", state='pending',
+        r = Release(id=2, compensation=2, file=None, name='name', is_mature=False, photographer=User.objects.get(pk=1),
+                    talent=User.objects.get(pk=2), shoot_date="2020-02-02", state='pending',
                     template=ReleaseTemplate.objects.get(pk=1), use_first_name=True, use_nickname=True,
-                    model_first_name='firstname', model_nickname='nick', model_full_name='full')
+                    talent_first_name='firstname', talent_nickname='nick', talent_full_name='full')
         r.save()
 
         response = self.client.get(reverse('photo:profile'), secure=True)
         self.assertEqual(len(response.context['gallery_list']), 2)
-        self.assertEqual(len(response.context['release_list']), 1)
+        self.assertEqual(len(response.context['release_list']), 2)
         self.assertEqual(response.status_code, 200)
 

@@ -14,7 +14,7 @@ class ProfileView(LoginRequiredMixin, View):
         logging.debug(request.user)
         gallery_list = []
         try:
-            gl = Gallery.objects.filter(Q(photo_model=request.user) | Q(owner=request.user) |
+            gl = Gallery.objects.filter(Q(release__talent=request.user) | Q(owner=request.user) |
                                                   Q(photographer=request.user))
             for g in gl:
                 if g not in gallery_list:
@@ -22,7 +22,7 @@ class ProfileView(LoginRequiredMixin, View):
         except Gallery.DoesNotExist:
             pass
         release_list = []
-        rl = Release.objects.filter(Q(photo_model=request.user) | Q(photographer=request.user))
+        rl = Release.objects.filter(Q(talent=request.user) | Q(photographer=request.user))
         for r in rl:
             if r not in release_list:
                 release_list.append(r)
