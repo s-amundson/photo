@@ -32,11 +32,12 @@
 
     <div class="row" id="images-div">
         <input type="hidden" id="id_image_base_url" value="{% url 'photo_app:image' %}">
+        <input type="hidden" id="id_thumb_base_url" value="{% url 'photo_app:thumb' %}">
         {% if images %}
             {% for image in images %}
               <div class="col border mx-auto">
                 <a target="_blank" href="{% url 'photo_app:image' image.id %}">
-                    <img src="{{ image.thumb.url }}"><br/>
+                    <img src="{% url 'photo_app:thumb' image.id %}"><br/>
                     {{ image.filename }}
                 </a>
               </div>

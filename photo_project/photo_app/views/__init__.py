@@ -2,7 +2,7 @@ from .gallery_form_view import GalleryFormView, GalleryFormApiView
 from .gallery_list_view import GalleryListView
 from .gallery_view import GalleryView
 from .image_api_view import ImageApiView
-from .image_view import ImageGetView, ImageView
+from .image_view import ImageGetView, ImageGetThumbView, ImageView
 from .links_views import LinksFormView, LinksTableView
 from .model_release_view import ModelReleaseView
 from .privacy_view import PrivacyView

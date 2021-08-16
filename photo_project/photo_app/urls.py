@@ -22,4 +22,6 @@ urlpatterns = [
     path('profile', ProfileView.as_view(), name='profile'),
     path('release_preview/<int:template>/', ReleaseTemplateView.as_view(), name='release_preview'),
     path('terms', TermsView.as_view(), name='terms'),
+    path('thumb', ImageGetThumbView.as_view(), name='thumb'),
+    path('thumb/<int:image_id>/', ImageGetThumbView.as_view(), name='thumb'),
 ]

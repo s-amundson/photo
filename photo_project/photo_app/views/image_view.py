@@ -1,37 +1,52 @@
-import os
 from PIL import Image
 import PIL.ExifTags
-from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render, redirect
-from django.forms import model_to_dict
+from django.http import HttpResponseForbidden
+from django.shortcuts import get_object_or_404, render
+from django.utils.datetime_safe import datetime
 from django_sendfile import sendfile
 
 # Create your views here.
-from django.views import generic, View
-from ..models import Gallery, Images
-from ..forms import ImageForm
-import logging
-
-# Get an instance of a logger
-# logger = logging.getLogger(__name__)
+from django.views import View
+from ..models import Images
 
 
-class ImageGetView(LoginRequiredMixin, View):
-    def get(self, request, image_id):
+class ImageGetView(View):
+    def public_gallery(self, gallery):
+        if not gallery.is_public:
+            return False
+        else:
+            if gallery.public_date is None or gallery.public_date >= datetime.now():
+                return True
+            else:
+                return False
+
+    def get(self, request, image_id, thumb=False):
         allowed = False
         image = get_object_or_404(Images, pk=image_id)
-        if not image.private:
-            allowed = True
-        elif request.user.is_staff or request.user.is_superuser:
-            allowed = True
+
+        if request.user.is_authenticated:
+            if request.user.is_staff or request.user.is_superuser:
+                allowed = True
+            elif image.gallery.release.talent == request.user:
+                allowed = True
+            elif self.public_gallery(image.gallery):
+                allowed = not image.private
+        else:
+            if self.public_gallery(image.gallery):
+                allowed = not image.private
 
         if allowed:
-            logging.debug('allowed')
+            if thumb:
+                return sendfile(request, image.thumb.path)
             return sendfile(request, image.image.path)
 
         return HttpResponseForbidden()
+
+
+class ImageGetThumbView(ImageGetView):
+    def get(self, request, image_id):
+        return super().get(request, image_id, thumb=True)
 
 
 class ImageView(LoginRequiredMixin, View):

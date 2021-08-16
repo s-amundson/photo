@@ -14,7 +14,7 @@ function add_image(data) {
     console.log(data["image"])
     let h = '<div class="col border mx-auto">';
     h = h + '<a target="_blank" href="' + $("#id_image_base_url").val() + "/" + data['id'] + '">';
-    h = h + '<img width="' + data['thumb_width'] + 'px" src="' + data['thumb'] + '"><br/>';
+    h = h + '<img width="' + data['thumb_width'] + 'px" src="' + $("#id_thumb_base_url").val() + "/" + data['id']  + '"><br/>';
     h = h + data['filename'] + '</a></div>';
 
     $("#images-div").append(h);
