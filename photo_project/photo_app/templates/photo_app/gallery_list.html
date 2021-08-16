@@ -19,7 +19,7 @@
         <div class="col border mx-auto">
           <a href="{% url 'photo_app:gallery_view' gallery.id %}">
             {% if gallery.display_image %}
-              <img src="{% url 'photo_app:thumb' display_image.id %}"><br/>
+              <img src="{% url 'photo_app:thumb' gallery.image.id %}"><br/>
             {% endif %}
             {{ gallery.name }}
           </a>
