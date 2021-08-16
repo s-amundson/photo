@@ -117,6 +117,7 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount.providers.facebook',
 
     'rest_framework',
+    'django_sendfile',
     "sslserver",
 ]
 
@@ -166,6 +167,13 @@ ROOT_URLCONF = 'photo_project.urls'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_secret('SECRET_KEY')
+
+if DEBUG:
+    SENDFILE_BACKEND = 'django_sendfile.backends.development'
+else:
+    SENDFILE_BACKEND = 'django_sendfile.backends.nginx'
+SENDFILE_ROOT = MEDIA_ROOT
+SENDFILE_URL = ''
 
 SITE_ID = 1
 

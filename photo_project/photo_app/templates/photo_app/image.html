@@ -34,8 +34,8 @@
                 <div class="col-md bg-dark text-white" id="block-main">
                     <div class="row">
                        <div class="mx-auto">
-                           <a target="_blank" href="{{ image.image.url }}">
-                            <img src="{{ image.image.url }}" alt="{{ image.image.url }}" class="img-fluid">
+                           <a target="_blank" href="{% url 'photo_app:image_get' image.id %}">
+                            <img src="{% url 'photo_app:image_get' image.id %}" alt="{{ image.image.url }}" class="img-fluid">
                            </a>
                       </div>
                     </div>

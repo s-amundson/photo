@@ -10,6 +10,7 @@ urlpatterns = [
     path('gallery_view/<int:gallery_id>/', GalleryView.as_view(), name='gallery_view'),
     path('image', ImageView.as_view(), name='image'),
     path('image/<int:image_id>/', ImageView.as_view(), name='image'),
+    path('image_get/<int:image_id>/', ImageGetView.as_view(), name='image_get'),
     path('image_upload/<int:gallery_id>/', ImageApiView.as_view(), name='image_upload'),
     path('links_form', LinksFormView.as_view(), name='links_form'),
     path('links_form/<int:link_id>/', LinksFormView.as_view(), name='links_form'),
@@ -19,6 +20,6 @@ urlpatterns = [
     path('privacy', PrivacyView.as_view(), name='privacy'),
     path('profile_info_api', PhotoModelApiView.as_view(), name='profile_info_api'),
     path('profile', ProfileView.as_view(), name='profile'),
-    path('terms', TermsView.as_view(), name='terms'),
     path('release_preview/<int:template>/', ReleaseTemplateView.as_view(), name='release_preview'),
+    path('terms', TermsView.as_view(), name='terms'),
 ]

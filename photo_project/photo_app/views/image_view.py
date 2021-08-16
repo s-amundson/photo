@@ -3,8 +3,10 @@ from PIL import Image
 import PIL.ExifTags
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render, redirect
 from django.forms import model_to_dict
+from django_sendfile import sendfile
 
 # Create your views here.
 from django.views import generic, View
@@ -16,13 +18,28 @@ import logging
 # logger = logging.getLogger(__name__)
 
 
+class ImageGetView(LoginRequiredMixin, View):
+    def get(self, request, image_id):
+        allowed = False
+        image = get_object_or_404(Images, pk=image_id)
+        if not image.private:
+            allowed = True
+        elif request.user.is_staff or request.user.is_superuser:
+            allowed = True
+
+        if allowed:
+            logging.debug('allowed')
+            return sendfile(request, image.image.path)
+
+        return HttpResponseForbidden()
+
+
 class ImageView(LoginRequiredMixin, View):
 
     def get(self, request, image_id, *args, **kwargs):
         image = get_object_or_404(Images, pk=image_id)
         # image_data = model_to_dict(image, exclude=['image'])
         i = Image.open(image.image)
-        logging.debug(i._getexif())
         edata = i._getexif()
         if edata is not None:
             exif = {
@@ -31,7 +48,6 @@ class ImageView(LoginRequiredMixin, View):
                 if k in PIL.ExifTags.TAGS
             }
             del exif['MakerNote']
-            logging.debug(exif)
             o = exif.get('Orientation', '')
             if o == 1 or o == 3:
                 orientation = "Landscape"
