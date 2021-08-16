@@ -40,6 +40,9 @@
                     <img src="{% url 'photo_app:thumb' image.id %}"><br/>
                     {{ image.filename }}
                 </a>
+                {% if image.private %}
+                    <br/>Private Image
+                {% endif %}
               </div>
             {% endfor %}
         {% else %}

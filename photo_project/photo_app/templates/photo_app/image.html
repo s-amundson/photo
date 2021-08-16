@@ -32,6 +32,9 @@
             <input type="hidden" id="alert-message" value="{{ alert_message }}">
             <div class="row">
                 <div class="col-md bg-dark text-white" id="block-main">
+                    {% if image.private %}
+                        <div class="row"><h4>Private Image</h4></div>
+                    {% endif %}
                     <div class="row">
                        <div class="mx-auto">
                            <a target="_blank" href="{% url 'photo_app:image_get' image.id %}">
