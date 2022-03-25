@@ -17,7 +17,7 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Images
         # exclude = []
-        fields = ['filename', 'id', 'image', 'gallery', 'height', 'width', 'thumb', 'thumb_width']
+        fields = ['filename', 'id', 'image', 'gallery', 'height', 'width', 'thumb', 'thumb_width', 'privacy_level']
         extra_kwargs = {'height': {'required': False}, 'width': {'required': False}, 'thumb': {'required': False},
                         'thumb_width': {'required': False}}
 

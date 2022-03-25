@@ -20,9 +20,17 @@ class Images(models.Model):
     image = models.ImageField(upload_to=content_file_name)
     height = models.IntegerField()
     orientation = models.IntegerField()
-    private = models.BooleanField(default=False)
+    # Privacy:
+    #   Photographer only is for just the photographer, used for records ect.
+    #   Private is for only the photographer and talent.
+    #   Public can be shared with anyone.
+    privacy_choices = [('photographer', 'Photographer Only'), ('private', 'Private'), ('public', 'Public')]
+    privacy_level = models.CharField(max_length=40, null=True, choices=privacy_choices, default='private')
     tags = models.CharField(max_length=255)
     taken = models.DateTimeField(default=None, blank=True, null=True)
     thumb = models.ImageField(upload_to=thumb_file_name)
     thumb_width = models.IntegerField()
     width = models.IntegerField()
+
+    def __str__(self):
+        return self.filename

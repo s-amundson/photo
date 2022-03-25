@@ -15,7 +15,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class GalleryView(LoginRequiredMixin, View):
+class GalleryView(View):
 
     def get(self, request, gallery_id, *args, **kwargs):
         gallery = get_object_or_404(Gallery, pk=gallery_id)
@@ -37,8 +37,10 @@ class GalleryView(LoginRequiredMixin, View):
 
         if request.user.is_staff or request.user.is_superuser or user_is_model:
             images = gallery.images_set.all()
+        elif user_is_model:
+            images = gallery.images_set.filter(privacy_level__in=['public', 'private'])
         else:
-            images = gallery.images_set.filter(private=False)
+            images = gallery.images_set.filter(privacy_level='public')
         form = ImageForm()
         logging.debug(gallery_id)
         gallery_form = GalleryForm(instance=gallery)

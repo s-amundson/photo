@@ -34,17 +34,18 @@ function load_gallery_form(gallery_id) {
 }
 
 async function load_link_form(link) {
+    console.log(link)
     let ustring = '/links_form';
     if (link != "") {
         ustring = ustring + "/" + link + "/";
     }
+    console.log(ustring)
     $.get(ustring, function(data, status){
         $("#link-form-div").html(data)
     });
 }
 
 function mature() {
-    console.log('update mature')
     if ($("#id_is_mature").prop('checked')) {
         $("#id_is_mature").prop('checked', true);
         $("#id_is_public").prop('checked', false);

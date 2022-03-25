@@ -31,27 +31,24 @@ class TestsGalleryForm(TestCase):
     def test_get_exists_not_owner(self):
         self.client.force_login(self.User.objects.get(pk=2))
         response = self.client.get(reverse('photo:gallery_form', kwargs={'gallery_id': 3}), secure=True)
-        # self.assertTemplateUsed(response, 'photo_app/forms/gallery_form.html')
-        self.assertIsNone(response.context)
-        logging.debug(response)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
 
     def test_get_exists_owner(self):
         response = self.client.get(reverse('photo:gallery_form', kwargs={'gallery_id': 4}), secure=True)
         self.assertTemplateUsed(response, 'photo_app/forms/gallery_form.html')
         self.assertEqual(response.status_code, 200)
 
-    def test_get_auth1(self):
-        self.client.force_login(self.test_user)
-        response = self.client.get(reverse('photo:index'), secure=True)
-        self.assertEqual(len(response.context['gallery_list']), 5)
-        self.assertEqual(response.status_code, 200)
-
-    def test_get_auth2(self):
-        self.client.force_login(self.User.objects.get(pk=2))
-        response = self.client.get(reverse('photo:index'), secure=True)
-        self.assertEqual(len(response.context['gallery_list']), 3)
-        self.assertEqual(response.status_code, 200)
+    # def test_get_auth1(self):
+    #     self.client.force_login(self.test_user)
+    #     response = self.client.get(reverse('photo:index'), secure=True)
+    #     self.assertEqual(len(response.context['gallery_list']), 5)
+    #     self.assertEqual(response.status_code, 200)
+    #
+    # def test_get_auth2(self):
+    #     self.client.force_login(self.User.objects.get(pk=2))
+    #     response = self.client.get(reverse('photo:index'), secure=True)
+    #     self.assertEqual(len(response.context['gallery_list']), 3)
+    #     self.assertEqual(response.status_code, 200)
 
     def test_post_new(self):
         response = self.client.post(reverse('photo:gallery_form'), self.test_dict, secure=True)
@@ -75,7 +72,7 @@ class TestsGalleryForm(TestCase):
         self.client.force_login(self.User.objects.get(pk=2))
         response = self.client.post(reverse('photo:gallery_form', kwargs={'gallery_id': 4}), self.test_dict,
                                     secure=True)
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 403)
         g = Gallery.objects.all()
         self.assertEqual(len(g), 5)
         g = Gallery.objects.get(pk=4)

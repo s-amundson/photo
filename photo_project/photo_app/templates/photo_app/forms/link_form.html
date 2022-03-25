@@ -1,16 +1,16 @@
 <form id="link-form" method="post" autocomplete="off" action="javascript:void(0);" class="form col" onSubmit="post_link()">
     {% csrf_token %}
-    {{ link_form.id }}
-    <div class="row">
-        <div class="col-2">
-            {{ link_form.category }}
+    {{ form.id }}
+    <div class="d-flex flex-row m-2">
+        <div class="col">
+            {{ form.category }}
         </div>
 
         <div class="col mx-auto">
-            {{ link_form.url }}
+            {{ form.url }}
         </div>
 
-        <div class="col-2">
+        <div class="col">
             <button id="btn-link-form" class="btn btn-primary m-2" type="submit">Submit</button>
         </div>
     </div>

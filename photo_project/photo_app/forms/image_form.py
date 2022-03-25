@@ -10,5 +10,5 @@ class ImageForm(ModelForm):
 
     class Meta:
         model = Images
-        fields = ['image']
+        fields = ['image', 'privacy_level']
 

@@ -15,7 +15,7 @@ function add_image(data) {
     let h = '<div class="col border mx-auto">';
     h = h + '<a target="_blank" href="' + $("#id_image_base_url").val() + "/" + data['id'] + '">';
     h = h + '<img width="' + data['thumb_width'] + 'px" src="' + $("#id_thumb_base_url").val() + "/" + data['id']  + '"><br/>';
-    h = h + data['filename'] + '</a></div>';
+    h = h + data['filename'] + '</a><br/>' + data['privacy_level'].charAt(0).toUpperCase() + data['privacy_level'].slice(1) + '</div>';
 
     $("#images-div").append(h);
 }
@@ -30,6 +30,7 @@ async function post_image(event) {
 //    form_data.append('image', file_data);
 //    form_data.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
     form_data.append('gallery', $("#id_gallery").val());
+    form_data.append('privacy_level', $("#id_privacy_level").val())
     console.log(form_data);
 
     await $.ajax({

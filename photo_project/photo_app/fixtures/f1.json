@@ -1,5 +1,5 @@
 [
-{"model": "photo_app.gallery", "pk": 1, "fields": {"description": "", "display_image": null, "is_mature": true, "is_public": false, "name": "One", "owner": 1, "public_date": null, "shoot_date": "2001-01-01", "photographer": [1], "release": []}},
+ {"model": "photo_app.gallery", "pk": 1, "fields": {"description": "", "display_image": null, "is_mature": true, "is_public": false, "name": "One", "owner": 1, "public_date": null, "shoot_date": "2001-01-01", "photographer": [1], "release": []}},
  {"model": "photo_app.gallery", "pk": 2, "fields": {"description": "", "display_image": null, "is_mature": false, "is_public": true, "name": "Two", "owner": 3, "public_date": "2001-01-11", "shoot_date": "2001-01-01", "photographer": [], "release": []}},
  {"model": "photo_app.gallery", "pk": 3, "fields": {"description": "", "display_image": null, "is_mature": true, "is_public": false, "name": "Three", "owner": 3, "public_date": null, "shoot_date": "2001-01-01", "photographer": [1], "release": [1]}},
  {"model": "photo_app.gallery", "pk": 4, "fields": {"description": "four", "display_image": null, "is_mature": false, "is_public": true, "name": "Four", "owner": 1, "public_date": "2022-04-11", "shoot_date": "2001-04-01", "photographer": [1], "release": [1]}},

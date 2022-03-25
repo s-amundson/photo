@@ -20,36 +20,39 @@
 
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
         <title>Photo: Image</title>
 
     </head>
     <body class="bg-dark text-white">
         {% include "nav.html" %}
-        <div class="container-fluid p-4 m-3" >
+        <div class="container" >
 
             <input type="hidden" id="alert-message" value="{{ alert_message }}">
-            <div class="row">
-                <div class="col-md bg-dark text-white" id="block-main">
-                    {% if image.private %}
-                        <div class="row"><h4>Private Image</h4></div>
-                    {% endif %}
-                    <div class="row">
-                       <div class="mx-auto">
-                           <a target="_blank" href="{% url 'photo_app:image_get' image.id %}">
-                            <img src="{% url 'photo_app:image_get' image.id %}" alt="{{ image.image.url }}" class="img-fluid">
-                           </a>
-                      </div>
-                    </div>
 
-                </div>
-                <div class="col-md-2" id="block-right">
-                    {% for key, values in image_data.items %}
-                        <p>{{ key }}: {{ values }}</p>
-                    {% endfor %}
-                </div>
+                   <a target="_blank" href="{% url 'photo_app:image_get' image.id %}">
+                    <img src="{% url 'photo_app:image_get' image.id %}" alt="{{ image.image.url }}" class="img-fluid m-3">
+                   </a>
+
+
+            <div class="bg-dark text-white" id="block-info">
+                <p>Privacy: {{image.privacy_level|capfirst }}</p>
+                {% for key, values in image_data.items %}
+                    <p>{{ key }}: {{ values }}</p>
+                {% endfor %}
+                {% if user.is_staff %}
+                    <form id="image-form" action="" method="post" role="form" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form }}
+                        <input type="hidden" id="id_gallery" value="{{ gallery.id }}">
+                        <input type="hidden" id="id_form_url" value="{% url 'photo_app:gallery_form' %}">
+                        <input type="submit" id="btn-image" value="Submit" >
+
+                    </form>
+                {% endif %}
             </div>
+
         </div>
 
         <footer class="small text-center text-muted">

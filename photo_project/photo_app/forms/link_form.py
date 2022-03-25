@@ -22,8 +22,9 @@ class LinkForm(ModelForm):
             choices.append((c.id, c.category))
         self.fields['category'].choices = choices
         self.fields['category'].widget.attrs.update({'class': 'form-control m-2'})
-        self.fields['url'].widget.attrs.update({'class': 'form-control m-2'})
+        self.fields['url'].widget.attrs.update({'class': 'form-control m-2', 'placeholder': "https://example.example.com"})
         self.fields['id'].widget = forms.HiddenInput()
+    # https://rose.facebook.example.com {'placeholder': 'First Name'}
 
     class Meta:
         model = Links

@@ -33,17 +33,17 @@ Model specifically acknowledge and agree, that the photographer may use my full 
 
 {% endif %}
 {% if use_first_name %}
-Model specifically acknowledge and agree, that the photographer may use my first name in connection with the Photographs.
+Model specifically acknowledge and agree, that the photographer may use my first name "{{ model.first_name }}" in connection with the Photographs.
 
 {% endif %}
 {% if use_nickname %}
 Model specifically acknowledge and agree, that the photographer may use "{{ model.nickname }}" name in connection with the Photographs.
 
 {% endif %}
-In exchange for the releases given above in this Model Release Agreement, Model is being paid the following compensation: {{ compensation }}
+In exchange for the releases given above in this Model Release Agreement, Model is being paid the following compensation: ${{ compensation }} USD
+
+Photographer agrees that model may post public photographs on their social media and modeling profiles. Model agrees to credit photographer and link to website when possible.
 
 I am legally competent adult of full legal age and have the right to contract in my own name. I have read this document thoroughly and understand the entirety of its contents in full.
 
 Model specifically agrees that this Model Release shall be governed and interpreted in accordance with the laws of the state of California and should any provision of the Model Release be judged by an appropriate court of competent jurisdiction as invalid, it shall not affect any of the remaining provisions in any way, to the extent possible.
-
-{{ model_name }}

@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render
 from django.views.generic.base import View
+
 import logging
 
 from ..forms import LinkForm
@@ -34,4 +35,4 @@ class ProfileView(LoginRequiredMixin, View):
 
         # form = PhotoModelForm(initial=pm)
         return render(request, 'photo_app/profile.html', {'gallery_list': gallery_list, 'release_list': release_list,
-                      'links': links, 'link_form':link_form})
+                      'links': links, 'form': link_form})

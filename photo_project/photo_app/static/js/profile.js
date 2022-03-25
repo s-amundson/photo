@@ -5,6 +5,10 @@ $(document).ready(function() {
         $("#profile-address").hide();
         $("#profile-form-div").show();
     });
+    $("#btn-add-link").click(function () {
+        console.log('load_link_form')
+        load_link_form('');
+    });
     get_links($("#btn-address-edit").attr("model_id"));
 });
 

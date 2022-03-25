@@ -1,16 +1,16 @@
 version: "3.7"
 
 services:
-#  db:
-#    container_name: postgresdb
-#    image: postgres:latest
-#    restart: 'no' #always
-#    env_file:
-#      - project.env
-#    ports:
-#      - 5432:5432
-#    volumes:
-#      - postgres-data:/var/lib/postgresql/data
+  db:
+    container_name: postgres_photo
+    image: postgres:latest
+    restart: 'no' #always
+    env_file:
+      - project.env
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
 
   photo:
     container_name: photo_django
@@ -21,8 +21,8 @@ services:
 
     ports:
       - 8080:8080
-#    depends_on:
-#      - db
+    depends_on:
+      - db
     volumes:
       - staticfiles:/home/app/web/staticfiles
       - media:/home/app/web/photo_app/media
@@ -44,7 +44,7 @@ services:
 networks:
   default:
     name: my-app-net
-    external: true
+#    external: true
 
 volumes:
   media:

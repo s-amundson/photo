@@ -3,30 +3,30 @@
         This Model Release Form relates to the use of personal media and images utilized for an artistic or commercial endeavor by and between the following parties:<br>
         <div class="row">
             <div class="col">
-                <span class="pl-2">{{ photographer.first_name }} {{ photographer.last_name }} ("Photographer"):</span><br>
-                <span class="pl-3">{{ photographer.street }}</span><br>
-                <span class="pl-3">{{ photographer.city }} {{ photographer.state }} {{ photographer.post_code }}</span><br>
-                <span class="pl-3">{{ photographer.phone }}</span><br>
-                <span class="pl-3">{{ photographer.email }}</span><br>
+                <span class="pl-2">{{ release.photographer.first_name }} {{ release.photographer.last_name }} ("Photographer"):</span><br>
+                <span class="pl-3">{{ release.photographer.street }}</span><br>
+                <span class="pl-3">{{ release.photographer.city }} {{ release.photographer.state }} {{ release.photographer.post_code }}</span><br>
+                <span class="pl-3">{{ release.photographer.phone }}</span><br>
+                <span class="pl-3">{{ release.photographer.email }}</span><br>
             </div>
             <div class="col-1"> and </div>
             <div class="col">
-                <span class="pl-3">{{ talent.first_name }} {{ talent.last_name }} ("Model"):</span><br>
-                <span class="pl-3">{{ talent.street }}</span><br>
-                <span class="pl-3">{{ talent.city }} {{ talent.state }} {{ talent.post_code }}</span><br>
-                <span class="pl-3">{{ talent.phone }}</span><br>
-                <span class="pl-3">{{ talent.email }}</span>
+                <span class="pl-3">{{ release.talent.first_name }} {{ release.talent.last_name }} ("Model"):</span><br>
+                <span class="pl-3">{{ release.talent.street }}</span><br>
+                <span class="pl-3">{{ release.talent.city }} {{ release.talent.state }} {{ release.talent.post_code }}</span><br>
+                <span class="pl-3">{{ release.talent.phone }}</span><br>
+                <span class="pl-3">{{ release.talent.email }}</span>
             </div>
         </div>
     </div>
 </div>
 
 <div class="row p-2">
-    I , {{ talent.first_name }} {{ talent.last_name }} , hereby absolutely and irrevocably authorize
-    {{ photographer.first_name }} {{ photographer.last_name }} as well as their legal representatives,
+    I , {{ release.talent.first_name }} {{ release.talent.last_name }} , hereby absolutely and irrevocably authorize
+    {{ release.photographer.first_name }} {{ release.photographer.last_name }} as well as their legal representatives,
     assignees, and transferees to use, publish, reuse, republish, distribute, disseminate or otherwise make publicly
     available for any artistic or commercial use, including advertising, publication, or illustration images of me
-    and/or my property taken on {{ date }}, in whole or in part, whether individually or collectively with any other
+    and/or my property taken on {{ release.date }}, in whole or in part, whether individually or collectively with any other
     material in any and all forms of media now or hereinafter known and/or developed, including, but not limited to,
     in print media, in digital media, on the Internet, in composite images, or distorted images or for any other
     lawful use as may be determined by Photographer in their sole and exclusive discretion. The Photographer
@@ -35,7 +35,7 @@
 
 <div class="row p-2"><div class="col">
     <div class="row">
-        I further completely release and discharge {{ photographer.first_name }} {{ photographer.last_name }} from any
+        I further completely release and discharge {{ release.photographer.first_name }} {{ release.photographer.last_name }} from any
         and all demands or claims that may arise out of or otherwise be connected with the use of the photographs featuring
         me, my image, or my property, including, without limitation, and any/all claims for the violation of a right of
         publicity, a right of privacy, or libel. I also waive and and all right to approve or otherwise review any uses of
@@ -43,12 +43,12 @@
     </div><br>
     <div class="row">
         This authorization and release shall inure to the benefit of the legal representatives, licensees, heirs, and
-        assignees of {{ photographer.first_name }} {{ photographer.last_name }} and shall also be binding upon me. my
+        assignees of {{ release.photographer.first_name }} {{ release.photographer.last_name }} and shall also be binding upon me. my
         heirs, assignees, and legal representatives.
     </div>
 </div></div>
 <div class="row p-2">
-    {% if is_mature %}
+    {% if release.is_mature %}
         Model specifically acknowledge and agree that the nature of the work may include full or partial nudity.
         I herby consent and agree to appear fully or partially nude in the work.
     {% else %}
@@ -57,26 +57,32 @@
     {% endif %}
 </div>
 
-{% if use_full_name %}
+{% if release.use_full_name %}
     <div class="row p-2">
-        Model specifically acknowledge and agree, that the Photographer may use my full name in connection with the photographs.
+        Model specifically acknowledge and agree, that the Photographer may use my full name of "
+        {{ release.talent.first_name }} {{ release.talent.last_name }}" in connection with the photographs.
     </div>
 {% endif %}
 
-{% if use_first_name %}
+{% if release.use_first_name %}
     <div class="row p-2">
-        Model specifically acknowledge and agree, that the Photographer may use my first name in connection with the photographs.
+        Model specifically acknowledge and agree, that the Photographer may use my first name of "
+        {{ release.talent.first_name }}" in connection with the photographs.
     </div>
 {% endif %}
 
-{% if use_nickname %}
+{% if release.use_nickname %}
     <div class="row p-2">
-        Model specifically acknowledge and agree, that the Photographer may use "{{ talent.nickname }}" name in connection with the photographs.
+        Model specifically acknowledge and agree, that the Photographer may use "{{ release.talent.nickname }}" name in connection with the photographs.
     </div>
 {% endif %}
 <div class="row p-2">
     In exchange for the releases given above in this Model Release Agreement, Model is being paid the following
-    compensation: {{ compensation }}
+    compensation: ${{ release.compensation }} USD
+</div>
+<div class="row p-2">
+    Photographer agrees that model may post public photographs on their social media and modeling profiles. Model
+    agrees to credit photographer and link to website when possible.
 </div>
 <div class="row p-2">
     I am legally competent adult of full legal age and have the right to contract in my own name. I have read this
@@ -86,35 +92,4 @@
     Model specifically agrees that this Model Release shall be governed and interpreted in accordance with the laws of
     the state of California and should any provision of the Model Release be judged by an appropriate court of
     competent jurisdiction as invalid, it shall not affect any of the remaining provisions in any way, to the extent possible.
-</div>
-
-
-<div class="row p-2">
-    <h5>Signatures:</h5>
-</div>
-
-<div class="row p-2">
-    <div class="col pt-4">
-        <hr />
-        {{ photographer.first_name }} {{ photographer.last_name }}
-    </div>
-    <div class="col-1">
-    </div>
-    <div class="col pt-4">
-        <hr />
-        {{ talent.first_name }} {{ talent.last_name }}
-    </div>
-</div>
-
-<div class="row p-2">
-    <div class="col pt-4">
-        <hr />
-        Date
-    </div>
-    <div class="col-1">
-    </div>
-    <div class="col pt-4">
-        <hr />
-        Date
-    </div>
 </div>

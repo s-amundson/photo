@@ -27,13 +27,14 @@
         {% include "photo_app/forms/profile_form.html" %}
     </div>
     <div id="profile-address" class="row px-3">
+        <div class="col-1"></div>
         <div class="col">
-            <div id="address1" class="row">{{ photo_model.street }} </div>
+            <div id="address1" class="row">{{ user.street }} </div>
             <div id="address2" class="row">
-                {{ photo_model.city }} {{ photo_model.state }} {{ photo_model.post_code }}
+                {{ user.city }} {{ user.state }} {{ user.post_code }}
             </div>
-            <div id="phone" class="row">{{ photo_model.phone }}</div>
-            <div class="row px-5">
+            <div id="phone" class="row">{{ user.phone }}</div>
+            <div class="row">
                 <button id="btn-address-edit" class="btn btn-primary" type="button" name="button"
                         model_id="{{ user.id }}">
                     Edit Info
@@ -49,7 +50,7 @@
     </div>
     <div id="links" class="px-3"></div>
     <div class="row px-3" id="link-form-div">
-        {% include "photo_app/forms/link_form.html" %}
+
     </div>
     <div class="row">
         <button id="btn-add-link" class="btn btn-primary" type="button" name="button">

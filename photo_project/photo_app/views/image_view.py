@@ -8,22 +8,30 @@ from django_sendfile import sendfile
 
 # Create your views here.
 from django.views import View
+from ..forms import ImageForm
 from ..models import Images
+
+# Get an instance of a logger
+import logging
+logger = logging.getLogger(__name__)
+
 
 class ImageCheckAuth:
     def check_auth(self, image, user):
         if user.is_authenticated:
+            logging.debug(image.privacy_level)
+            logging.debug(self.public_gallery(image.gallery))
             if user.is_staff or user.is_superuser:
                 return True
             elif image.gallery.owner == user:
                 return True
             elif self.talent_is_user(image.gallery, user):
-                return True
+                return image.privacy_level in ['private', 'public']
             elif self.public_gallery(image.gallery):
-                return not image.private
+                return image.privacy_level == 'public'
         else:
             if self.public_gallery(image.gallery):
-                return not image.private
+                return image.privacy_level == 'public'
 
     def talent_is_user(self, gallery, user):
         releases = gallery.release.all()
@@ -33,10 +41,12 @@ class ImageCheckAuth:
         return False
 
     def public_gallery(self, gallery):
+        logging.debug(gallery.is_public)
+        logging.debug(gallery.public_date >= date.today())
         if not gallery.is_public:
             return False
         else:
-            if gallery.public_date is None or gallery.public_date >= date.today():
+            if gallery.public_date is None or gallery.public_date <= date.today():
                 return True
             else:
                 return False
@@ -59,7 +69,7 @@ class ImageGetThumbView(ImageGetView):
         return super().get(request, image_id, thumb=True)
 
 
-class ImageView(LoginRequiredMixin, View):
+class ImageView(View):
 
     def get(self, request, image_id, *args, **kwargs):
         image = get_object_or_404(Images, pk=image_id)
@@ -97,5 +107,5 @@ class ImageView(LoginRequiredMixin, View):
                       'Width': exif.get('ExifImageWidth', ''),
                       'Filename': image.image.name.split('/')[-1]
                       }
-
-        return render(request, 'photo_app/image.html', {'image': image, 'image_data': image_data})
+        form = ImageForm(instance=image)
+        return render(request, 'photo_app/image.html', {'image': image, 'image_data': image_data, 'form': form})
