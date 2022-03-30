@@ -25,7 +25,7 @@ class ReleaseTemplateView(UserPassesTestMixin, View):
             release_id = self.kwargs.get('release_id', None)
             logging.debug(release_id)
             if release_id is None:
-                return self.request.user.is_photographer
+                return False
             self.release = get_object_or_404(Release, pk=release_id)
             if self.request.user.is_staff:
                 return True

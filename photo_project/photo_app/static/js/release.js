@@ -31,7 +31,7 @@ $(document).ready(function() {
         $("#id_template").prop('disabled', false);
         if (!sig.signature('isEmpty')) {
             console.log('submit')
-            $("#id_signature").val(sig.signature('toDataURL', 'image/jpeg', 0.8));
+            $(".signature").val(sig.signature('toDataURL', 'image/jpeg', 0.8));
 //            $(this).unbind();
 //            $(this).submit();
         }

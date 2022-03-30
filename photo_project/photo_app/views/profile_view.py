@@ -20,7 +20,7 @@ class ProfileView(LoginRequiredMixin, View):
             for g in gl:
                 if g not in gallery_list:
                     gallery_list.append(g)
-        except Gallery.DoesNotExist:
+        except Gallery.DoesNotExist:  # pragma: no cover
             pass
         release_list = []
         rl = Release.objects.filter(Q(talent=request.user) | Q(photographer=request.user))

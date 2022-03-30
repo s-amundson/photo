@@ -15,39 +15,40 @@ from rest_framework.views import APIView
 from rest_framework import permissions, status
 from rest_framework.response import Response
 
-from ..forms import GalleryCreateForm, GalleryForm
+from ..forms import GalleryForm
 from ..models import Gallery
 from ..serializers import GallerySerializer
 
 logger = logging.getLogger(__name__)
 
 
-class GalleryFormApiView(LoginRequiredMixin, APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def post(self, request, gallery_id=None):
-        logging.debug('here')
-        if gallery_id is not None:
-            g = get_object_or_404(Gallery, pk=gallery_id)
-            if request.user == g.owner or request.user.is_superuser:
-                pass
-            else:
-                return HttpResponseBadRequest()
-            # serializer = GallerySerializer()
-        else:
-            g = None
-
-        serializer = GallerySerializer(data=request.data)
-        if serializer.is_valid():
-            if gallery_id is None:
-                gallery = serializer.save()
-                gallery.owner = request.user
-                gallery.save()
-            return Response(serializer.data)
-
-        else:
-            logging.debug(serializer.errors)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+# class GalleryFormApiView(LoginRequiredMixin, APIView):
+#     permission_classes = [permissions.IsAuthenticated]
+#
+#     def post(self, request, gallery_id=None):
+#
+#         if gallery_id is not None:
+#             g = get_object_or_404(Gallery, pk=gallery_id)
+#             logging.debug(g.owner)
+#             if not request.user == g.owner or request.user.is_superuser:
+#                 return HttpResponseBadRequest()
+#             # serializer = GallerySerializer()
+#         else:
+#             g = None
+#         logging.debug('here')
+#         serializer = GallerySerializer(data=request.data)
+#         if serializer.is_valid():
+#             logging.debug('valid')
+#             if gallery_id is None:
+#                 gallery = serializer.save()
+#                 gallery.owner = request.user
+#                 gallery.save()
+#                 logging.debug(gallery)
+#             return Response(serializer.data)
+#
+#         else:
+#             logging.debug(serializer.errors)
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class GalleryFormView(UserPassesTestMixin, FormView):

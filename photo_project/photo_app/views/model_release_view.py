@@ -29,19 +29,30 @@ class ModelReleaseView(UserPassesTestMixin, FormView):
     def form_valid(self, form):
         logging.debug(form.cleaned_data)
         logging.debug(self.release)
+        em = EmailMessage()
         if self.release is None:
             mr = form.save()
-            mr.state = 'pending'
+            mr.state = 'started'
             mr.photographer = self.request.user
             mr.save()
-        elif self.release.state == 'pending' and self.release.photographer.id == self.request.user.id:
+        elif self.release.state in ['started', 'pending'] and self.release.photographer.id == self.request.user.id:
+            started = self.release.state == 'started'
             mr = form.save()
-            # EmailMessage().release_modified(self.release.talent, mr)
+            if not form.cleaned_data['photographer_signature'] in ['',  form.empty_sig]:
+                mr = form.save()
+                mr.state = 'pending'
+                mr.photographer_signature = form.make_signature(
+                    f'{self.request.user.first_name}_{self.request.user.last_name}', 'photographer_signature')
+                mr.save()
+                if started:
+                    em.release_notification(self.release.talent, mr)
+                else:
+                    em.release_modified(self.release.talent, mr)
 
         elif self.release.state in ['pending', 'agreed'] and self.release.talent.id == self.request.user.id:
             mr = form.save()
             # if form.cleaned_data['agree']:
-            if form.cleaned_data['talent_signature'] != form.empty_sig:
+            if form.cleaned_data['talent_signature'] not in ['',  form.empty_sig]:
                 logging.debug('signed')
                 mr.state = 'agreed'
                 mr.talent_first_name = self.request.user.first_name
@@ -50,19 +61,24 @@ class ModelReleaseView(UserPassesTestMixin, FormView):
                 # mr.talent_signature = form.make_signature(
                 #     f'{self.request.user.first_name}_{self.request.user.last_name}')
                 mr.save()
-            # EmailMessage().release_modified(self.release.photographer, mr)
-        elif self.release.state == 'agreed':
-            logging.debug(model_to_dict(self.release))
-            if form.cleaned_data['photographer_signature'] != form.empty_sig:
-                mr = form.save()
-                mr.state = 'complete'
-                mr.photographer_signature = form.make_signature(
-                    f'{self.request.user.first_name}_{self.request.user.last_name}')
-                mr.save()
-        if form.cleaned_data.get('send_email', False):
-            EmailMessage().release_notification(self.release.talent, mr)
-            return render(self.request, 'photo_app/message.html', {'message': 'Release Saved'})
+            em.release_modified(mr.photographer, mr)
+        # elif self.release.state == 'agreed':
+        #     logging.debug(model_to_dict(self.release))
+        #     if form.cleaned_data['photographer_signature'] != form.empty_sig:
+        #         mr = form.save()
+        #         mr.state = 'complete'
+        #         mr.photographer_signature = form.make_signature(
+        #             f'{self.request.user.first_name}_{self.request.user.last_name}')
+        #         mr.save()
+        # if form.cleaned_data.get('send_email', False):
+        #     EmailMessage().release_notification(mr.talent, mr)
+        #     return render(self.request, 'photo_app/message.html', {'message': 'Release Saved'})
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        logging.debug(context)
+        return context
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -83,10 +99,12 @@ class ModelReleaseView(UserPassesTestMixin, FormView):
                 logging.debug(model_to_dict(self.release))
                 if self.request.user.id == self.release.photographer.id:
                     logging.debug('photographer')
-                    if self.release.state == 'pending':
+                    if self.release.state in ['started', 'pending']:
+                        logging.debug('ReleasePhotographerForm')
                         self.form_class = ReleasePhotographerForm
                     else:
                         self.form_class = ReleaseSignedForm
+                        logging.debug('ReleasePhotographerForm')
                     return True
                 elif self.request.user.id == self.release.talent.id:
                     self.form_class = ReleaseModelForm

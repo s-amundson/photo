@@ -32,5 +32,5 @@ class Images(models.Model):
     thumb_width = models.IntegerField()
     width = models.IntegerField()
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return self.filename

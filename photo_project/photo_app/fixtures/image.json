@@ -1,0 +1,22 @@
+[
+  {
+    "model": "photo_app.images",
+    "pk": 1,
+    "fields": {
+      "active": true,
+      "camera_make": "make",
+      "camera_model": "model",
+      "gallery": 1,
+      "filename": "1.jpg",
+      "image": "1.jpg",
+      "height": 400,
+      "orientation": 0,
+      "privacy_level": "private",
+      "tags": "",
+      "taken": null,
+      "thumb": "1_thumb.jpg",
+      "thumb_width": 200,
+      "width": 400
+    }
+  }
+]

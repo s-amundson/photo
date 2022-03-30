@@ -66,3 +66,16 @@ class TestsLinks(TestCase):
         response = self.client.get('/links_table/10/', secure=True)
         # logging.debug(response.context)
         self.assertEqual(response.status_code, 404)
+
+    def test_catgory_add(self):
+        self.client.force_login(self.User.objects.get(pk=1))
+        response = self.client.get(reverse('photo:link_category-add'), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_catgory_update(self):
+        self.client.force_login(self.User.objects.get(pk=1))
+        response = self.client.get(reverse('photo:link_category-update', kwargs={'pk': 1}), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        'link_category-add'

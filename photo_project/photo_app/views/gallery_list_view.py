@@ -35,6 +35,6 @@ class GalleryListView(ListView):
             if g not in self.gallery_list:
                 d = model_to_dict(g)
                 if g.display_image is not None:
-                    d['image'] = Images.objects.get(pk=g.display_image)
+                    d['image'] = g.display_image
                 self.gallery_list.append(d)
         logging.debug(len(self.gallery_list))

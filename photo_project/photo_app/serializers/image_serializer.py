@@ -23,11 +23,9 @@ class ImageSerializer(serializers.ModelSerializer):
 
     def save(self, *args, **kwargs):
         if self.instance is not None:
-            if self.instance.image:
+            if self.instance.image:  # pragma: no cover
                 self.instance.image.delete()
-        for k, v in kwargs.items():
-            logging.debug(f'k={k}, v={v}')
-        # logging.debug(self.image)
+
         image = self.validated_data.get('image')
         img = Image.open(self.validated_data.get('image'))
         w, h = img.size
@@ -43,13 +41,7 @@ class ImageSerializer(serializers.ModelSerializer):
         img.thumbnail((200, 200))
         byte_arr = io.BytesIO()
         img.save(byte_arr, format=img.format)
-        # InMemoryUploadedFile(
-        #      pillow_image,       # file
-        #      None,               # field_name
-        #      img_name,           # file name
-        #      'image/jpeg',       # content_type
-        #      pillow_image.tell,  # size
-        #      None)               # content_type_extra
+
         cf = ContentFile(self.image_to_byte_array(img))
         img_file = InMemoryUploadedFile(
             cf,             # file

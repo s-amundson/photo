@@ -35,7 +35,7 @@ class GalleryView(View):
             if release.talent == request.user:
                 user_is_model = True
 
-        if request.user.is_staff or request.user.is_superuser or user_is_model:
+        if request.user.is_staff or request.user.is_superuser:
             images = gallery.images_set.all()
         elif user_is_model:
             images = gallery.images_set.filter(privacy_level__in=['public', 'private'])
@@ -49,6 +49,6 @@ class GalleryView(View):
         logging.debug(gallery.release.all())
 
         # context = self.get_gallery(request, gallery_id)
-        d = {'form': form, 'images': images, 'gallery': gallery, 'gallery_form': gallery_form, 'update': True,
+        d = {'form': form, 'images': images, 'gallery': gallery, 'gallery_form': gallery_form,
              'owner': owner, 'models': models}
         return render(request, 'photo_app/gallery.html', d)

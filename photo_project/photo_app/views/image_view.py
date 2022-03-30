@@ -18,12 +18,13 @@ logger = logging.getLogger(__name__)
 
 class ImageCheckAuth:
     def check_auth(self, image, user):
+        logging.debug(user.is_authenticated)
         if user.is_authenticated:
             logging.debug(image.privacy_level)
             logging.debug(self.public_gallery(image.gallery))
             if user.is_staff or user.is_superuser:
                 return True
-            elif image.gallery.owner == user:
+            elif image.gallery.owner == user:  # pragma: no cover
                 return True
             elif self.talent_is_user(image.gallery, user):
                 return image.privacy_level in ['private', 'public']
@@ -41,8 +42,6 @@ class ImageCheckAuth:
         return False
 
     def public_gallery(self, gallery):
-        logging.debug(gallery.is_public)
-        logging.debug(gallery.public_date >= date.today())
         if not gallery.is_public:
             return False
         else:
@@ -90,9 +89,9 @@ class ImageView(View):
                 orientation = "Landscape"
             elif o == 8 or o == 6:
                 orientation = "Portrait"
-            else:
+            else:  # pragma: no cover
                 orientation = o
-        else:
+        else:  # pragma: no cover
             exif = {}
             orientation = ''
         image_data = {'Camera': exif.get('Model', ''),

@@ -1,10 +1,11 @@
 from django.test import TestCase
 
 # from .tests.tests_gallery import TestsGallery
-from .tests.tests_gallery_form import TestsGalleryForm
+# from .tests.tests_gallery_form import TestsGalleryForm
 # from .tests.tests_gallery_form import TestsGalleryFormApi
 # from .tests.tests_gallery_list import TestsGalleryList
-# from .tests.tests_image_api import TestsImage
+# from .tests.tests_image import TestsImage
+# from .tests.tests_image import TestsImageApi
 # from .tests.tests_info import TestsInfo
 # from .tests.tests_links import TestsLinks
 # from .tests.tests_model_release import TestsModelRelease
