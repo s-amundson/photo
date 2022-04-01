@@ -13,7 +13,7 @@ $(document).ready(function() {
 });
 
 async function get_profile_info() {
-    await $.get("profile_info_api", function(data, status){
+    await $.get(url_profile_api, function(data, status){
         console.log(data);
         $("#id_first_name").val(data['first_name']);
         $("#id_last_name").val(data['last_name']);
@@ -42,7 +42,7 @@ async function get_profile_info() {
 }
 
 async function post_address_function(model_id) {
-    let data = await $.post("profile_info_api", {
+    let data = await $.post(url_profile_api, {
         csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
         'first_name': $("#id_first_name").val(),
         'last_name': $("#id_last_name").val(),

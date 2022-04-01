@@ -35,4 +35,7 @@ class Release(models.Model):
     talent_nickname = models.CharField(max_length=100, null=True, default=None)
     talent_full_name = models.CharField(max_length=100, null=True, default=None)
     talent_signature = models.ImageField(upload_to="signatures/%Y/%m/%d/", null=True, default=None)
+    talent_signature_date = models.DateField(null=True, default=None)
+    pdf = models.FileField(upload_to="release/%Y/%m/%d/", null=True, default=None)
     photographer_signature = models.ImageField(upload_to="signatures/%Y/%m/%d/", null=True, default=None)
+    photographer_signature_date = models.DateField(null=True, default=None)

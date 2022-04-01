@@ -1,7 +1,14 @@
 from django.forms import ModelForm, BooleanField, ChoiceField, model_to_dict, CharField, HiddenInput
 import os
 import base64
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.units import inch
+from reportlab.platypus import Paragraph, Frame, Image, Spacer
+from reportlab.lib.pagesizes import letter
+
 from django.core.files.base import File
+from django.template.loader import get_template
 
 from ..models import Release, ReleaseTemplate
 
@@ -40,13 +47,63 @@ class ReleaseForm(ModelForm):
         return File(open('img.jpg', 'rb'), name=f'{fn}.jpg')
 
     def make_pdf(self):
-        logging.debug(self.instance)
-        image_b64 = self.cleaned_data['photographer_signature']
-        img_format, imgstr = image_b64.split(';base64,')
+        styles = getSampleStyleSheet()
 
-        ext = img_format.split('/')[-1]
-        with open('psig.jpg', 'wb') as f:
-            f.write(base64.b64decode(imgstr))
+        story = [Paragraph('Model Release', styles['Title'])]
+        logging.debug(self.instance)
+        template = get_template(f'photo_app/release/{self.instance.template.file}.txt').render(
+            {'release': self.instance})
+        template = template.split('\n')
+        for line in template:
+            if len(line):
+                story.append(Paragraph(line, styles['Normal']))
+            else:
+                story.append(Spacer(1, 0.2 * inch))
+
+        story.append(Paragraph("Model Signature:", styles['Normal']))
+        talent_sig = Image(self.instance.talent_signature.file, width=3 * inch, height=1 * inch, hAlign='LEFT')
+        story.append(talent_sig)
+        story.append(Paragraph(f'Date: {self.instance.talent_signature_date}', styles['Normal']))
+        story.append(Spacer(1, 0.2 * inch))
+        story.append(Paragraph("Photographer Signature:", styles['Normal']))
+        photo_sig = Image(self.instance.photographer_signature.file, width=3 * inch, height=1 * inch, hAlign='LEFT')
+        story.append(photo_sig)
+        story.append(Paragraph(f'Date: {self.instance.photographer_signature_date}', styles['Normal']))
+        logging.debug(len(story))
+        c = Canvas('mydoc.pdf', pagesize=letter)
+        while len(story) > 0:
+            f = Frame(inch / 2, inch, 7 * inch, 9 * inch, showBoundary=0)
+            f.addFromList(story, c)
+            c.showPage()
+        c.save()
+        self.instance.pdf = File(open('mydoc.pdf', 'rb'), name=f'{self.instance.id}.pdf')
+        self.instance.save()
+
+        # with open(os.path.join(settings.BASE_DIR, 'program_app', 'templates', 'program_app', 'awrl.txt'), 'r') as f:
+        #     story.append(Paragraph(f.readline(), styles['Normal']))
+        #     story.append(Spacer(1, 0.2 * inch))
+        #     story.append(Paragraph(f.readline(), styles['Normal']))
+        #     story.append(Spacer(1, 0.1 * inch))
+        #     for line in f.readlines():
+        #         story.append(Paragraph(line, styles['Bullet']))
+        #         story.append(Spacer(1, 0.1 * inch))
+        # story.append(Paragraph("Student:", styles['Normal']))
+        # story.append(
+        #     Paragraph(f'&nbsp;&nbsp;&nbsp;&nbsp;{self.student.first_name} {self.student.last_name}', styles['Normal']))
+        # story.append(Paragraph(f'&nbsp;&nbsp;&nbsp;&nbsp;{sf.street}', styles['Normal']))
+        # story.append(Paragraph(f'&nbsp;&nbsp;&nbsp;&nbsp;{sf.city} {sf.state} {sf.post_code}', styles['Normal']))
+        #
+        # new_sig = Image('img.jpg', width=3 * inch, height=1 * inch, hAlign='LEFT')
+        # story.append(new_sig)
+        # name = f"{self.cleaned_data['sig_first_name']} {self.cleaned_data['sig_last_name']}"
+        # story.append(Paragraph(f"Signed By {name} on Date: {timezone.localtime(timezone.now()).date()}"))
+        # c = Canvas('mydoc.pdf')
+        # f = Frame(inch / 2, inch, 7 * inch, 9 * inch, showBoundary=1)
+        # f.addFromList(story, c)
+        # c.save()
+        # fn = f'{self.student.last_name}_{self.student.first_name}'
+        # self.student.signature = File(open('img.jpg', 'rb'), name=f'{fn}.jpg')
+        # self.student.signature_pdf = File(open('mydoc.pdf', 'rb'), name=f'{fn}.pdf')
 
 
 class ReleaseModelForm(ReleaseForm):
@@ -71,7 +128,7 @@ class ReleaseModelForm(ReleaseForm):
             self.fields[f].widget.attrs.update({'class': 'form-control m-2', 'disabled': 'disabled',
                                                 'style': 'display:none'})
         self.fields['photographer_signature'].required = False
-        self.fields['photographer_signature'].widget.attrs.update({'class': 'signature'})
+        self.fields['talent_signature'].widget.attrs.update({'class': 'signature'})
         self.fields['use_first_name'].label = f'Photographer may use my first name of ' \
                                               f'"{self.instance.talent.first_name}" in connection with the photographs'
         self.fields['use_full_name'].label = f'Photographer may use my full name of ' \
@@ -106,6 +163,7 @@ class ReleasePhotographerForm(ReleaseForm):
         for f in self.Meta.exclude:
             self.fields[f].required = False
         self.fields['talent_signature'].required = False
+        self.fields['photographer_signature'].widget.attrs.update({'class': 'signature'})
         self.signature = True
 
 

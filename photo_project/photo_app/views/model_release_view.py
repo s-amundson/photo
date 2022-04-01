@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 from django.http import JsonResponse
+from django.utils import timezone
 
 from ..models import Release
 from ..forms import ReleasePhotographerForm, ReleaseModelForm, ReleaseSignedForm
@@ -28,7 +29,7 @@ class ModelReleaseView(UserPassesTestMixin, FormView):
 
     def form_valid(self, form):
         logging.debug(form.cleaned_data)
-        logging.debug(self.release)
+        logging.debug(self.request.POST)
         em = EmailMessage()
         if self.release is None:
             mr = form.save()
@@ -37,30 +38,35 @@ class ModelReleaseView(UserPassesTestMixin, FormView):
             mr.save()
         elif self.release.state in ['started', 'pending'] and self.release.photographer.id == self.request.user.id:
             started = self.release.state == 'started'
-            mr = form.save()
+            # mr = form.save()
+            logging.debug('here')
             if not form.cleaned_data['photographer_signature'] in ['',  form.empty_sig]:
-                mr = form.save()
+                logging.debug('signed')
+                mr = form.save(commit=False)
                 mr.state = 'pending'
                 mr.photographer_signature = form.make_signature(
                     f'{self.request.user.first_name}_{self.request.user.last_name}', 'photographer_signature')
+                mr.photographer_signature_date = timezone.localtime(timezone.now()).date()
                 mr.save()
                 if started:
                     em.release_notification(self.release.talent, mr)
                 else:
                     em.release_modified(self.release.talent, mr)
+            else:
+                mr = form.save()
 
         elif self.release.state in ['pending', 'agreed'] and self.release.talent.id == self.request.user.id:
-            mr = form.save()
-            # if form.cleaned_data['agree']:
+            mr = form.save(commit=False)
             if form.cleaned_data['talent_signature'] not in ['',  form.empty_sig]:
                 logging.debug('signed')
                 mr.state = 'agreed'
                 mr.talent_first_name = self.request.user.first_name
                 mr.talent_full_name = f'{self.request.user.first_name} {self.request.user.last_name}'
                 mr.talent_nickname = self.request.user.nickname
-                # mr.talent_signature = form.make_signature(
-                #     f'{self.request.user.first_name}_{self.request.user.last_name}')
-                mr.save()
+                mr.talent_signature = form.make_signature(
+                    f'{self.request.user.first_name}_{self.request.user.last_name}', 'talent_signature')
+                mr.talent_signature_date = timezone.localtime(timezone.now()).date()
+            mr.save()
             em.release_modified(mr.photographer, mr)
         # elif self.release.state == 'agreed':
         #     logging.debug(model_to_dict(self.release))
@@ -119,7 +125,7 @@ class ModelReleaseView(UserPassesTestMixin, FormView):
 class ModelReleaseUpdateView(ModelReleaseView):
     def form_valid(self, form):
         logging.debug('update')
-        if self.release is None:
+        if self.release is None:  # pragma: no cover
             return self.form_invalid(form)
-        mr = form.save()
+        form.save()
         return JsonResponse({'status': 'success'})

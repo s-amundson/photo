@@ -120,6 +120,7 @@ class TestsModelRelease(TestCase):
                     template=ReleaseTemplate.objects.get(pk=1), use_first_name=True, use_nickname=True,
                     talent_first_name='firstname', talent_nickname='nick', talent_full_name='full')
         r.save()
+        logging.debug(r.id)
         self.release_dict['shoot_date'] = '2020-04-04'
         # self.release_dict['photographer_signature'] = self.img
         self.client.force_login(self.test_user) # this user is photographer
@@ -202,3 +203,4 @@ class TestsModelRelease(TestCase):
         ml = ml[1]
         self.assertNotEquals(ml.file, None)
         self.assertEqual(ml.state, 'pending')
+
