@@ -9,7 +9,7 @@ from django.test import TestCase
 # from .tests.tests_info import TestsInfo
 # from .tests.tests_links import TestsLinks
 # from .tests.tests_make_pdf import TestsReleasePDF
-from .tests.tests_model_release import TestsModelRelease
+# from .tests.tests_model_release import TestsModelRelease
 # from .tests.tests_profile_view import TestsProfile
 # from .tests.tests_profile_info_api import TestsProfileInfoApi
 # from .tests.tests_release_template import TestsReleaseTemplate

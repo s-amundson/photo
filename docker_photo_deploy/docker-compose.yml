@@ -27,19 +27,19 @@ services:
       - staticfiles:/home/app/web/staticfiles
       - media:/home/app/web/photo_app/media
 
-#  nginx:
-#    container_name: nginx
-#
-#    image: nginx:mainline-alpine
-#    restart: 'no' #always
-#    ports:
-#      - 80:80
-#      - 443:443
-#    volumes:
-#      - ../nginx:/etc/nginx/conf.d
-#      - staticfiles:/app/static/
-#    depends_on:
-#      - web
+  nginx:
+    container_name: nginx
+
+    image: nginx:mainline-alpine
+    restart: 'no' #always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ../nginx:/etc/nginx/conf.d
+      - staticfiles:/app/static/
+    depends_on:
+      - web
 
 networks:
   default:
