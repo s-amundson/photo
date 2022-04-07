@@ -1,5 +1,5 @@
 Commands:
-    docker exec -it \django_photo_dev python manage.py makemigrations photo_app
+    docker exec -it photo_django python manage.py makemigrations photo_app
     docker exec -it \django_photo_dev python manage.py migrate
     docker exec -it \django_photo_dev python manage.py dumpdata > f2.json
     docker exec -it \django_photo_dev python manage.py loaddata f2.json
