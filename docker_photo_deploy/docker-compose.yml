@@ -46,9 +46,10 @@ services:
       - 443:443
     volumes:
       - ../nginx:/etc/nginx
-      - staticfiles:/app/static/
+      - staticfiles:/photo-app/static/
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
+      - media:/photo-app/media
     depends_on:
       - photo
 
