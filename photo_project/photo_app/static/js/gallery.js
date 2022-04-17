@@ -3,7 +3,7 @@ $(document).ready(function() {
     $("#image-form").submit(post_image);
     $("#btn-gallery-edit").click(function () {
         $(this).hide();
-        load_gallery_form($("#id_gallery").val());
+        load_gallery_form();
     });
 });
 
@@ -24,17 +24,14 @@ async function post_image(event) {
     event.preventDefault();
     $("#btn-image").prop("disabled",true)
 
-//    var file_data = $('#id_image').prop('files')[0];
     var form_data = new FormData($("#image-form")[0]);
     console.log(form_data);
-//    form_data.append('image', file_data);
-//    form_data.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
     form_data.append('gallery', $("#id_gallery").val());
     form_data.append('privacy_level', $("#id_privacy_level").val())
     console.log(form_data);
 
     await $.ajax({
-        url: "/image_upload/" + $("#id_gallery").val() + "/", // point to server-side controller method
+        url: url_image_upload, // point to server-side controller method
         dataType: 'json', // what to expect back from the server
         cache: false,
         contentType: false,
@@ -42,7 +39,6 @@ async function post_image(event) {
         data: form_data,
         type: 'post',
         success: function (response) {
-//            $('#msg').html(response); // display success response from the server
             console.log(response)
             add_image(response)
         },

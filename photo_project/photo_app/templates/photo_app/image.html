@@ -41,7 +41,14 @@
                 {% for key, values in image_data.items %}
                     <p>{{ key }}: {{ values }}</p>
                 {% endfor %}
+                <p>
+                    <a class="pr-4" href="{% url 'photo_app:image_get' image.id %}" download="">
+                        <img src="{% static 'images/icons8-download-48.png' %}" width="24" height="24" alt="Download">
+                        Download
+                    </a>
+                </p>
                 {% if user.is_staff %}
+                    <hr>
                     <form id="image-form" action="" method="post" role="form" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form }}

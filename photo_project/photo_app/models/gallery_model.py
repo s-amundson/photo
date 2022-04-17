@@ -8,7 +8,6 @@ class Gallery(models.Model):
     display_image = models.ForeignKey('photo_app.Images', default=None, null=True, on_delete=models.SET_NULL,
                                       related_name='display')
     is_mature = models.BooleanField(default=False)
-    is_public = models.BooleanField(default=False)
     name = models.CharField(max_length=100)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1,
                               related_name='gallery_owner')

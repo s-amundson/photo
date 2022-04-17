@@ -18,7 +18,7 @@ class TestsGalleryForm(TestCase):
         self.User = get_user_model()
         self.test_user = self.User.objects.get(email='EmilyNConlan@einrot.com')
         self.client.force_login(self.test_user)
-        self.test_dict = {'name': 'name', 'shoot_date': '2020-02-02', 'is_mature': False, 'is_public': True,
+        self.test_dict = {'name': 'name', 'shoot_date': '2020-02-02', 'is_mature': False, 'privacy_level': 'public',
                           'photographer': self.test_user.id, 'public_date': '2020-03-03'}
         # self.test_user = self.User.objects.create_user(username='fred', password='secret')
 
@@ -56,7 +56,7 @@ class TestsGalleryForm(TestCase):
         self.assertEqual(len(g), 6)
         g = g[5]
         self.assertEqual(g.name, 'name')
-        self.assertTrue(g.is_public)
+        self.assertEqual(g.privacy_level, 'public')
 
     def test_post_update_authorized(self):
         response = self.client.post(reverse('photo:gallery_form', kwargs={'gallery_id': 4}), self.test_dict, secure=True)
@@ -65,7 +65,7 @@ class TestsGalleryForm(TestCase):
         self.assertEqual(len(g), 5)
         g = Gallery.objects.get(pk=4)
         self.assertEqual(g.name, 'name')
-        self.assertTrue(g.is_public)
+        self.assertEqual(g.privacy_level, 'public')
 
     def test_post_update_unauthorized(self):
         self.client.force_login(self.User.objects.get(pk=2))
@@ -76,7 +76,7 @@ class TestsGalleryForm(TestCase):
         self.assertEqual(len(g), 5)
         g = Gallery.objects.get(pk=4)
         self.assertEqual(g.name, 'Four')
-        self.assertTrue(g.is_public)
+        self.assertEqual(g.privacy_level, 'public')
 
     def test_post_invalid(self):
         self.test_dict['photographer'] = 5

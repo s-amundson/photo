@@ -15,13 +15,10 @@ async function get_links(user_id) {
     });
 }
 
-function load_gallery_form(gallery_id) {
+function load_gallery_form() {
     $("#div-add-gallery").show();
     $("#btn-add-gallery").hide();
-    if(gallery_id) {
-        url_string = "/gallery_form/" + gallery_id + "/";
-    }
-    $.get(url_string, function(data, status){
+    $.get(url_gallery_form, function(data, status){
         $("#div-add-gallery").html(data);
         $("#btn-gallery-form").html("Add");
         $("#gallery-form").submit(post_gallery_form);
@@ -35,9 +32,9 @@ function load_gallery_form(gallery_id) {
 
 async function load_link_form(link) {
     console.log(link)
-    let ustring = '/links_form';
+    let ustring = url_links_form;
     if (link != "") {
-        ustring = ustring + "/" + link + "/";
+        ustring = ustring + link + "/";
     }
     console.log(ustring)
     $.get(ustring, function(data, status){
@@ -60,9 +57,9 @@ function mature() {
 
 async function post_link() {
     console.log('post_link');
-    let ustring = '/links_form';
+    let ustring = url_links_form;
     if ($("#id_id").val() != "") {
-        ustring = ustring + "/" + $("#id_id").val() + "/";
+        ustring = ustring + $("#id_id").val() + "/";
     }
     let data = await $.post(ustring, {
         csrfmiddlewaretoken: $('#link-form > [name="csrfmiddlewaretoken"]').val(),
@@ -78,11 +75,7 @@ async function post_link() {
 
 async function post_gallery_form(e, gallery_id) {
     e.preventDefault();
-    var url_string = "/gallery_form"
-    if($("#id_gallery").val()) {
-        url_string = "/gallery_form/" + $("#id_gallery").val() + "/";
-    }
-    let data = await $.post(url_string, {
+    let data = await $.post(url_gallery_form, {
         csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
         'name': $("#id_name").val(),
         'description': $("#id_description").val(),

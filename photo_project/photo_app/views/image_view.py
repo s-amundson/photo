@@ -82,7 +82,7 @@ class ImageCheckAuth:
         return False
 
     def public_gallery(self, gallery):
-        if not gallery.is_public:
+        if not gallery.privacy_level == 'public':
             return False
         else:
             if gallery.public_date is None or gallery.public_date <= date.today():

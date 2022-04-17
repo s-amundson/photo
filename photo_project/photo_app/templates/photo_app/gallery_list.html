@@ -7,13 +7,17 @@
 {% block script %}
     {% load static %}
     <script src="{% static 'js/gallery_list.js' %}"></script>
+    <script>
+        let url_gallery_form = "{% url 'photo_app:gallery_form' %}"
+    </script>
 {% endblock %}
 
 {% block main %}
   {% load static %}
   <div class="'row">
     {% if home %}
-      <p>Welcome to my site. I have created this site as a repository of my photos and to share with my friends.</p>
+      <p>Welcome to my site. I have created this site as a repository of my photos and to share with my friends and
+        collaborators.</p>
     {% endif %}
   </div>
   <div class="row mx-auto"><h3>Galleries</h3></div>

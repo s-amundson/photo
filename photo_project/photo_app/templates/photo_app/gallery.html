@@ -2,6 +2,10 @@
 {% block script %}
     {% load static %}
     <script src="{% static 'js/gallery.js' %}"></script>
+    <script>
+        let url_gallery_form = "{% url 'photo_app:gallery_form' gallery.id %}"
+        let url_image_upload = "{% url 'photo_app:image_upload' gallery.id %}"
+    </script>
 {% endblock %}
 {% block title %}
     Gallery
@@ -9,10 +13,9 @@
 
 {% block main %}
 
-  {% load static %}
     <div class="row">
       <div class="col">
-        <h2 align="center">{{ gallery.name }}</h2>
+        <h2 align="center">{{ gallery.name }} {{gallery.id}}</h2>
       </div>
     </div>
 
@@ -25,6 +28,9 @@
                 <a target="_blank" href="{% url 'photo_app:image' image.id %}">
                     <img src="{% url 'photo_app:thumb' image.id %}"><br/>
                     {{ image.filename }}
+                </a>&nbsp;&nbsp;&nbsp;
+                <a class="pr-4" href="{% url 'photo_app:image_get' image.id %}" download="">
+                    <img src="{% static 'images/icons8-download-48.png' %}" width="24" height="24" alt="Download">
                 </a>
                 <br/>{{ image.privacy_level|capfirst }}
               </div>

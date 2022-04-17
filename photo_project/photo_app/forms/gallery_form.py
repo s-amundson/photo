@@ -13,7 +13,7 @@ class GalleryForm(ModelForm):
         model = Gallery
         required_fields = ['name']
         read_fields = []
-        optional_fields = ['display_image', 'is_mature', 'is_public', 'release', 'public_date', 'photographer',
+        optional_fields = ['display_image', 'is_mature', 'release', 'public_date', 'photographer',
                            'privacy_level', 'shoot_date', 'description']
         fields = required_fields + read_fields + optional_fields
 
