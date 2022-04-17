@@ -14,7 +14,7 @@ class GalleryForm(ModelForm):
         required_fields = ['name']
         read_fields = []
         optional_fields = ['display_image', 'is_mature', 'is_public', 'release', 'public_date', 'photographer',
-                           'shoot_date', 'description']
+                           'privacy_level', 'shoot_date', 'description']
         fields = required_fields + read_fields + optional_fields
 
         # exclude = ['owner', 'photo_model']

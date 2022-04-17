@@ -82,6 +82,18 @@ class TestsImage(TestCase):
         response = self.client.get(reverse('photo:image', kwargs={'image_id': 1}), secure=True)
         self.assertEqual(response.status_code, 200)
 
+    def test_get_add_image(self):
+        self.test_user = self.User.objects.get(pk=1)
+        self.client.force_login(self.test_user)
+        g = Gallery.objects.get(pk=1)
+        g.is_public = True
+        g.save()
+        i = Images.objects.get(pk=1)
+        i.privacy_level = 'public'
+        i.save()
+        response = self.client.get(reverse('photo:add_image', kwargs={'gallery_id': 1}), secure=True)
+        self.assertEqual(response.status_code, 200)
+
     def test_get_image_publicdate_future(self):
         g = Gallery.objects.get(pk=1)
         g.is_public = True
@@ -104,6 +116,23 @@ class TestsImage(TestCase):
         response = self.client.get(reverse('photo:thumb', kwargs={'image_id': 1}), secure=True)
         self.assertEqual(response.status_code, 403)
 
+    def test_post_add_image(self):
+        self.test_user = self.User.objects.get(pk=1)
+        self.client.force_login(self.test_user)
+        g = Gallery(is_public=False, name='test', owner=self.test_user,
+                    public_date=None, shoot_date='2021-06-26')
+        g.save()
+        g.release.add(Release.objects.get(pk=1))
+
+        # pic = SimpleUploadedFile("1.jpg", "file_content", content_type="video/mp4")
+        # with open() as f:
+        p = os.path.join(settings.BASE_DIR, 'photo_app', 'media', '1.jpg')
+        with open(p, 'rb') as f:
+            response = self.client.post(reverse('photo:add_image', kwargs={'gallery_id': 1}),
+                                        {'image': f, 'gallery': g.id, 'privacy_level': 'private'}, secure=True)
+
+        response = self.client.get(reverse('photo:image', kwargs={'image_id': 1}), secure=True)
+        self.assertEqual(response.status_code, 200)
 
 class TestsImageApi(TestCase):
     fixtures = ['f1']
@@ -115,21 +144,6 @@ class TestsImageApi(TestCase):
         self.test_user = self.User.objects.get(pk=1)
         # self.test_user = User.objects.create_user(username='fred', password='secret')
         self.client.force_login(self.test_user)
-
-    # def test_post_image(self):
-    #     g = Gallery(is_public=False, name='test', owner=self.test_user,
-    #                 public_date=None, shoot_date='2021-06-26')
-    #     g.save()
-    #     g.release.add(Release.objects.get(pk=1))
-    #
-    #     # pic = SimpleUploadedFile("1.jpg", "file_content", content_type="video/mp4")
-    #     # with open() as f:
-    #     p = os.path.join(settings.BASE_DIR, 'photo_app', 'fixtures', '1.jpg')
-    #     with open(p, 'rb') as f:
-    #         response = self.client.post(reverse('photo:image_upload', kwargs={'gallery_id': 1}),
-    #                                     {'image': f, 'gallery': g.id}, secure=True)
-    #
-    #     self.assertEqual(response.status_code, 200)
 
     def test_post_image(self):
         g = Gallery(is_public=False, name='test', owner=self.test_user,
@@ -148,13 +162,6 @@ class TestsImageApi(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_post_image_error(self):
-        # g = Gallery(is_public=False, name='test', owner=self.test_user,
-        #             public_date=None, shoot_date='2021-06-26')
-        # g.save()
-        # g.release.add(Release.objects.get(pk=1))
-
-        # pic = SimpleUploadedFile("1.jpg", "file_content", content_type="video/mp4")
-        # with open() as f:
         p = os.path.join(settings.BASE_DIR, 'photo_app', 'media', '1.jpg')
         with open(p, 'rb') as f:
             response = self.client.post(reverse('photo:image_upload', kwargs={'gallery_id': 1}),

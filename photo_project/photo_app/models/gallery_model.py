@@ -14,5 +14,7 @@ class Gallery(models.Model):
                               related_name='gallery_owner')
     public_date = models.DateField(null=True, default=None)
     photographer = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='photographers', default=None)
+    privacy_choices = [('public', 'Public'), ('authenticated', 'Authenticated'), ('private', 'Private')]
+    privacy_level = models.CharField(max_length=40, null=True, choices=privacy_choices, default='private')
     release = models.ManyToManyField('photo_app.Release', related_name='releases')
     shoot_date = models.DateField(null=True, default=None)

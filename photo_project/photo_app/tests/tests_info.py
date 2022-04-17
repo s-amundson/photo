@@ -25,3 +25,8 @@ class TestsInfo(TestCase):
         response = self.client.get(reverse('photo:privacy'), secure=True)
         self.assertTemplateUsed(response, 'photo_app/privacy.html')
         self.assertEqual(response.status_code, 200)
+
+    def test_get_about(self):
+        response = self.client.get(reverse('photo:about'), secure=True)
+        self.assertTemplateUsed(response, 'photo_app/about_me.html')
+        self.assertEqual(response.status_code, 200)

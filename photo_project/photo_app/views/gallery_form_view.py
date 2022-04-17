@@ -65,6 +65,9 @@ class GalleryFormView(UserPassesTestMixin, FormView):
         gallery = form.save(commit=False)
         if self.gallery is None:
             gallery.owner = self.request.user
+        logging.debug(gallery.is_mature)
+        if gallery.is_mature and gallery.privacy_level == 'public':
+            gallery.privacy_level = 'authenticated'
         gallery.save()
         url = reverse('photo_app:gallery_view', kwargs={'gallery_id': gallery.id})
         return JsonResponse({'status': "SUCCESS", 'url': url})

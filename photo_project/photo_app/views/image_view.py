@@ -1,19 +1,59 @@
 from PIL import Image
 import PIL.ExifTags
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse_lazy
+from django.views.generic.edit import FormView
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render
-from django.utils.datetime_safe import date
+from django.utils.datetime_safe import date, datetime
 from django_sendfile import sendfile
 
 # Create your views here.
 from django.views import View
 from ..forms import ImageForm
-from ..models import Images
+from ..models import Gallery, Images
+from ..src import Img
 
 # Get an instance of a logger
 import logging
 logger = logging.getLogger(__name__)
+
+
+class AddImageView(UserPassesTestMixin, FormView):
+    form_class = ImageForm
+    gallery = None
+    template_name = 'photo_app/form_as_p.html'
+    success_url = reverse_lazy('photo:index')
+
+    def form_invalid(self, form):
+        logging.debug(form.errors)
+        return super().form_invalid(form)
+
+    def form_valid(self, form):
+        logging.debug(form.cleaned_data)
+        record = form.save(commit=False)
+        record.gallery = self.gallery
+        img = Img(record.image)
+        img.update_record(record)
+
+        return super().form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        logging.debug(self.request.POST)
+        return super().post(request, *args, **kwargs)
+
+    def test_func(self):
+        if self.request.user.is_authenticated:
+            gid = self.kwargs.get('gallery_id', None)
+            logging.debug(gid)
+            if gid is not None:
+                self.gallery = get_object_or_404(Gallery, pk=gid)
+                self.success_url = reverse_lazy('photo:gallery_view', kwargs={'gallery_id': gid})
+                # if not (self.request.user == gid.owner or self.request.user.is_superuser):
+                #     return False
+            return self.request.user.is_staff
+        else:
+            return False
 
 
 class ImageCheckAuth:

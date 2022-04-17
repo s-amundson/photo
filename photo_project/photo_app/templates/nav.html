@@ -1,5 +1,6 @@
 <nav class="navbar navbar-dark bg-dark border">
-    <a class="navbar-brand" href="/"> <span class="blue">Sam's Photography</span></a>
+    {% load static %}
+    <a class="navbar-brand" href="/"><img src="{% static 'icons8-camera-50.png' %}" alt="Italian Trulli"> <span class="blue">Sam's Photography</span></a>
 
     <div class="navbar-expand-sm" id="navbar">
         <ul class="navbar-nav ml-auto mt-2">
@@ -8,6 +9,9 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'photo:privacy' %}">Privacy</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'photo:about' %}">About Me</a>
             </li>
             {% if user.is_authenticated %}
 

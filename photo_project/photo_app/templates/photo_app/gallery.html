@@ -15,20 +15,6 @@
         <h2 align="center">{{ gallery.name }}</h2>
       </div>
     </div>
-    {% if owner %}
-        <div class="row">
-           <div class="mx-auto">
-            <form id="image-form" action="" method="post" role="form" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form }}
-                <input type="hidden" id="id_gallery" value="{{ gallery.id }}">
-                <input type="hidden" id="id_form_url" value="{% url 'photo_app:gallery_form' %}">
-                <input type="submit" id="btn-image" value="Submit" >
-
-            </form>
-          </div>
-        </div>
-    {% endif %}
 
     <div class="row" id="images-div">
         <input type="hidden" id="id_image_base_url" value="{% url 'photo_app:image' %}">
@@ -47,7 +33,13 @@
         <p id="no-image">There are no images.</p>
         {% endif %}
     </div>
-
+    {% if owner %}
+        <div class="row pt-1">
+            <a href="{% url 'photo:add_image' gallery.id %}" class="btn btn-primary" role="button">
+                Add Image
+            </a>
+        </div>
+    {% endif %}
     <div class="row pt-3">
       <div class="col">
         <h4>Description</h4>
