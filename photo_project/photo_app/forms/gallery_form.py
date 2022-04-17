@@ -13,8 +13,8 @@ class GalleryForm(ModelForm):
         model = Gallery
         required_fields = ['name']
         read_fields = []
-        optional_fields = ['display_image', 'is_mature', 'is_public', 'release', 'public_date', 'photographer',
-                           'shoot_date']
+        optional_fields = ['display_image', 'is_mature', 'release', 'public_date', 'photographer',
+                           'privacy_level', 'shoot_date', 'description']
         fields = required_fields + read_fields + optional_fields
 
         # exclude = ['owner', 'photo_model']
@@ -33,6 +33,7 @@ class GalleryForm(ModelForm):
         # self.fields['public_date'] = DateField(required=False)
         for f in self.Meta.optional_fields:
             self.fields[f].required = False
+        self.fields['display_image'].queryset = self.instance.images_set.filter(privacy_level='public')
         self.fields['release'].choices = self.release_choices()
         self.fields['photographer'].choices = self.photographer_choices()
 
@@ -52,15 +53,15 @@ class GalleryForm(ModelForm):
 # 'display_image', 'is_mature', 'is_public', 'name', 'owner', 'photo_model', 'public_date', 'photographer', 'shoot_date'
 
 
-class GalleryCreateForm(GalleryForm):
-    class Meta(GalleryForm.Meta):
-        required_fields = ['name']
-        read_fields = []
-        optional_fields = ['is_mature', 'is_public', 'release', 'public_date', 'photographer',
-                           'shoot_date']
-        fields = required_fields + read_fields + optional_fields
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for f in self.Meta.optional_fields:
-            self.fields[f].required = False
+# class GalleryCreateForm(GalleryForm):
+#     class Meta(GalleryForm.Meta):
+#         required_fields = ['name']
+#         read_fields = []
+#         optional_fields = ['is_mature', 'is_public', 'release', 'public_date', 'photographer',
+#                            'shoot_date']
+#         fields = required_fields + read_fields + optional_fields
+#
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         for f in self.Meta.optional_fields:
+#             self.fields[f].required = False

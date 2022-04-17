@@ -3,7 +3,7 @@ $(document).ready(function() {
     $("#image-form").submit(post_image);
     $("#btn-gallery-edit").click(function () {
         $(this).hide();
-        load_gallery_form($("#id_gallery").val());
+        load_gallery_form();
     });
 });
 
@@ -14,8 +14,8 @@ function add_image(data) {
     console.log(data["image"])
     let h = '<div class="col border mx-auto">';
     h = h + '<a target="_blank" href="' + $("#id_image_base_url").val() + "/" + data['id'] + '">';
-    h = h + '<img width="' + data['thumb_width'] + 'px" src="' + data['thumb'] + '"><br/>';
-    h = h + data['filename'] + '</a></div>';
+    h = h + '<img width="' + data['thumb_width'] + 'px" src="' + $("#id_thumb_base_url").val() + "/" + data['id']  + '"><br/>';
+    h = h + data['filename'] + '</a><br/>' + data['privacy_level'].charAt(0).toUpperCase() + data['privacy_level'].slice(1) + '</div>';
 
     $("#images-div").append(h);
 }
@@ -24,16 +24,14 @@ async function post_image(event) {
     event.preventDefault();
     $("#btn-image").prop("disabled",true)
 
-//    var file_data = $('#id_image').prop('files')[0];
     var form_data = new FormData($("#image-form")[0]);
     console.log(form_data);
-//    form_data.append('image', file_data);
-//    form_data.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
     form_data.append('gallery', $("#id_gallery").val());
+    form_data.append('privacy_level', $("#id_privacy_level").val())
     console.log(form_data);
 
     await $.ajax({
-        url: "/image_upload/" + $("#id_gallery").val() + "/", // point to server-side controller method
+        url: url_image_upload, // point to server-side controller method
         dataType: 'json', // what to expect back from the server
         cache: false,
         contentType: false,
@@ -41,7 +39,6 @@ async function post_image(event) {
         data: form_data,
         type: 'post',
         success: function (response) {
-//            $('#msg').html(response); // display success response from the server
             console.log(response)
             add_image(response)
         },

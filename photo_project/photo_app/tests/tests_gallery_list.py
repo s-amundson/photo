@@ -40,12 +40,3 @@ class TestsGalleryList(TestCase):
         response = self.client.get(reverse('photo:index'), secure=True)
         self.assertEqual(len(response.context['gallery_list']), 3)
         self.assertEqual(response.status_code, 200)
-
-
-        # g = Gallery(is_public=False, name='test', owner=self.test_user, photo_model=None,
-        #             public_date=None, shoot_date='2021-06-26')
-        # # with open() as f:
-        # p = os.path.join(settings.BASE_DIR, 'photo_app', 'fixtures', '1.jpeg')
-        # # p = "/home/sam/PycharmProjects/photo/photo_project/photo_app/static/images/target2.png"
-        # logging.debug(p)
-        # img = Image.open(p)

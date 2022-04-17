@@ -15,21 +15,12 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class GalleryView(LoginRequiredMixin, View):
+class GalleryView(View):
 
     def get(self, request, gallery_id, *args, **kwargs):
         gallery = get_object_or_404(Gallery, pk=gallery_id)
-        if request.user.is_staff or request.user.is_superuser:
-            images = gallery.images_set.all()
-        else:
-            images = gallery.images_set.filter(private=False)
-        form = ImageForm()
-        logging.debug(gallery_id)
-        gallery_form = GalleryForm(instance=gallery)
-        owner = gallery.owner == request.user
-        logging.debug(owner)
-        logging.debug(gallery.release.all())
         releases = gallery.release.all()
+        user_is_model = False
         models = []
         for release in releases:
             d = {}
@@ -41,7 +32,23 @@ class GalleryView(LoginRequiredMixin, View):
             elif release.use_nickname:
                 d['name'] = release.talent_nickname
             models.append(d)
+            if release.talent == request.user:
+                user_is_model = True
+
+        if request.user.is_staff or request.user.is_superuser:
+            images = gallery.images_set.all()
+        elif user_is_model:
+            images = gallery.images_set.filter(privacy_level__in=['public', 'private'])
+        else:
+            images = gallery.images_set.filter(privacy_level='public')
+        form = ImageForm()
+        logging.debug(gallery_id)
+        gallery_form = GalleryForm(instance=gallery)
+        owner = gallery.owner == request.user
+        logging.debug(owner)
+        logging.debug(gallery.release.all())
+
         # context = self.get_gallery(request, gallery_id)
-        d = {'form': form, 'images': images, 'gallery': gallery, 'gallery_form': gallery_form, 'update': True,
+        d = {'form': form, 'images': images, 'gallery': gallery, 'gallery_form': gallery_form,
              'owner': owner, 'models': models}
         return render(request, 'photo_app/gallery.html', d)

@@ -7,10 +7,19 @@
 {% block script %}
     {% load static %}
     <script src="{% static 'js/gallery_list.js' %}"></script>
+    <script>
+        let url_gallery_form = "{% url 'photo_app:gallery_form' %}"
+    </script>
 {% endblock %}
 
 {% block main %}
   {% load static %}
+  <div class="'row">
+    {% if home %}
+      <p>Welcome to my site. I have created this site as a repository of my photos and to share with my friends and
+        collaborators.</p>
+    {% endif %}
+  </div>
   <div class="row mx-auto"><h3>Galleries</h3></div>
   <div class="row" id="gallery-list">
     {% if gallery_list %}
@@ -19,7 +28,7 @@
         <div class="col border mx-auto">
           <a href="{% url 'photo_app:gallery_view' gallery.id %}">
             {% if gallery.display_image %}
-              <img src="{{ gallery.image.thumb.url }}"><br/>
+              <img src="{% url 'photo_app:thumb' gallery.image.id %}"><br/>
             {% endif %}
             {{ gallery.name }}
           </a>
@@ -31,7 +40,7 @@
 
     {% endif %}
   </div>
-  {% if user.is_authenticated %}
+  {% if user.is_staff %}
     <div class="row">
       <div class="col">
         <button id="btn-add-gallery" class="btn btn-primary" type="button" name="button">

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import json
 import os
+import sys
 from django.core.exceptions import ImproperlyConfigured
 from pathlib import Path
 
@@ -69,18 +70,10 @@ AUTHENTICATION_BACKENDS = (
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 DATABASES = {
-    'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': get_secret("DATABASE_NAME"),
-        'USER': get_secret("DATABASE_USER"),
-        'PASSWORD': get_secret("DATABASE_PASSWORD"),
-        'HOST': get_secret("DATABASE_HOST"),
-        'PORT': get_secret("DATABASE_PORT"),
-    }
+    'default': get_secret("DATABASE"),
 }
-
+if 'test' in sys.argv:  # or 'test_coverage' in sys.argv: #Covers regular testing and django-coverage
+    DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_secret("DEBUG")
 
@@ -89,7 +82,7 @@ DEBUG = get_secret("DEBUG")
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DEFAULT_FROM_EMAIL = get_secret('DEFAULT_FROM_EMAIL')
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = get_secret("EMAIL_BACKEND")
 EMAIL_DEBUG = get_secret("EMAIL_DEBUG")
 EMAIL_DEBUG_ADDRESSES = get_secret('EMAIL_DEBUG_ADDRESSES')
 EMAIL_USE_TLS = True
@@ -117,6 +110,7 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount.providers.facebook',
 
     'rest_framework',
+    'django_sendfile',
     "sslserver",
 ]
 
@@ -166,6 +160,13 @@ ROOT_URLCONF = 'photo_project.urls'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_secret('SECRET_KEY')
+
+if DEBUG:
+    SENDFILE_BACKEND = 'django_sendfile.backends.development'
+else:
+    SENDFILE_BACKEND = 'django_sendfile.backends.nginx'
+SENDFILE_ROOT = MEDIA_ROOT
+SENDFILE_URL = MEDIA_URL
 
 SITE_ID = 1
 

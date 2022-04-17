@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.db import models
-from .gallery_model import Gallery
 
 
 class LinkCategory(models.Model):

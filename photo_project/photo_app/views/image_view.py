@@ -1,28 +1,121 @@
-import os
 from PIL import Image
 import PIL.ExifTags
-from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, render, redirect
-from django.forms import model_to_dict
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse_lazy
+from django.views.generic.edit import FormView
+from django.http import HttpResponseForbidden
+from django.shortcuts import get_object_or_404, render
+from django.utils.datetime_safe import date, datetime
+from django_sendfile import sendfile
 
 # Create your views here.
-from django.views import generic, View
-from ..models import Gallery, Images
+from django.views import View
 from ..forms import ImageForm
-import logging
+from ..models import Gallery, Images
+from ..src import Img
 
 # Get an instance of a logger
-# logger = logging.getLogger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
-class ImageView(LoginRequiredMixin, View):
+class AddImageView(UserPassesTestMixin, FormView):
+    form_class = ImageForm
+    gallery = None
+    template_name = 'photo_app/form_as_p.html'
+    success_url = reverse_lazy('photo:index')
+
+    def form_invalid(self, form):
+        logging.debug(form.errors)
+        return super().form_invalid(form)
+
+    def form_valid(self, form):
+        logging.debug(form.cleaned_data)
+        record = form.save(commit=False)
+        record.gallery = self.gallery
+        img = Img(record.image)
+        img.update_record(record)
+
+        return super().form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        logging.debug(self.request.POST)
+        return super().post(request, *args, **kwargs)
+
+    def test_func(self):
+        if self.request.user.is_authenticated:
+            gid = self.kwargs.get('gallery_id', None)
+            logging.debug(gid)
+            if gid is not None:
+                self.gallery = get_object_or_404(Gallery, pk=gid)
+                self.success_url = reverse_lazy('photo:gallery_view', kwargs={'gallery_id': gid})
+                # if not (self.request.user == gid.owner or self.request.user.is_superuser):
+                #     return False
+            return self.request.user.is_staff
+        else:
+            return False
+
+
+class ImageCheckAuth:
+    def check_auth(self, image, user):
+        logging.debug(user.is_authenticated)
+        if user.is_authenticated:
+            logging.debug(image.privacy_level)
+            logging.debug(self.public_gallery(image.gallery))
+            if user.is_staff or user.is_superuser:
+                return True
+            elif image.gallery.owner == user:  # pragma: no cover
+                return True
+            elif self.talent_is_user(image.gallery, user):
+                return image.privacy_level in ['private', 'public']
+            elif self.public_gallery(image.gallery):
+                return image.privacy_level == 'public'
+        else:
+            if self.public_gallery(image.gallery):
+                return image.privacy_level == 'public'
+
+    def talent_is_user(self, gallery, user):
+        releases = gallery.release.all()
+        for release in releases:
+            if release.talent == user:
+                return True
+        return False
+
+    def public_gallery(self, gallery):
+        if not gallery.privacy_level == 'public':
+            return False
+        else:
+            if gallery.public_date is None or gallery.public_date <= date.today():
+                return True
+            else:
+                return False
+
+
+class ImageGetView(View):
+    def get(self, request, image_id, thumb=False):
+        image = get_object_or_404(Images, pk=image_id)
+
+        if ImageCheckAuth().check_auth(image, request.user):
+            if thumb:
+                return sendfile(request, image.thumb.path)
+            return sendfile(request, image.image.path)
+
+        return HttpResponseForbidden()
+
+
+class ImageGetThumbView(ImageGetView):
+    def get(self, request, image_id):
+        return super().get(request, image_id, thumb=True)
+
+
+class ImageView(View):
 
     def get(self, request, image_id, *args, **kwargs):
         image = get_object_or_404(Images, pk=image_id)
+        if not ImageCheckAuth().check_auth(image, request.user):
+            return HttpResponseForbidden()
         # image_data = model_to_dict(image, exclude=['image'])
         i = Image.open(image.image)
-        logging.debug(i._getexif())
         edata = i._getexif()
         if edata is not None:
             exif = {
@@ -31,15 +124,14 @@ class ImageView(LoginRequiredMixin, View):
                 if k in PIL.ExifTags.TAGS
             }
             del exif['MakerNote']
-            logging.debug(exif)
             o = exif.get('Orientation', '')
             if o == 1 or o == 3:
                 orientation = "Landscape"
             elif o == 8 or o == 6:
                 orientation = "Portrait"
-            else:
+            else:  # pragma: no cover
                 orientation = o
-        else:
+        else:  # pragma: no cover
             exif = {}
             orientation = ''
         image_data = {'Camera': exif.get('Model', ''),
@@ -54,5 +146,5 @@ class ImageView(LoginRequiredMixin, View):
                       'Width': exif.get('ExifImageWidth', ''),
                       'Filename': image.image.name.split('/')[-1]
                       }
-
-        return render(request, 'photo_app/image.html', {'image': image, 'image_data': image_data})
+        form = ImageForm(instance=image)
+        return render(request, 'photo_app/image.html', {'image': image, 'image_data': image_data, 'form': form})

@@ -1,5 +1,14 @@
 <form method="post" autocomplete="off" class="form" id="model-release" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ use_form.as_p }}
-    <input type="submit" value="Submit">
+    {{form.as_p}}
+    {% if form.signature %}
+    <p>Signature:</p>
+    <p class="ml-5" id="sig"></p>
+    {% endif %}
+    <p class="ml-5">
+        <button class="btn btn-primary" id="btn-submit" type="submit">Submit</button>
+        {% if form.signature %}
+            <button class="btn btn-primary" id="clear">Clear</button>
+        {% endif %}
+    </p>
 </form>
