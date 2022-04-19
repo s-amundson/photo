@@ -19,8 +19,6 @@ class Img:
         self.taken = self.exif.get(306, None)
         if self.taken is not None:
             self.taken = datetime.strptime(self.taken, '%Y:%m:%d %H:%M:%S') #“2017:09:29 17:36:00”
-        # g = self.validated_data.get('gallery')
-        # logging.debug(g)
 
         self.img.thumbnail((200, 200))
         byte_arr = io.BytesIO()
@@ -42,10 +40,10 @@ class Img:
         return byte_arr
 
     def update_record(self, record):
-        logging.debug(self.taken)
-        # logging.debug(type(self.taken))
         record.width, record.height = self.img.size
-        record.filename = record.image.name
+        name = record.image.name.split('/')
+        logging.info(name)
+        record.filename = name[-1]
         record.thumb_width = 200
         record.orientation = self.exif.get(274, 0)
         record.taken = self.taken

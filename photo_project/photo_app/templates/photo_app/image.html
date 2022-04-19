@@ -49,7 +49,8 @@
                 </p>
                 {% if user.is_staff %}
                     <hr>
-                    <form id="image-form" action="" method="post" role="form" enctype="multipart/form-data">
+                    <form id="image-form" action="{% url 'photo:image_update' image.id %}"
+                          method="post" role="form" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form }}
                         <input type="hidden" id="id_gallery" value="{{ gallery.id }}">

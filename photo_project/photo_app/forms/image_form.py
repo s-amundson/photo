@@ -16,3 +16,14 @@ class ImageForm(ModelForm):
         optional_fields = ['raw_image']
         fields = required_fields + optional_fields
 
+
+class ImageUpdateForm(ImageForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = Images
+        required_fields = []
+        optional_fields = ['raw_image', 'image', 'privacy_level']
+        fields = required_fields + optional_fields

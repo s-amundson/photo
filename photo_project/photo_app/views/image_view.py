@@ -10,7 +10,7 @@ from django_sendfile import sendfile
 
 # Create your views here.
 from django.views import View
-from ..forms import ImageForm
+from ..forms import ImageForm, ImageUpdateForm
 from ..models import Gallery, Images
 from ..src import Img
 
@@ -22,35 +22,38 @@ logger = logging.getLogger(__name__)
 class AddImageView(UserPassesTestMixin, FormView):
     form_class = ImageForm
     gallery = None
+    image = None
     template_name = 'photo_app/form_as_p.html'
     success_url = reverse_lazy('photo:index')
 
     def form_invalid(self, form):
-        logging.debug(form.errors)
+        logging.info(form.errors)
         return super().form_invalid(form)
 
     def form_valid(self, form):
-        logging.debug(form.cleaned_data)
-        record = form.save(commit=False)
-        record.gallery = self.gallery
-        img = Img(record.image)
-        img.update_record(record)
+        logging.info(form.cleaned_data)
+        if form.cleaned_data['image'] is not None:
+            record = form.save(commit=False)
+            record.gallery = self.gallery
+            img = Img(record.image)
+            img.update_record(record)
+        else:
+            form.save()
 
         return super().form_valid(form)
 
-    def post(self, request, *args, **kwargs):
-        logging.debug(self.request.POST)
-        return super().post(request, *args, **kwargs)
 
     def test_func(self):
         if self.request.user.is_authenticated:
             gid = self.kwargs.get('gallery_id', None)
-            logging.debug(gid)
+            iid = self.kwargs.get('image_id', None)
             if gid is not None:
                 self.gallery = get_object_or_404(Gallery, pk=gid)
-                self.success_url = reverse_lazy('photo:gallery_view', kwargs={'gallery_id': gid})
-                # if not (self.request.user == gid.owner or self.request.user.is_superuser):
-                #     return False
+                if iid is not None:
+                    self.image = get_object_or_404(Images, pk=iid)
+                    self.success_url = reverse_lazy('photo:image', kwargs={'image_id': iid})
+                else:
+                    self.success_url = reverse_lazy('photo:gallery_view', kwargs={'gallery_id': gid})
             return self.request.user.is_staff
         else:
             return False
@@ -148,3 +151,23 @@ class ImageView(View):
                       }
         form = ImageForm(instance=image)
         return render(request, 'photo_app/image.html', {'image': image, 'image_data': image_data, 'form': form})
+
+
+class UpdateImageView(AddImageView):
+    form_class = ImageUpdateForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = self.image
+        return kwargs
+
+    def test_func(self):
+        if self.request.user.is_authenticated:
+            iid = self.kwargs.get('image_id', None)
+            if iid is not None:
+                self.image = get_object_or_404(Images, pk=iid)
+                self.gallery = self.image.gallery
+                self.success_url = reverse_lazy('photo:image', kwargs={'image_id': iid})
+            return self.request.user.is_staff
+        else:
+            return False
