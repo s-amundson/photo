@@ -45,13 +45,13 @@ async function load_link_form(link) {
 function mature() {
     if ($("#id_is_mature").prop('checked')) {
         $("#id_is_mature").prop('checked', true);
-        $("#id_is_public").prop('checked', false);
-        $("#id_is_public").attr("disabled", true);
+//        $("#id_is_public").prop('checked', false);
+//        $("#id_is_public").attr("disabled", true);
         $("#id_public_date").attr("disabled", true);
     }
     else {
         $("#id_public_date").attr("disabled", false);
-        $("#id_is_public").attr("disabled", false);
+//        $("#id_is_public").attr("disabled", false);
     }
 }
 
@@ -81,7 +81,7 @@ async function post_gallery_form(e, gallery_id) {
         'description': $("#id_description").val(),
         'shoot_date': $("#id_shoot_date").val(),
         'is_mature': $("#id_is_mature").prop('checked'),
-        'is_public': $("#id_is_public").prop('checked'),
+        'privacy_level': $("#id_privacy_level").val(),
         'public_date': $("#id_public_date").val(),
         'display_image': $("#id_display_image").val(),
         'release': $("#id_release").val(),
@@ -97,6 +97,7 @@ async function post_gallery_form(e, gallery_id) {
         $("#gallery-list").append(h);
         $("#div-add-gallery").hide();
         $("#btn-add-gallery").show();
+        $("#btn-gallery-edit").show();
         return data;
     }, "json");
 }

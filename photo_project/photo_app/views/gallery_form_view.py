@@ -57,11 +57,11 @@ class GalleryFormView(UserPassesTestMixin, FormView):
     template_name = 'photo_app/forms/gallery_form.html'
 
     def form_invalid(self, form):
-        logging.debug(form.errors)
+        logging.warning(form.errors)
         return JsonResponse({'status': 'ERROR', 'errors': form.errors})
 
     def form_valid(self, form):
-        logging.debug(form.cleaned_data)
+        logging.info(form.cleaned_data)
         gallery = form.save(commit=False)
         if self.gallery is None:
             gallery.owner = self.request.user

@@ -3,8 +3,9 @@
     {% load static %}
     <script src="{% static 'js/gallery.js' %}"></script>
     <script>
-        let url_gallery_form = "{% url 'photo_app:gallery_form' gallery.id %}"
-        let url_image_upload = "{% url 'photo_app:image_upload' gallery.id %}"
+        let url_gallery_form = "{% url 'photo_app:gallery_form' gallery.id %}";
+        let url_image_upload = "{% url 'photo_app:image_upload' gallery.id %}";
+        let gallery_id = {{ gallery.id }};
     </script>
 {% endblock %}
 {% block title %}
