@@ -10,8 +10,8 @@ from django_sendfile import sendfile
 
 # Create your views here.
 from django.views import View
-from ..forms import ImageForm, ImageUpdateForm
-from ..models import Gallery, Images
+from ..forms import ImageCommentForm, ImageForm, ImageUpdateForm
+from ..models import Gallery, Images, ImageComment
 from ..src import Img
 
 # Get an instance of a logger
@@ -61,16 +61,18 @@ class AddImageView(UserPassesTestMixin, FormView):
 
 class ImageCheckAuth:
     def check_auth(self, image, user):
-        logging.debug(user.is_authenticated)
+        logging.warning(user.is_authenticated)
         if user.is_authenticated:
-            logging.debug(image.privacy_level)
-            logging.debug(self.public_gallery(image.gallery))
+            logging.warning(image.privacy_level)
+            logging.warning(self.public_gallery(image.gallery))
             if user.is_staff or user.is_superuser:
                 return True
             elif image.gallery.owner == user:  # pragma: no cover
                 return True
             elif self.talent_is_user(image.gallery, user):
                 return image.privacy_level in ['private', 'public']
+            elif image.gallery.privacy_level == 'authenticated':
+                return image.privacy_level in ['public']
             elif self.public_gallery(image.gallery):
                 return image.privacy_level == 'public'
         else:

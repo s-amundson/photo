@@ -1,0 +1,5 @@
+[
+  {"model": "photo_app.imagecomment", "pk": 1, "fields": {"comment":  "Comment one private", "comment_date": "2022-01-06T16:33:56.868Z", "image":  1, "privacy_level":  "private", "user": 1}},
+  {"model": "photo_app.imagecomment", "pk": 2, "fields": {"comment":  "Comment two public", "comment_date": "2022-01-06T17:33:56.868Z", "image":  1, "privacy_level":  "public", "user": 2}},
+  {"model": "photo_app.imagecomment", "pk": 3, "fields": {"comment":  "Comment three private", "comment_date": "2022-01-06T18:33:56.868Z", "image":  1, "privacy_level":  "private", "user": 3}}
+ ]

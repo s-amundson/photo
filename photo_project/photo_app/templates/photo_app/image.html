@@ -15,7 +15,10 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
         <script src="{% static 'js/main.js' %}"></script>
-
+        <script src="{% static 'js/image.js' %}"></script>
+        <script>
+            let url_image_comment = "{% url 'photo_app:image_comment' image.id %}";
+        </script>
         <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 
 
@@ -35,32 +38,36 @@
                     <img src="{% url 'photo_app:image_get' image.id %}" alt="{{ image.image.url }}" class="img-fluid m-3">
                    </a>
 
+            <div class="row">
+                <div class="col bg-dark text-white border-right" id="block-info">
+                    <h6>Image Info</h6>
+                    <p>Privacy: {{image.privacy_level|capfirst }}</p>
+                    {% for key, values in image_data.items %}
+                        <p>{{ key }}: {{ values }}</p>
+                    {% endfor %}
+                    <p>
+                        <a class="pr-4" href="{% url 'photo_app:image_get' image.id %}" download="">
+                            <img src="{% static 'images/icons8-download-48.png' %}" width="24" height="24" alt="Download">
+                            Download
+                        </a>
+                    </p>
+                    {% if user.is_staff %}
+                        <hr>
+                        <form id="image-form" action="{% url 'photo:image_update' image.id %}"
+                              method="post" role="form" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form }}
+                            <input type="hidden" id="id_gallery" value="{{ gallery.id }}">
+                            <input type="hidden" id="id_form_url" value="{% url 'photo_app:gallery_form' %}">
+                            <input type="submit" id="btn-image" value="Submit" >
 
-            <div class="bg-dark text-white" id="block-info">
-                <p>Privacy: {{image.privacy_level|capfirst }}</p>
-                {% for key, values in image_data.items %}
-                    <p>{{ key }}: {{ values }}</p>
-                {% endfor %}
-                <p>
-                    <a class="pr-4" href="{% url 'photo_app:image_get' image.id %}" download="">
-                        <img src="{% static 'images/icons8-download-48.png' %}" width="24" height="24" alt="Download">
-                        Download
-                    </a>
-                </p>
-                {% if user.is_staff %}
-                    <hr>
-                    <form id="image-form" action="{% url 'photo:image_update' image.id %}"
-                          method="post" role="form" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ form }}
-                        <input type="hidden" id="id_gallery" value="{{ gallery.id }}">
-                        <input type="hidden" id="id_form_url" value="{% url 'photo_app:gallery_form' %}">
-                        <input type="submit" id="btn-image" value="Submit" >
-
-                    </form>
-                {% endif %}
+                        </form>
+                    {% endif %}
+                </div>
+                <div class="col bg-dark text-white">
+                    <div id="div-image-comment"></div>
+                </div>
             </div>
-
         </div>
 
         <footer class="small text-center text-muted">

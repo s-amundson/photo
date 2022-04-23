@@ -14,6 +14,7 @@ urlpatterns = [
     path('gallery_view/<int:gallery_id>/', GalleryView.as_view(), name='gallery_view'),
     path('image', ImageView.as_view(), name='image'),
     path('image/<int:image_id>/', ImageView.as_view(), name='image'),
+    path('image_comment/<int:image_id>/', ImageCommentView.as_view(), name='image_comment'),
     path('image_get/<int:image_id>/', ImageGetView.as_view(), name='image_get'),
     path('image_update/<int:image_id>/', UpdateImageView.as_view(), name='image_update'),
     path('image_upload/<int:gallery_id>/', ImageApiView.as_view(), name='image_upload'),

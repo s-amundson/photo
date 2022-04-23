@@ -1,6 +1,26 @@
 from django.forms import ModelForm
 
-from ..models import Images
+from ..models import Images, ImageComment
+# Get an instance of a logger
+import logging
+logger = logging.getLogger(__name__)
+
+
+class ImageCommentForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for f in self.Meta.required_fields:
+            self.fields[f].widget.attrs.update({'class': 'form-control m-2'})
+        for f in self.Meta.hidden_fields:
+            logging.warning(f)
+            self.fields[f].required = False
+            self.fields[f].widget.attrs.update({'class': 'form-control m-2', 'style': 'display:none'})
+
+    class Meta:
+        model = ImageComment
+        hidden_fields = ['image', 'privacy_level', 'user']
+        required_fields = ['comment']
+        fields = required_fields + hidden_fields
 
 
 class ImageForm(ModelForm):

@@ -1,5 +1,6 @@
 from django.db import models
 from .gallery_model import Gallery
+from django.conf import settings
 
 
 def content_file_name(instance, filename):
@@ -35,3 +36,12 @@ class Images(models.Model):
 
     def __str__(self):  # pragma: no cover
         return self.filename
+
+
+class ImageComment(models.Model):
+    comment = models.TextField()
+    comment_date = models.DateTimeField(auto_now=True)
+    image = models.ForeignKey(Images, on_delete=models.CASCADE)
+    privacy_choices = [('private', 'Private'), ('public', 'Public')]
+    privacy_level = models.CharField(max_length=40, null=True, choices=privacy_choices, default='private')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

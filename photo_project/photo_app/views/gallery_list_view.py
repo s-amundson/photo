@@ -22,7 +22,6 @@ class GalleryListView(ListView):
         return context
 
     def get_queryset(self):
-        logging.debug(Gallery.objects.filter(privacy_level__in=['public']))
         if self.request.user.is_staff:
             queryset = Gallery.objects.all()
         elif self.request.user.is_authenticated:
@@ -34,11 +33,11 @@ class GalleryListView(ListView):
         else:
             queryset = Gallery.objects.filter(privacy_level='public', public_date__lte=date.today())
         self.gallery_list = []
-        logging.debug(queryset)
+        logging.warning(queryset)
         for g in queryset:
             if g not in self.gallery_list:
                 d = model_to_dict(g)
                 if g.display_image is not None:
                     d['image'] = g.display_image
                 self.gallery_list.append(d)
-        logging.debug(len(self.gallery_list))
+        logging.warning(len(self.gallery_list))
