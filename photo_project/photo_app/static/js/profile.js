@@ -29,10 +29,10 @@ async function get_profile_info() {
         if (data['first_name'] == "") {
             $("#profile-address").hide();
             $("#profile-form-div").show();
-            $("#profile-form").submit(function(e){
-                e.preventDefault();
-                post_address_function($("#btn-address-edit").attr("model_id") == "");
-            });
+//            $("#profile-form").submit(function(e){
+//                e.preventDefault();
+//                post_address_function($("#btn-address-edit").attr("model_id") == "");
+//            });
         }
         else {
             $("#profile-form-div").hide();

@@ -10,7 +10,7 @@ from .links_views import LinkCategoryCreateView, LinkCategoryUpdateView, LinksFo
 from .model_release_view import ModelReleaseView, ModelReleaseUpdateView
 from .privacy_view import PrivacyView
 from .profile_info_api_view import PhotoModelApiView
-from .profile_view import ProfileView
+from .profile_view import ProfileFormView
 from .terms_view import TermsView
 # from .release_template_view import ReleaseTemplateFormView, ReleaseTemplateView
 from .release_template_view import ReleaseTemplateView

@@ -1,5 +1,5 @@
-from django.forms import ModelForm, DateField, ChoiceField, TextInput, CheckboxInput
-
+from django.forms import ModelForm, DateField, ChoiceField, TextInput, CheckboxInput, SelectDateWidget
+from django.utils.datetime_safe import date
 from ..models import Gallery, Release, User
 import logging
 
@@ -20,12 +20,8 @@ class GalleryForm(ModelForm):
         # exclude = ['owner', 'photo_model']
         widgets = {'name': TextInput(attrs={'placeholder': 'Gallery Name', 'autocomplete': 'off',
                                             'class': "form-control m-2 member-required"}),
-                   'public_date': TextInput(attrs={'placeholder': 'YYYY-MM-DD', 'autocomplete': 'off',
-                                           'class': 'form-control m-2 member-required',
-                                           'data-error-msg': "Please enter date in format YYYY-MM-DD"}),
-                   'shoot_date': TextInput(attrs={'placeholder': 'YYYY-MM-DD', 'autocomplete': 'off',
-                                           'class': 'form-control m-2 member-required',
-                                           'data-error-msg': "Please enter date in format YYYY-MM-DD"})}
+                   'public_date': SelectDateWidget(attrs={'autocomplete': 'off', 'class': 'form-control m-2'}),
+                   'shoot_date': SelectDateWidget(attrs={'autocomplete': 'off', 'class': 'form-control m-2'})}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -36,6 +32,8 @@ class GalleryForm(ModelForm):
         self.fields['display_image'].queryset = self.instance.images_set.filter(privacy_level='public')
         self.fields['release'].choices = self.release_choices()
         self.fields['photographer'].choices = self.photographer_choices()
+        self.fields['public_date'].initial = date.today()
+        self.fields['shoot_date'].initial = date.today()
 
     def release_choices(self):
         pm = Release.objects.filter(state='complete')
