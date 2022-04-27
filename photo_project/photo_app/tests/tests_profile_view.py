@@ -75,6 +75,15 @@ class TestsProfile(TestCase):
         self.post_data.pop('street')
         self.client.force_login(self.User.objects.get(pk=2))
         response = self.client.post(reverse('photo:profile'), self.post_data, secure=True)
+        self.assertEqual(response.status_code, 200)
+        pm = User.objects.get(pk=2)
+        self.assertEqual(pm.first_name, self.post_data['first_name'][0])
+
+    def test_add_info_good_without_dob(self):
+        self.client.force_login(self.User.objects.get(pk=2))
+        for f in ['dob_year', 'dob_month', 'dob_day']:
+            self.post_data.pop(f)
+        response = self.client.post(reverse('photo:profile'), self.post_data, secure=True)
         self.assertRedirects(response, reverse('photo:profile'))
         pm = User.objects.get(pk=2)
         self.assertEqual(pm.first_name, self.post_data['first_name'][0])

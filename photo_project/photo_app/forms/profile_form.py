@@ -11,9 +11,9 @@ class ProfileForm(ModelForm):
 
     class Meta:
         model = User
-        required_fields = ['first_name', 'last_name', 'dob', 'phone', 'street', 'city', 'state', 'post_code']
+        required_fields = ['first_name', 'last_name', 'phone', 'street', 'city', 'state', 'post_code']
         read_fields = []
-        optional_fields = ['is_model', 'nickname']
+        optional_fields = ['is_model', 'dob', 'nickname']
         fields = required_fields + read_fields + optional_fields
 
 
