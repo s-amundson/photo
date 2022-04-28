@@ -135,7 +135,10 @@ class ReleaseModelForm(ReleaseForm):
         self.fields['use_full_name'].label = f'Photographer may use my full name of ' \
                                              f'"{self.instance.talent.first_name} {self.instance.talent.last_name}" ' \
                                              f'in connection with the photographs'
-        self.fields['use_nickname'].label = f'Photographer may use the name of ' \
+        if self.instance.talent.nickname is None:
+            self.fields.pop('use_nickname')
+        else:
+            self.fields['use_nickname'].label = f'Photographer may use the name of ' \
                                             f'"{self.instance.talent.nickname}" in connection with the photographs'
         self.signature = True
 

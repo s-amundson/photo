@@ -71,15 +71,17 @@
     </div>
 {% endif %}
 
-{% if release.use_nickname %}
+{% if release.use_nickname and release.talent.nickname %}
     <div class="row p-2">
         Model specifically acknowledge and agree, that the Photographer may use "{{ release.talent.nickname }}" name in connection with the photographs.
     </div>
 {% endif %}
-<div class="row p-2">
-    In exchange for the releases given above in this Model Release Agreement, Model is being paid the following
-    compensation: ${{ release.compensation }} USD
-</div>
+{% if release.compensation %}
+    <div class="row p-2">
+        In exchange for the releases given above in this Model Release Agreement, Model is being paid the following
+        compensation: ${{ release.compensation }} USD
+    </div>
+{% endif %}
 <div class="row p-2">
     Photographer agrees that model may post public photographs on their social media and modeling profiles. Model
     agrees to credit photographer and link to website when possible.
