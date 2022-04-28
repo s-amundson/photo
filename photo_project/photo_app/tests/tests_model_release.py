@@ -27,7 +27,10 @@ class TestsModelRelease(TestCase):
                              'is_mature': False,
                              'photographer': 1,
                              'talent': 2,
-                             'shoot_date': "2020-02-02",
+                             'shoot_date': '2020-02-02',
+                             # 'shoot_date_month': ['02'],
+                             # 'shoot_date_day': ['02'],
+                             # 'shoot_date_year': ['2020'],
                              # 'state': 'pending',
                              'template': 1,
                              'use_first_name': True,
@@ -109,6 +112,9 @@ class TestsModelRelease(TestCase):
         self.client.force_login(self.test_user) # this user is photographer
         # set an invalid date
         self.release_dict['shoot_date'] = '13/15/23'
+        # self.release_dict['shoot_date_year'] = '2023'
+        # self.release_dict['shoot_date_month'] = '13'
+        # self.release_dict['shoot_date_day'] = '15'
         response = self.client.post(reverse('photo:model_release'), self.release_dict, secure=True)
         self.assertEqual(response.status_code, 200)
         ml = Release.objects.all()
@@ -121,7 +127,10 @@ class TestsModelRelease(TestCase):
                     talent_first_name='firstname', talent_nickname='nick', talent_full_name='full')
         r.save()
         logging.debug(r.id)
-        self.release_dict['shoot_date'] = '2020-04-04'
+        self.release_dict['shoot_date'] = "2020-04-04"
+        # self.release_dict['shoot_date_year'] = '2020'
+        # self.release_dict['shoot_date_month'] = '04'
+        # self.release_dict['shoot_date_day'] = '04'
         # self.release_dict['photographer_signature'] = self.img
         self.client.force_login(self.test_user) # this user is photographer
 

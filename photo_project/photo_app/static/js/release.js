@@ -73,13 +73,15 @@ function add_template() {
 
 function get_template() {
 //  Get the selected release template from the server
-    console.log(url_template)
-    $.get(url_template, function(data, status){
-        $("#template-view").html(data);
+    if (signature_required) {
+        console.log(url_template)
+        $.get(url_template, function(data, status){
+            $("#template-view").html(data);
 
-    });
-    if (template_choice == "#temp_template_choice"){
-        $("#id_template").val($("#temp_template_choice").val());
+        });
+        if (template_choice == "#temp_template_choice"){
+            $("#id_template").val($("#temp_template_choice").val());
+        }
     }
 }
 async function post_template(event) {

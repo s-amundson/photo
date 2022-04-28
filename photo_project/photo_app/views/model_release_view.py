@@ -28,8 +28,11 @@ class ModelReleaseView(UserPassesTestMixin, FormView):
         return super().form_invalid(form)
 
     def form_valid(self, form):
-        logging.debug(form.cleaned_data)
+        logging.warning(form.cleaned_data)
         logging.debug(self.request.POST)
+        # photographer_signature = form.cleaned_data.get('photographer_signature', None)
+        # if form.cleaned_data.get('photographer_signature', None) is not None:
+        #     form.cleaned_data.pop('photographer_signature')
         em = EmailMessage()
         if self.release is None:
             mr = form.save()
@@ -40,7 +43,7 @@ class ModelReleaseView(UserPassesTestMixin, FormView):
             started = self.release.state == 'started'
             # mr = form.save()
             logging.debug('here')
-            if not form.cleaned_data['photographer_signature'] in ['',  form.empty_sig]:
+            if form.cleaned_data['photographer_signature'] not in ['',  form.empty_sig]:
                 logging.debug('signed')
                 mr = form.save(commit=False)
                 mr.state = 'pending'

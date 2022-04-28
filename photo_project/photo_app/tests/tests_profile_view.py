@@ -77,7 +77,7 @@ class TestsProfile(TestCase):
         response = self.client.post(reverse('photo:profile'), self.post_data, secure=True)
         self.assertEqual(response.status_code, 200)
         pm = User.objects.get(pk=2)
-        self.assertEqual(pm.first_name, self.post_data['first_name'][0])
+        self.assertEqual(pm.first_name, 'Rosalva')
 
     def test_add_info_good_without_dob(self):
         self.client.force_login(self.User.objects.get(pk=2))
