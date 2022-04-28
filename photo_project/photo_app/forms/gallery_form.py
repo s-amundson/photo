@@ -36,7 +36,7 @@ class GalleryForm(ModelForm):
         self.fields['shoot_date'].initial = date.today()
 
     def release_choices(self):
-        pm = Release.objects.filter(state='complete')
+        pm = Release.objects.all()
         choices = []
         for m in pm:
             choices.append((m.id, m.shoot_date))
