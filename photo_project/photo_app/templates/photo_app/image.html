@@ -37,7 +37,17 @@
                    <a target="_blank" href="{% url 'photo_app:image_get' image.id %}">
                     <img src="{% url 'photo_app:image_get' image.id %}" alt="{{ image.image.url }}" class="img-fluid m-3">
                    </a>
-
+            <div class="row d-flex justify-content-between">
+                {% if prev_image %}
+                    <a href="{% url 'photo:image' prev_image.id %}" class="btn btn-primary" role="button">
+                        Previous Image
+                    </a>
+                {% endif %}
+                {% if next_image %}
+                    <a href="{% url 'photo:image' next_image.id %}" class="btn btn-primary" role="button">
+                        Next Image
+                    </a>
+                {% endif %}
             <div class="row">
                 <div class="col bg-dark text-white border-right" id="block-info">
                     <h6>Image Info</h6>

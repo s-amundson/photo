@@ -117,6 +117,25 @@ class ImageView(View):
 
     def get(self, request, image_id, *args, **kwargs):
         image = get_object_or_404(Images, pk=image_id)
+        if request.user.is_staff or request.user.is_superuser:
+            images = image.gallery.images_set.all()
+        elif ImageCheckAuth().talent_is_user(image.gallery):
+            images = image.gallery.images_set.filter(privacy_level__in=['public', 'private'])
+        else:
+            images = image.gallery.images_set.filter(privacy_level='public')
+        images = images.order_by('id')
+        prev_image = None
+        next_image = None
+        img_list = list(images)
+        for i in range(len(img_list)):
+            if img_list[i] == image:
+                if i > 0:
+                    prev_image = img_list[i-1]
+                if i < len(img_list) - 1:
+                    next_image = img_list[i+1]
+        logging.warning(prev_image)
+        logging.warning(next_image)
+
         if not ImageCheckAuth().check_auth(image, request.user):
             return HttpResponseForbidden()
         # image_data = model_to_dict(image, exclude=['image'])
@@ -152,7 +171,9 @@ class ImageView(View):
                       'Filename': image.image.name.split('/')[-1]
                       }
         form = ImageForm(instance=image)
-        return render(request, 'photo_app/image.html', {'image': image, 'image_data': image_data, 'form': form})
+        context = {'image': image, 'image_data': image_data, 'form': form, 'prev_image': prev_image,
+                   'next_image': next_image}
+        return render(request, 'photo_app/image.html', context)
 
 
 class UpdateImageView(AddImageView):

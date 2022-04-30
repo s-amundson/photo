@@ -41,6 +41,7 @@ class GalleryView(View):
             images = gallery.images_set.filter(privacy_level__in=['public', 'private'])
         else:
             images = gallery.images_set.filter(privacy_level='public')
+        images = images.order_by('id')
         form = ImageForm()
         logging.debug(gallery_id)
         gallery_form = GalleryForm(instance=gallery)
