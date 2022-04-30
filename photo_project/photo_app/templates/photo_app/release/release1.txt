@@ -28,10 +28,10 @@ Photographer agrees not to make any alterations to the Photographs that would ma
 {% endif %}
 {% if release.use_first_name %}Model specifically acknowledge and agree, that the Photographer may use my first name of "{{ release.talent.first_name }}" in connection with the photographs.
 {% endif %}
-{% if release.use_nickname %}Model specifically acknowledge and agree, that the Photographer may use "{{ release.talent.nickname }}" name in connection with the photographs.
+{% if release.use_nickname and release.talent.nickname %}Model specifically acknowledge and agree, that the Photographer may use "{{ release.talent.nickname }}" name in connection with the photographs.
 {% endif %}
-In exchange for the releases given above in this Model Release Agreement, Model is being paid the following compensation: ${{ release.compensation }} USD
-
+{% if release.compensation %}In exchange for the releases given above in this Model Release Agreement, Model is being paid the following compensation: ${{ release.compensation }} USD
+{% endif %}
 Photographer agrees that model may post public photographs on their social media and modeling profiles. Model agrees to credit photographer and link to website when possible.
 
 I am legally competent adult of full legal age and have the right to contract in my own name. I have read this document thoroughly and understand the entirety of its contents in full.
