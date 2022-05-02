@@ -5,6 +5,18 @@ $(document).ready(function() {
         $(this).hide();
         load_gallery_form();
     });
+    $("#btn-image-privacy").click(function() {
+        console.log($("#div_image_privacy").is(":visible"))
+        if ($("#div_image_privacy").is(":visible")) {
+            $(this).html("Show Privacy Info");
+            $("#div_image_privacy").hide();
+        }
+        else {
+            $(this).html("Hide Privacy Info");
+            $("#div_image_privacy").show();
+        }
+    });
+    $("#div_image_privacy").hide();
 });
 
 function add_image(data) {

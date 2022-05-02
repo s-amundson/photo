@@ -39,7 +39,7 @@ class GalleryForm(ModelForm):
         pm = Release.objects.all()
         choices = []
         for m in pm:
-            choices.append((m.id, m.shoot_date))
+            choices.append((m.id, f'{m.shoot_date} {m.name}'))
         return choices
 
     def photographer_choices(self):

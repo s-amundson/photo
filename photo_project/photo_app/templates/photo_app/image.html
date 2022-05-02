@@ -51,6 +51,8 @@
             <div class="row">
                 <div class="col bg-dark text-white border-right" id="block-info">
                     <h6>Image Info</h6>
+                    <p>Gallery: {{ image.gallery.name }}</p>
+                    <p>Gallery Privacy: {{ image.gallery.privacy_level|capfirst }}</p>
                     <p>Privacy: {{image.privacy_level|capfirst }}</p>
                     {% for key, values in image_data.items %}
                         <p>{{ key }}: {{ values }}</p>
