@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 # from .tests.tests_gallery import TestsGallery
-# from .tests.tests_gallery_form import TestsGalleryForm
+from .tests.tests_gallery_form import TestsGalleryForm
 # from .tests.tests_gallery_form import TestsGalleryFormApi
 # from .tests.tests_gallery_list import TestsGalleryList
 # from .tests.tests_image import TestsImage

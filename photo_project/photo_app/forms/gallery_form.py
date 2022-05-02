@@ -30,24 +30,11 @@ class GalleryForm(ModelForm):
         for f in self.Meta.optional_fields:
             self.fields[f].required = False
         self.fields['display_image'].queryset = self.instance.images_set.filter(privacy_level='public')
-        self.fields['release'].choices = self.release_choices()
-        self.fields['photographer'].choices = self.photographer_choices()
+        self.fields['release'].queryset = Release.objects.all().order_by('shoot_date')
+        self.fields['photographer'].queryset = User.objects.filter(is_photographer=True)
         self.fields['public_date'].initial = date.today()
         self.fields['shoot_date'].initial = date.today()
 
-    def release_choices(self):
-        pm = Release.objects.all()
-        choices = []
-        for m in pm:
-            choices.append((m.id, f'{m.shoot_date} {m.name}'))
-        return choices
-
-    def photographer_choices(self):
-        p = User.objects.filter(is_photographer=True)
-        choices = []
-        for m in p:
-            choices.append((m.id, f'{m.first_name} {m.last_name}'))
-        return choices
 # 'display_image', 'is_mature', 'is_public', 'name', 'owner', 'photo_model', 'public_date', 'photographer', 'shoot_date'
 
 

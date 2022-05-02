@@ -119,7 +119,7 @@ class ImageView(View):
         image = get_object_or_404(Images, pk=image_id)
         if request.user.is_staff or request.user.is_superuser:
             images = image.gallery.images_set.all()
-        elif ImageCheckAuth().talent_is_user(image.gallery):
+        elif ImageCheckAuth().talent_is_user(image.gallery, request.user):
             images = image.gallery.images_set.filter(privacy_level__in=['public', 'private'])
         else:
             images = image.gallery.images_set.filter(privacy_level='public')

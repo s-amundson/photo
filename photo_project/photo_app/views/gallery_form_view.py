@@ -61,6 +61,7 @@ class GalleryFormView(UserPassesTestMixin, FormView):
         return JsonResponse({'status': 'ERROR', 'errors': form.errors})
 
     def form_valid(self, form):
+        logging.warning(self.request.POST)
         logging.info(form.cleaned_data)
         gallery = form.save(commit=False)
         if self.gallery is None:
@@ -69,6 +70,7 @@ class GalleryFormView(UserPassesTestMixin, FormView):
         if gallery.is_mature and gallery.privacy_level == 'public':
             gallery.privacy_level = 'authenticated'
         gallery.save()
+        form.save_m2m()
         url = reverse('photo_app:gallery_view', kwargs={'gallery_id': gallery.id})
         return JsonResponse({'status': "SUCCESS", 'url': url})
 

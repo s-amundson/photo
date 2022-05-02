@@ -4,7 +4,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
-from ..models import Gallery
+from ..models import Gallery, Release
 
 logger = logging.getLogger(__name__)
 
@@ -59,6 +59,9 @@ class TestsGalleryForm(TestCase):
         self.assertEqual(g.privacy_level, 'public')
 
     def test_post_update_authorized(self):
+        release = Release.objects.first()
+        logging.warning(release)
+        self.test_dict['release'] = release.id
         response = self.client.post(reverse('photo:gallery_form', kwargs={'gallery_id': 4}), self.test_dict, secure=True)
         self.assertEqual(response.status_code, 200)
         g = Gallery.objects.all()

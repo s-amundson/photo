@@ -14,3 +14,6 @@ class User(AbstractUser):
     phone = PhoneField(max_length=20, null=True, default=None)
     state = models.CharField(max_length=3)
     street = models.CharField(max_length=150)
+
+    def __str__(self):  # pragma: no cover
+        return f'{self.first_name} {self.last_name}'
