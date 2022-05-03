@@ -73,7 +73,7 @@ function add_template() {
 
 function get_template() {
 //  Get the selected release template from the server
-    if (signature_required) {
+    if (form_instance) {
         console.log(url_template)
         $.get(url_template, function(data, status){
             $("#template-view").html(data);

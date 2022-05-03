@@ -15,9 +15,11 @@
     <script>
         let signature_required = {{form.signature|lower}}
         {% if form.instance.id %}
+            let form_instance = true
             let url_template = "{% url 'photo:release_preview' form.instance.id %}"
             let url_release_update = "{% url 'photo:model_release_update' form.instance.id %}"
         {% else %}
+            let form_instance = false
             let url_template = "{% url 'photo:release_preview'%}"
             let url_release_update = "{% url 'photo:model_release_update'%}"
         {% endif %}
@@ -48,6 +50,28 @@
         <div class="row p-2">
             <div class="col" id="template-view"></div>
         </div>
+        {% if form.instance.photographer_signature %}
+            <div class="row p-2">
+                <div class="col">
+                    <p>Photographer Signature:</p>
+                    <p class="ml-5">
+                        <img src="{{ form.instance.photographer_signature.url }}" class="img-responsive"
+                                     style="width: 392px; height: 198px; float: left; margin-right: 10px;" />
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+        {% if form.instance.talent_signature %}
+            <div class="row p-2">
+                <div class="col">
+                    <p>Model Signature:</p>
+                    <p class="ml-5">
+                        <img src="{{ form.instance.talent_signature.url }}" class="img-responsive"
+                                     style="width: 392px; height: 198px; float: left; margin-right: 10px;" />
+                    </p>
+                </div>
+            </div>
+        {% endif %}
         <div class="row p-2">
             <div class="col">
                 {% if form.signature %}

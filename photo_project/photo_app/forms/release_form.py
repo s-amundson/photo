@@ -196,7 +196,7 @@ class ReleaseSignedForm(ReleaseForm):
         for f in self.Meta.hidden_fields:
             self.fields[f].required = False
             self.fields[f].widget.attrs.update({'class': 'form-control m-2', 'disabled': 'disabled'})
-
+        self.signature = True
 
 class ReleaseTemplateForm(ModelForm):
 
