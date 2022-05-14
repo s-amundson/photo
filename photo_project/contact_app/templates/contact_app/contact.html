@@ -14,7 +14,7 @@
             {% empty %}
                 <p class="ml-4">No Links</p>
             {% endfor %}
-            {% if form.instance %}
+            {% if form.has_instance %}
                 <p class="ml-4"><a href="{% url 'contact:link' form.instance.id %}">Add Link</a></p>
             {% endif %}
         <button class="btn btn-primary" type="submit">Update</button>
@@ -25,7 +25,7 @@
     {% empty %}
         <p class="ml-4">No Comments</p>
     {% endfor %}
-    {% if form.instance %}
+    {% if form.has_instance %}
         <p class="ml-4"><a href="{% url 'contact:comment' form.instance.id %}">Add Comment</a></p>
     {% endif %}
 {% endblock %}

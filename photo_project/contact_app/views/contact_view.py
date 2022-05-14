@@ -23,8 +23,7 @@ class ContactView(UserPassesTestMixin, FormView):
         return super().form_invalid(form)
 
     def form_valid(self, form):
-        logging.info(form.cleaned_data)
-        contact = form.save()
+        form.save()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -46,6 +45,7 @@ class ContactView(UserPassesTestMixin, FormView):
     def test_func(self):
         if self.request.user.is_authenticated:
             cid = self.kwargs.get('contact_id', None)
+            logging.warning(cid)
             if cid is not None:
                 self.contact = get_object_or_404(Contact, pk=cid)
             return self.request.user.is_staff

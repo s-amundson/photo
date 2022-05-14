@@ -17,7 +17,6 @@ class ContactForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        # self.fields['public_date'] = DateField(required=False)
+        self.has_instance = kwargs.get('instance', None)
         for f in self.Meta.optional_fields:
             self.fields[f].required = False

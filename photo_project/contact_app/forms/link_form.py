@@ -27,3 +27,4 @@ class LinkForm(ModelForm):
         for f in self.Meta.read_fields:
             self.fields[f].required = False
             self.fields[f].widget.attrs.update({'class': 'form-control m-2', 'readonly': 'readonly'})
+        logging.warning(self.instance)

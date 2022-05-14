@@ -45,6 +45,6 @@ class CommentView(UserPassesTestMixin, FormView):
             self.success_url = reverse_lazy('contact:contact', kwargs={'contact_id': cid})
             logging.warning(com_id)
             if com_id is not None:
-                self.comment = get_object_or_404(Link, pk=com_id)
+                self.comment = get_object_or_404(Comment, pk=com_id)
             return self.request.user.is_staff
         return False
