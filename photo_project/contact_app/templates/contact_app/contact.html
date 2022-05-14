@@ -16,8 +16,11 @@
             {% endfor %}
             {% if form.has_instance %}
                 <p class="ml-4"><a href="{% url 'contact:link' form.instance.id %}">Add Link</a></p>
+                <button class="btn btn-primary" type="submit">Update</button>
+            {% else %}
+                <button class="btn btn-primary" type="submit">Save</button>
             {% endif %}
-        <button class="btn btn-primary" type="submit">Update</button>
+
     </form>
     <p><h5>Comments</h5></p>
     {% for comment in comments %}

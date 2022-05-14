@@ -23,7 +23,8 @@ class ContactView(UserPassesTestMixin, FormView):
         return super().form_invalid(form)
 
     def form_valid(self, form):
-        form.save()
+        contact = form.save()
+        self.success_url = reverse_lazy('contact:contact', kwargs={'contact_id': contact.id})
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

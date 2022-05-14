@@ -5,7 +5,7 @@ from photo_app.fields import PhoneField
 
 
 class Contact(models.Model):
-    email = models.EmailField(null=True, default=None)
+    email = models.EmailField(null=True, default=None, unique=True)
     first_name = models.CharField(max_length=100, null=True, default=None)
     is_model = models.BooleanField(default=True)
     last_name = models.CharField(max_length=100, null=True, default=None)

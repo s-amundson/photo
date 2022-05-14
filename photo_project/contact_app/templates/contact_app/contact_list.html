@@ -12,6 +12,7 @@
             <th> Last Name </th>
             <th> First Name </th>
             <th> Email </th>
+            <th> Rating </th>
 
         </thead>
         <tbody>
@@ -21,10 +22,11 @@
                         {{ contact.last_name }}</a></td>
                     <td>{{ contact.first_name }}</td>
                     <td>{{ contact.email }}</td>
+                    <td>{{ contact.score }}</td>
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="3"> No Contacts yet.</td>
+                    <td colspan="4"> No Contacts yet.</td>
                 </tr>
             {% endfor %}
         </tbody>
