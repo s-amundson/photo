@@ -150,13 +150,13 @@ class ReleasePhotographerForm(ReleaseForm):
         exclude = ['talent_signature']
         required_fields = ['name', 'talent', 'shoot_date', 'template']
         read_fields = []
-        optional_fields = ['compensation', 'is_mature', 'send_email', 'use_first_name', 'use_full_name', 'use_nickname', 'photographer_signature']
+        optional_fields = ['compensation', 'is_mature', 'send_email', 'use_first_name', 'use_full_name', 'use_nickname',
+                           'photographer_signature']
         fields = required_fields + read_fields + optional_fields
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         logging.warning(kwargs)
-        # logging.debug(model_to_dict(kwargs['instance']))
         for f in self.Meta.required_fields:
             self.fields[f].required = True
         # for f in self.Meta.read_fields:

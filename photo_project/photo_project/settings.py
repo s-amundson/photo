@@ -95,6 +95,7 @@ EMAIL_HOST_PASSWORD = get_secret('EMAIL_HOST_PASSWORD')
 # Application definition
 INSTALLED_APPS = [
     'photo_app',
+    'contact_app',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

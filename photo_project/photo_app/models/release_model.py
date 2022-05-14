@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from .release_template_model import ReleaseTemplate
+from ..src import OverwriteStorage
 
 
 def content_file_name(instance, filename):
@@ -34,10 +35,10 @@ class Release(models.Model):
     talent_first_name = models.CharField(max_length=50, null=True, default=None)
     talent_nickname = models.CharField(max_length=100, null=True, default=None)
     talent_full_name = models.CharField(max_length=100, null=True, default=None)
-    talent_signature = models.ImageField(upload_to="signatures/%Y/%m/%d/", null=True, default=None)
+    talent_signature = models.ImageField(storage=OverwriteStorage(), upload_to="signatures/%Y/%m/%d/", null=True, default=None)
     talent_signature_date = models.DateField(null=True, default=None)
     pdf = models.FileField(upload_to="release/%Y/%m/%d/", null=True, default=None)
-    photographer_signature = models.ImageField(upload_to="signatures/%Y/%m/%d/", null=True, default=None)
+    photographer_signature = models.ImageField(storage=OverwriteStorage(), upload_to="signatures/%Y/%m/%d/", null=True, default=None)
     photographer_signature_date = models.DateField(null=True, default=None)
 
     def __str__(self):  # pragma: no cover

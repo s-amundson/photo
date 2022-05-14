@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %} Contact List {% endblock %}
+
+
+{% block main %}
+
+
+  <div id="contact_table">
+    <table class="table table-bordered text-white">
+        <thead>
+            <th> Last Name </th>
+            <th> First Name </th>
+            <th> Email </th>
+
+        </thead>
+        <tbody>
+            {% for contact in object_list %}
+                <tr>
+                    <td><a href="{% url 'contact:contact' contact.id %}">
+                        {{ contact.last_name }}</a></td>
+                    <td>{{ contact.first_name }}</td>
+                    <td>{{ contact.email }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3"> No Contacts yet.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+  </div>
+<a class="" href="{% url 'contact:contact' %}">Create Contact</a>
+{% endblock %}
+
+{% block right %}
+  <div id="login-div"></div>
+{% endblock %}

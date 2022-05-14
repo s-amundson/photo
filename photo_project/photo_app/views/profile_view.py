@@ -33,7 +33,7 @@ class ProfileFormView(LoginRequiredMixin, FormView):
     def get_gallery_list(self):
         gallery_list = []
         gl = Gallery.objects.filter(Q(release__talent=self.request.user) | Q(owner=self.request.user) |
-                                              Q(photographer=self.request.user))
+                                              Q(photographer=self.request.user)).order_by('shoot_date')
         for g in gl:
             if g not in gallery_list:
                 gallery_list.append(g)
@@ -41,7 +41,7 @@ class ProfileFormView(LoginRequiredMixin, FormView):
 
     def get_release_list(self):
         release_list = []
-        rl = Release.objects.filter(Q(talent=self.request.user) | Q(photographer=self.request.user))
+        rl = Release.objects.filter(Q(talent=self.request.user) | Q(photographer=self.request.user)).order_by('-shoot_date')
         for r in rl:
             if r not in release_list:
                 release_list.append(r)

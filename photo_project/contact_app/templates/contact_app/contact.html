@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %} Contact {% endblock %}
+
+
+{% block main %}
+    <div class="row" message_text="{{ message }}" hidden id="message"><h3>"{{ message }}"</h3></div>
+
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+        {{ form.as_p }}
+            <p><h5>Links</h5></p>
+            {% for link in links %}
+                <p class="ml-4"><a href="{% url 'contact:link' form.instance.id link.id %}">{{ link.service }}:</a> {{ link.account }}</p>
+            {% empty %}
+                <p class="ml-4">No Links</p>
+            {% endfor %}
+            {% if form.instance %}
+                <p class="ml-4"><a href="{% url 'contact:link' form.instance.id %}">Add Link</a></p>
+            {% endif %}
+        <button class="btn btn-primary" type="submit">Update</button>
+    </form>
+    <p><h5>Comments</h5></p>
+    {% for comment in comments %}
+        <p class="ml-4"><a href="{% url 'contact:comment' form.instance.id comment.id %}">{{ comment.comment_date }}:</a> {{ comment.comment }}</p>
+    {% empty %}
+        <p class="ml-4">No Comments</p>
+    {% endfor %}
+    {% if form.instance %}
+        <p class="ml-4"><a href="{% url 'contact:comment' form.instance.id %}">Add Comment</a></p>
+    {% endif %}
+{% endblock %}
+
+{% block right %}
+  <div id="login-div"></div>
+{% endblock %}

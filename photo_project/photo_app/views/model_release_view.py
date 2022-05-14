@@ -62,7 +62,10 @@ class ModelReleaseView(UserPassesTestMixin, FormView):
             mr = form.save(commit=False)
             if form.cleaned_data['talent_signature'] not in ['',  form.empty_sig]:
                 logging.debug('signed')
-                mr.state = 'agreed'
+                if self.release.photographer_signature is not None:
+                    mr.state = 'complete'
+                else:
+                    mr.state = 'agreed'
                 mr.talent_first_name = self.request.user.first_name
                 mr.talent_full_name = f'{self.request.user.first_name} {self.request.user.last_name}'
                 mr.talent_nickname = self.request.user.nickname
@@ -71,6 +74,9 @@ class ModelReleaseView(UserPassesTestMixin, FormView):
                 mr.talent_signature_date = timezone.localtime(timezone.now()).date()
             mr.save()
             em.release_modified(mr.photographer, mr)
+            if self.release.photographer_signature is not None and self.release.talent_signature is not None:
+                logging.warning(self.release.talent_signature is not None)
+                form.make_pdf()
         # elif self.release.state == 'agreed':
         #     logging.debug(model_to_dict(self.release))
         #     if form.cleaned_data['photographer_signature'] != form.empty_sig:
@@ -104,12 +110,12 @@ class ModelReleaseView(UserPassesTestMixin, FormView):
                 return True
             else:
                 self.release = get_object_or_404(Release, pk=release)
-                logging.debug(self.release.state)
+                logging.warning(self.release.state)
                 logging.debug(model_to_dict(self.release))
                 if self.request.user.id == self.release.photographer.id:
                     logging.debug('photographer')
                     if self.release.state in ['started', 'pending']:
-                        logging.debug('ReleasePhotographerForm')
+                        logging.warning('ReleasePhotographerForm')
                         self.form_class = ReleasePhotographerForm
                     else:
                         self.form_class = ReleaseSignedForm

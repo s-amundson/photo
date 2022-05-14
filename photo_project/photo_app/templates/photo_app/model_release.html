@@ -50,7 +50,7 @@
         <div class="row p-2">
             <div class="col" id="template-view"></div>
         </div>
-        {% if form.instance.photographer_signature %}
+        {% if user.is_staff and form.instance.photographer_signature %}
             <div class="row p-2">
                 <div class="col">
                     <p>Photographer Signature:</p>
