@@ -31,17 +31,29 @@ class AddImageView(UserPassesTestMixin, FormView):
         return super().form_invalid(form)
 
     def form_valid(self, form):
-        logging.info(form.cleaned_data)
+        image_files = self.request.FILES.getlist('image')
         if form.cleaned_data['image'] is not None:
-            record = form.save(commit=False)
-            record.gallery = self.gallery
-            img = Img(record.image)
-            img.update_record(record)
+            for image in image_files:
+                img = Img(image)
+                record = Images.objects.create(
+                    camera_make=img.camera_make,
+                    camera_model=img.camera_model,
+                    gallery=self.gallery,
+                    filename=image.name,
+                    image=image,
+                    orientation=img.orientation,
+                    privacy_level=form.cleaned_data['privacy_level'],
+                    # tags = models.CharField(max_length=255)
+                    taken=img.taken,
+                    thumb=img.img_file,
+                    thumb_width=200,
+                    width=img.width,
+                    height=img.height
+                )
         else:
             form.save()
 
         return super().form_valid(form)
-
 
     def test_func(self):
         if self.request.user.is_authenticated:

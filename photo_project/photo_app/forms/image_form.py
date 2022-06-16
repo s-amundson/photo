@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, ClearableFileInput
 
 from ..models import Images, ImageComment
 # Get an instance of a logger
@@ -16,6 +16,7 @@ class ImageCommentForm(ModelForm):
             self.fields[f].required = False
             self.fields[f].widget.attrs.update({'class': 'form-control m-2', 'style': 'display:none'})
 
+
     class Meta:
         model = ImageComment
         hidden_fields = ['image', 'privacy_level', 'user']
@@ -29,6 +30,7 @@ class ImageForm(ModelForm):
         super().__init__(*args, **kwargs)
         for f in self.Meta.optional_fields:
             self.fields[f].required = False
+        self.fields['image'].widget.attrs.update({'multiple': True})
 
     class Meta:
         model = Images

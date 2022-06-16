@@ -4,13 +4,25 @@
 
 
 {% block main %}
+    <form class="form m-2" method="get">
 
+        <div class="m-2"><h5>Filter:</h5></div>
+        <div class="d-flex flex-row m-2">
+            <div class="m-2 fieldWrapper">
+                {{form.first_name.label_tag }} {{ form.first_name }}
+            </div>
+            <div class="m-2 fieldWrapper">
+                {{form.last_name.label_tag }} {{ form.last_name }}
+            </div>
+        </div>
+      <input class="btn btn-primary" type="submit" value="Submit">
+  </form>
 
   <div id="contact_table">
     <table class="table table-bordered text-white">
         <thead>
-            <th> Last Name </th>
             <th> First Name </th>
+            <th> Last Name </th>
             <th> Email </th>
             <th> Rating </th>
 
@@ -19,8 +31,8 @@
             {% for contact in object_list %}
                 <tr>
                     <td><a href="{% url 'contact:contact' contact.id %}">
-                        {{ contact.last_name }}</a></td>
-                    <td>{{ contact.first_name }}</td>
+                        {{ contact.first_name }}</a></td>
+                    <td>{{ contact.last_name }}</td>
                     <td>{{ contact.email }}</td>
                     <td>{{ contact.score }}</td>
                 </tr>

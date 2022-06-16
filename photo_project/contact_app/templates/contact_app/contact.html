@@ -2,7 +2,9 @@
 
 {% block title %} Contact {% endblock %}
 
-
+{% block left %}
+    <a href="{% url 'contact:contact_list' %}">Contact List</a>
+{% endblock %}
 {% block main %}
     <div class="row" message_text="{{ message }}" hidden id="message"><h3>"{{ message }}"</h3></div>
 

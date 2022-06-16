@@ -15,7 +15,10 @@ class Img:
         self.width, self.height = self.img.size
         logging.debug(f'width= {self.width}, height= {self.height}')
         self.exif = self.img.getexif()
-        logging.debug(self.exif)
+        self.camera_make = self.exif.get(271, 'None')
+        self.camera_model = self.exif.get(272, 'None')
+        self.orientation = self.exif.get(274, 0)
+        # logging.debug(self.exif)
         self.taken = self.exif.get(306, None)
         if self.taken is not None:
             self.taken = datetime.strptime(self.taken, '%Y:%m:%d %H:%M:%S') #“2017:09:29 17:36:00”

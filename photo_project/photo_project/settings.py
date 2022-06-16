@@ -74,6 +74,8 @@ DATABASES = {
 }
 if 'test' in sys.argv:  # or 'test_coverage' in sys.argv: #Covers regular testing and django-coverage
     DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 2621440 * 8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_secret("DEBUG")
 
