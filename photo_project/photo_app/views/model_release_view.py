@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.forms import model_to_dict
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 from django.http import JsonResponse
@@ -30,9 +30,6 @@ class ModelReleaseView(UserPassesTestMixin, FormView):
     def form_valid(self, form):
         logging.warning(form.cleaned_data)
         logging.debug(self.request.POST)
-        # photographer_signature = form.cleaned_data.get('photographer_signature', None)
-        # if form.cleaned_data.get('photographer_signature', None) is not None:
-        #     form.cleaned_data.pop('photographer_signature')
         em = EmailMessage()
         if self.release is None:
             mr = form.save()
@@ -77,17 +74,6 @@ class ModelReleaseView(UserPassesTestMixin, FormView):
             if self.release.photographer_signature is not None and self.release.talent_signature is not None:
                 logging.warning(self.release.talent_signature is not None)
                 form.make_pdf()
-        # elif self.release.state == 'agreed':
-        #     logging.debug(model_to_dict(self.release))
-        #     if form.cleaned_data['photographer_signature'] != form.empty_sig:
-        #         mr = form.save()
-        #         mr.state = 'complete'
-        #         mr.photographer_signature = form.make_signature(
-        #             f'{self.request.user.first_name}_{self.request.user.last_name}')
-        #         mr.save()
-        # if form.cleaned_data.get('send_email', False):
-        #     EmailMessage().release_notification(mr.talent, mr)
-        #     return render(self.request, 'photo_app/message.html', {'message': 'Release Saved'})
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

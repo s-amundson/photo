@@ -1,8 +1,4 @@
-from django.forms import model_to_dict
-from django.db.models import Q
-from django.utils.datetime_safe import date
 from .gallery_list_view import GalleryListView
-from ..models import Gallery, Images
 
 import logging
 

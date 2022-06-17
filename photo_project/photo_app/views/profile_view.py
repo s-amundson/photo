@@ -1,11 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.shortcuts import render
-from django.views.generic.base import View
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 
-from ..forms import LinkForm, ProfileForm
+from ..forms import ProfileForm
 from ..models import Gallery, Links, Release
 
 import logging

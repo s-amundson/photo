@@ -1,42 +1,18 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.forms import model_to_dict
 from django.shortcuts import render, get_object_or_404
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import FormView
-from django.template.loader import get_template
 from django.views.generic.base import View
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 
-import logging
-from django.http import HttpResponseBadRequest
-
-from rest_framework.views import APIView
-from rest_framework import permissions, status
-from rest_framework.response import Response
-
 from ..forms import LinkForm
 from ..models import Links, User
-from ..serializers import LinkSerializer
 
+import logging
 logger = logging.getLogger(__name__)
 
-
-# class LinksApiView(LoginRequiredMixin, APIView):
-#     permission_classes = [permissions.IsAuthenticated]
-#
-#     def post(self, request, link_id):
-#         logging.debug(request.data)
-#
-#         serializer = LinkSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#
-#             return Response(serializer.data)
-#
-#         else:
-#             logging.debug(serializer.errors)
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LinkCategoryCreateView(UserPassesTestMixin, CreateView):
     model = Links

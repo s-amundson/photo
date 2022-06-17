@@ -1,6 +1,6 @@
 from PIL import Image
 import PIL.ExifTags
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
 from django.http import HttpResponseForbidden
@@ -10,8 +10,8 @@ from django_sendfile import sendfile
 
 # Create your views here.
 from django.views import View
-from ..forms import ImageCommentForm, ImageForm, ImageUpdateForm
-from ..models import Gallery, Images, ImageComment
+from ..forms import ImageForm, ImageUpdateForm
+from ..models import Gallery, Images
 from ..src import Img
 
 # Get an instance of a logger
@@ -32,7 +32,10 @@ class AddImageView(UserPassesTestMixin, FormView):
 
     def form_valid(self, form):
         image_files = self.request.FILES.getlist('image')
-        if form.cleaned_data['image'] is not None:
+        logging.warning(image_files)
+        logging.warning(self.image)
+        logging.warning(form.cleaned_data['image'])
+        if image_files and form.cleaned_data['image'] is not None:
             for image in image_files:
                 img = Img(image)
                 record = Images.objects.create(
@@ -50,6 +53,12 @@ class AddImageView(UserPassesTestMixin, FormView):
                     width=img.width,
                     height=img.height
                 )
+        elif form.cleaned_data['image'] is not None:
+            img = Img(form.cleaned_data['image'])
+            record = form.save(commit=False)
+            record.gallery = self.gallery
+            record.image = form.cleaned_data['image']
+            img.update_record(record)
         else:
             form.save()
 
@@ -73,10 +82,7 @@ class AddImageView(UserPassesTestMixin, FormView):
 
 class ImageCheckAuth:
     def check_auth(self, image, user):
-        logging.warning(user.is_authenticated)
         if user.is_authenticated:
-            logging.warning(image.privacy_level)
-            logging.warning(self.public_gallery(image.gallery))
             if user.is_staff or user.is_superuser:
                 return True
             elif image.gallery.owner == user:  # pragma: no cover
@@ -199,6 +205,7 @@ class UpdateImageView(AddImageView):
     def test_func(self):
         if self.request.user.is_authenticated:
             iid = self.kwargs.get('image_id', None)
+            logging.warning(iid)
             if iid is not None:
                 self.image = get_object_or_404(Images, pk=iid)
                 self.gallery = self.image.gallery
