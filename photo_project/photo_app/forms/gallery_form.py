@@ -35,18 +35,3 @@ class GalleryForm(ModelForm):
         self.fields['public_date'].initial = date.today()
         self.fields['shoot_date'].initial = date.today()
 
-# 'display_image', 'is_mature', 'is_public', 'name', 'owner', 'photo_model', 'public_date', 'photographer', 'shoot_date'
-
-
-# class GalleryCreateForm(GalleryForm):
-#     class Meta(GalleryForm.Meta):
-#         required_fields = ['name']
-#         read_fields = []
-#         optional_fields = ['is_mature', 'is_public', 'release', 'public_date', 'photographer',
-#                            'shoot_date']
-#         fields = required_fields + read_fields + optional_fields
-#
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         for f in self.Meta.optional_fields:
-#             self.fields[f].required = False

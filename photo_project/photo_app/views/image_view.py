@@ -27,6 +27,7 @@ class AddImageView(UserPassesTestMixin, FormView):
     success_url = reverse_lazy('photo:index')
 
     def form_invalid(self, form):
+        logging.warning(self.request.POST)
         logging.info(form.errors)
         return super().form_invalid(form)
 

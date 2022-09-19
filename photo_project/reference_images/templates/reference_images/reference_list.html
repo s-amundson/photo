@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Reference List
+{% endblock %}
+
+
+{% block main %}
+    {% load static %}
+
+    <div class="row mx-auto"><h3>Reference Images</h3></div>
+    {% for reference in reference_list %}
+        <div class="row border m-2 p-2">
+            <div class="col mx-auto">
+                <img class="rounded img-fluid" src="{% url 'reference:image_get' reference.id %}">
+            </div>
+            <table class="col table table-bordered">
+                <tr>
+                    <td>Categories: </td>
+                    <td>
+                        <ul>
+                            {% for category in reference.category.all %}
+                            <li>{{ category }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Link: </td>
+                    <td>{{ reference.link }}</td>
+                </tr>
+                <tr>
+                    <td>Model Mayhem: </td>
+                    <td>{{ reference.is_model_mayhem }}</td>
+                </tr>
+                <tr>
+                    <td>Note: </td>
+                    <td>{{ reference.note }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="mx-auto text-center align-middle">
+                        <a href="{% url 'reference:reference_form' reference.id %}" class="btn btn-primary">Edit</a>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    {% empty %}
+        <div class="row"> No References </div>
+    {% endfor %}
+
+    <hr>
+    <div class="m-2">
+        <form method="post" enctype="multipart/form-data" action="{% url 'reference:reference_form' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+{% endblock %}
+

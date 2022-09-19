@@ -76,6 +76,7 @@ if 'test' in sys.argv:  # or 'test_coverage' in sys.argv: #Covers regular testin
     DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 2621440 * 8
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_secret("DEBUG")
 
@@ -83,7 +84,6 @@ DEBUG = get_secret("DEBUG")
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DEFAULT_FROM_EMAIL = get_secret('DEFAULT_FROM_EMAIL')
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = get_secret("EMAIL_BACKEND")
 EMAIL_DEBUG = get_secret("EMAIL_DEBUG")
 EMAIL_DEBUG_ADDRESSES = get_secret('EMAIL_DEBUG_ADDRESSES')
@@ -98,6 +98,7 @@ EMAIL_HOST_PASSWORD = get_secret('EMAIL_HOST_PASSWORD')
 INSTALLED_APPS = [
     'photo_app',
     'contact_app',
+    'reference_images',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
