@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 class ReferenceFormView(UserPassesTestMixin, FormView):
     form_class = ReferenceForm
     success_url = reverse_lazy('reference:reference_list')
-    template_name = 'photo_app/form_as_p.html'
+    template_name = 'reference_images/reference.html'
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

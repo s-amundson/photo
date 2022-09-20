@@ -1,4 +1,5 @@
 from django import forms
+from src import MyModelForm
 from ..models import Reference
 import logging
 
@@ -6,9 +7,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class ReferenceForm(forms.ModelForm):
+class ReferenceForm(MyModelForm):
 
-    class Meta:
+    class Meta(MyModelForm.Meta):
         model = Reference
         required_fields = ['category', 'image', 'link']
         read_fields = []
@@ -17,6 +18,9 @@ class ReferenceForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for f in self.Meta.optional_fields:
-            self.fields[f].required = False
-            # self.fields[f].widget.attrs.update({'class': 'form-control m-2'})
+
+        self.fields['active'].widget.attrs.update({'class': 'm-2'})
+        self.fields['is_model_mayhem'].widget.attrs.update({'class': 'm-2'})
+    #     for f in self.Meta.optional_fields:
+    #         self.fields[f].required = False
+    #         # self.fields[f].widget.attrs.update({'class': 'form-control m-2'})
