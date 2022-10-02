@@ -24,7 +24,6 @@ urlpatterns = [
     path('model_release_update/<int:release>/', ModelReleaseUpdateView.as_view(), name='model_release_update'),
     path('model_release_update/', ModelReleaseUpdateView.as_view(), name='model_release_update'),
     path('privacy/', PrivacyView.as_view(), name='privacy'),
-    path('profile_info_api/', PhotoModelApiView.as_view(), name='profile_info_api'),
     path('profile/', ProfileFormView.as_view(), name='profile'),
     path('release_preview/', ReleaseTemplateView.as_view(), name='release_preview'),
     path('release_preview/<int:release_id>/', ReleaseTemplateView.as_view(), name='release_preview'),

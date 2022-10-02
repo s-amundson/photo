@@ -1,13 +1,8 @@
-import os
-from PIL import Image
-
-from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, render
 
 # Create your views here.
-from django.views import generic, View
-from ..models import Gallery, Images
+from django.views import View
+from ..models import Gallery
 from ..forms import GalleryForm, ImageForm
 import logging
 

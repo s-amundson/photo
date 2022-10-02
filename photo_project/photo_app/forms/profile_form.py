@@ -28,3 +28,4 @@ class ProfileForm(ModelForm):
 
         self.fields['dob'].label = "Date of Birth"
         self.fields['is_model'].label = "I am a Model"
+        self.fields['is_model'].widget.attrs.update({'class': 'm-2'})
