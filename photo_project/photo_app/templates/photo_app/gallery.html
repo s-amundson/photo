@@ -42,11 +42,9 @@
         {% endif %}
     </div>
     {% if owner %}
-        <div class="row pt-1">
-            <a href="{% url 'photo:add_image' gallery.id %}" class="btn btn-primary" role="button">
-                Add Image
-            </a>
-        </div>
+        <a href="{% url 'photo:add_image' gallery.id %}" class="btn btn-primary" role="button">
+            Add Image
+        </a>
     {% endif %}
     <div class="row pt-3">
       <div class="col">
@@ -80,11 +78,9 @@
     {% endif %}
     <div class="row p-3"><hr/></div>
     {% if owner %}
-        <div class="row ">
-            <button id="btn-gallery-edit" class="btn btn-primary" type="button" name="button">
-                Edit Gallery
-            </button>
-        </div>
+        <button id="btn-gallery-edit" class="btn btn-primary" type="button" name="button">
+            Edit Gallery
+        </button>
         <div id="div-add-gallery"></div>
     {% endif %}
 {% endblock %}

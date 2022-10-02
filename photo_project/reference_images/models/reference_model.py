@@ -16,7 +16,7 @@ def thumb_file_name(instance, filename):
 class Reference(models.Model):
     active = models.BooleanField(default=True)
     category = models.ManyToManyField(Category)
-    image = models.ImageField(storage=OverwriteStorage(), upload_to=content_file_name)
+    image = models.ImageField(upload_to=content_file_name)
     is_model_mayhem = models.BooleanField(default=False)
     link = models.URLField(null=True, default=None)
     note = models.CharField(max_length=255)

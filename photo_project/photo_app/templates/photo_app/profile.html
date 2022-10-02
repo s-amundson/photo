@@ -38,12 +38,10 @@
                 {{ user.city }} {{ user.state }} {{ user.post_code }}
             </div>
             <div id="phone" class="row">{{ user.phone }}</div>
-            <div class="row">
-                <button id="btn-address-edit" class="btn btn-primary" type="button" name="button"
-                        model_id="{{ user.id }}">
-                    Edit Info
-                </button>
-            </div>
+            <button id="btn-address-edit" class="btn btn-primary" type="button" name="button"
+                    model_id="{{ user.id }}">
+                Edit Info
+            </button>
         </div>
     </div>
 
@@ -56,11 +54,9 @@
     <div class="row px-3" id="link-form-div">
 
     </div>
-    <div class="row">
-        <button id="btn-add-link" class="btn btn-primary" type="button" name="button">
-            Add Link
-        </button>
-    </div>
+    <button id="btn-add-link" class="btn btn-primary" type="button" name="button">
+        Add Link
+    </button>
 
     <div class="row px-3 pt-3 align-items-center mx-auto">
         <div class="col-12">
