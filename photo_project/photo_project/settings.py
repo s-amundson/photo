@@ -67,6 +67,9 @@ AUTHENTICATION_BACKENDS = (
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend"
 )
+
+CSRF_TRUSTED_ORIGINS = get_secret("CSRF_TRUSTED_ORIGINS")
+
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 DATABASES = {
@@ -98,6 +101,7 @@ EMAIL_HOST_PASSWORD = get_secret('EMAIL_HOST_PASSWORD')
 INSTALLED_APPS = [
     'photo_app',
     'contact_app',
+    'recaptcha',
     'reference_images',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -158,6 +162,11 @@ MIDDLEWARE = [
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'photo_app', 'media')
 MEDIA_URL = '/media/'
+
+RECAPTCHA_PRIVATE_KEY = get_secret('RECAPTCHA')['SECRET_KEY']
+RECAPTCHA_PUBLIC_KEY = get_secret('RECAPTCHA')['SITE_KEY']
+RECAPTCHA_SECRET_KEY_V3 = get_secret('RECAPTCHA')['SECRET_KEY_V3']
+RECAPTCHA_SITE_KEY_V3 = get_secret('RECAPTCHA')['SITE_KEY_V3']
 
 ROOT_URLCONF = 'photo_project.urls'
 
@@ -226,6 +235,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'recaptcha.context_processors.recaptcha'
             ],
         },
     },

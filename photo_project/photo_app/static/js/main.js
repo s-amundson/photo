@@ -4,6 +4,9 @@ $(document).ready(function(){
     if ($("#alert-message").val() != "") {
         alert($("#alert-message").val());
     }
+    $.cookieConsent({
+        message: 'This website uses cookies. By using this website you consent to our use of these cookies.'
+    });
 });
 
 async function get_links(user_id) {
@@ -76,18 +79,7 @@ async function post_link() {
 async function post_gallery_form(e, gallery_id) {
     e.preventDefault();
     let data = await $.post(url_gallery_form, $("#gallery-form").serializeArray()
-//    {
-//        csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
-//        'name': $("#id_name").val(),
-//        'description': $("#id_description").val(),
-//        'shoot_date': $("#id_shoot_date").val(),
-//        'is_mature': $("#id_is_mature").prop('checked'),
-//        'privacy_level': $("#id_privacy_level").val(),
-//        'public_date': $("#id_public_date").val(),
-//        'display_image': $("#id_display_image").val(),
-//        'release': $("#id_release").val(),
-//        'photographer': $("#id_photographer").val(),
-//    }
+
     ).done(function( data ) {
         console.log(data);
 
