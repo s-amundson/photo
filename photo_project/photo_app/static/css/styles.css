@@ -47,11 +47,10 @@ main img
     /* constrain images on small screens */
     max-width: 100%;
 }
-.table_head
-{
 
+.table {
+    color: var(--bs-white);
 }
-
 /* body { */
     /* padding-top: 100px; */
     /* background-color: rgb(157, 180, 143) */

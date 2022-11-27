@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block script %}
+    {% load static %}
+    <script src="{% static 'js/mood.js' %}"></script>
+{% endblock %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block main %}
+    <div class="row" message_text="{{ message }}" hidden id="message"><h3>"{{ message }}"</h3></div>
+
+    <div class="row" id="mood-images-div">
+        {% if object_list %}
+            {% for mood_image in object_list %}
+                <div class="col border mx-auto">
+                    <div class="mood-image" img_id="{{ mood_image.id }}">
+                        {% if mood_image.image %}
+                            <img class="m-2 img-fluid"
+                                 src="{% url 'photo_app:image_get' mood_image.image.id %}">
+                        {% elif mood_image.reference_image %}
+                            <img class="rounded m-2 img-thumbnail img-fluid"
+                                 src="{% url 'reference:image_get' mood_image.reference_image.id %}">
+                        {% endif %}
+                        <p>{{ mood_image.comment }}</p>
+                    </div>
+                    {% if form %}
+                        <a href="{% url 'reference:mood_image' mood_image.id %}" class="btn btn-primary">Edit</a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p id="no-image">There are no images.</p>
+        {% endif %}
+    </div>
+    <div class="row mx-auto" id="selected-image"></div>
+    {% if form %}
+        <form method="post" enctype="multipart/form-data">{% csrf_token %}
+            <div class="col">
+                {{ form.as_p }}
+            </div>
+
+            <input type="submit" value="Submit">
+        </form>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,22 @@
+{% load static %}
+{% if object_list %}
+    {% for image in object_list %}
+        <div class="col border mx-auto">
+            {% if image_link %}
+                <a target="_blank" href="{% url 'photo_app:image' image.id %}">
+            {% endif %}
+            <img class="gallery-image" src="{% url 'photo_app:thumb' image.id %}" img_id="{{ image.id }}"><br/>
+            {{ image.filename }}
+            {% if image_link %}
+                </a>
+                <a class="pr-4" href="{% url 'photo_app:image_get' image.id %}" download="">
+                    <img src="{% static 'images/icons8-download-48.png' %}" width="24" height="24" alt="Download">
+                </a>
+            {% endif %}
+        <br/>Privacy Level: {{ image.privacy_level|capfirst }}
+      </div>
+    {% endfor %}
+
+{% else %}
+    <p id="no-image">There are no images.</p>
+{% endif %}

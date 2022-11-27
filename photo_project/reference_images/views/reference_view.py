@@ -1,14 +1,10 @@
-from django.forms import model_to_dict
-from django.db.models import Q
-from django.utils.datetime_safe import date
-from django.contrib.auth.mixins import UserPassesTestMixin
-from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, FormView
 from django_sendfile import sendfile
 
+from src.mixins import StaffMixin
 from ..forms import ReferenceForm
 from ..models import Reference
 
@@ -18,7 +14,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class ReferenceFormView(UserPassesTestMixin, FormView):
+class ReferenceFormView(StaffMixin, FormView):
     form_class = ReferenceForm
     success_url = reverse_lazy('reference:reference_list')
     template_name = 'reference_images/reference.html'
@@ -33,24 +29,14 @@ class ReferenceFormView(UserPassesTestMixin, FormView):
         form.save()
         return super().form_valid(form)
 
-    def test_func(self):
-        if self.request.user.is_authenticated:
-            return self.request.user.is_staff
-        return False
 
-
-class ReferenceImageGetView(UserPassesTestMixin, View):
+class ReferenceImageGetView(View):
     def get(self, request, ref_id, thumb=False):
         image = get_object_or_404(Reference, pk=ref_id)
         return sendfile(request, image.image.path)
 
-    def test_func(self):
-        if self.request.user.is_authenticated:
-            return self.request.user.is_staff
-        return False
 
-
-class ReferenceListView(ListView):
+class ReferenceListView(StaffMixin, ListView):
     model = Reference
     template_name = 'reference_images/reference_list.html'
 

@@ -24,22 +24,7 @@
     <div class="row" id="images-div">
         <input type="hidden" id="id_image_base_url" value="{% url 'photo_app:image' %}">
         <input type="hidden" id="id_thumb_base_url" value="{% url 'photo_app:thumb' %}">
-        {% if images %}
-            {% for image in images %}
-              <div class="col border mx-auto">
-                <a target="_blank" href="{% url 'photo_app:image' image.id %}">
-                    <img src="{% url 'photo_app:thumb' image.id %}"><br/>
-                    {{ image.filename }}
-                </a>&nbsp;&nbsp;&nbsp;
-                <a class="pr-4" href="{% url 'photo_app:image_get' image.id %}" download="">
-                    <img src="{% static 'images/icons8-download-48.png' %}" width="24" height="24" alt="Download">
-                </a>
-                <br/>Privacy Level: {{ image.privacy_level|capfirst }}
-              </div>
-            {% endfor %}
-        {% else %}
-        <p id="no-image">There are no images.</p>
-        {% endif %}
+        {% include "photo_app/gallery_insert.html" %}
     </div>
     {% if owner %}
         <a href="{% url 'photo:add_image' gallery.id %}" class="btn btn-primary" role="button">

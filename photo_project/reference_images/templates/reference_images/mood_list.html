@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Mood List
+{% endblock %}
+
+
+{% block main %}
+    {% load static %}
+
+    <div class="row mx-auto"><h3>Mood Pages</h3></div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th> ID </th>
+                <th> UUID </th>
+                <th> Public </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mood in object_list %}
+                <tr>
+                    <td>{{ mood.id }}</td>
+                    <td>
+                        <a href="{% url 'reference:mood_page' mood.random_url %}">{{ mood.random_url }}</a>
+                        <a href="{% url 'reference:mood_form' mood.id %}" class="btn btn-primary">Edit</a>
+                    </td>
+                    <td>{{ mood.is_public }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="3">No Moods</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'reference:mood_form'%}" class="btn btn-primary">Add Mood Page</a>
+
+{% endblock %}
+

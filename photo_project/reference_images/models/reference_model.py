@@ -1,5 +1,4 @@
 from django.db import models
-from photo_app.src import OverwriteStorage
 
 from .category_model import Category
 

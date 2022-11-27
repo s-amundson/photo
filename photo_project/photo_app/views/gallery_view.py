@@ -1,23 +1,30 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
+from django.views.generic import ListView
 
-# Create your views here.
-from django.views import View
 from ..models import Gallery
-from ..forms import GalleryForm, ImageForm
 import logging
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 
-class GalleryView(View):
+class GalleryView(ListView):
+    gallery = None
+    image_link = False
+    model = Gallery
+    template_name = 'photo_app/gallery.html'
 
-    def get(self, request, gallery_id, *args, **kwargs):
-        gallery = get_object_or_404(Gallery, pk=gallery_id)
-        releases = gallery.release.all()
-        user_is_model = False
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['gallery'] = self.gallery
+        context['image_link'] = self.image_link
+        context['owner'] = self.gallery.owner == self.request.user
+        context['models'] = self.get_models
+        return context
+
+    def get_models(self):
         models = []
-        for release in releases:
+        for release in self.gallery.release.all():
             d = {}
             if release.use_full_name:
                 d['name'] = release.talent_full_name
@@ -27,24 +34,15 @@ class GalleryView(View):
             elif release.use_nickname:
                 d['name'] = release.talent_nickname
             models.append(d)
-            if release.talent == request.user:
-                user_is_model = True
+        return models
 
-        if request.user.is_staff or request.user.is_superuser:
-            images = gallery.images_set.all()
-        elif user_is_model:
-            images = gallery.images_set.filter(privacy_level__in=['public', 'private'])
-        else:
-            images = gallery.images_set.filter(privacy_level='public')
-        images = images.order_by('id')
-        form = ImageForm()
-        logging.debug(gallery_id)
-        gallery_form = GalleryForm(instance=gallery)
-        owner = gallery.owner == request.user
-        logging.debug(owner)
-        logging.debug(gallery.release.all())
+    def get_queryset(self):
+        self.gallery = get_object_or_404(Gallery, pk=self.kwargs.get('gallery_id'))
+        queryset = self.gallery.images_set.filter(gallery=self.gallery).filter(privacy_level='public')
+        logging.warning(queryset)
+        return queryset.order_by('id')
 
-        # context = self.get_gallery(request, gallery_id)
-        d = {'form': form, 'images': images, 'gallery': gallery, 'gallery_form': gallery_form,
-             'owner': owner, 'models': models}
-        return render(request, 'photo_app/gallery.html', d)
+
+class GalleryInsertView(GalleryView):
+    image_link = False
+    template_name = 'photo_app/gallery_insert.html'
