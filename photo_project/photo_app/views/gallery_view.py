@@ -19,7 +19,7 @@ class GalleryView(ListView):
         context['gallery'] = self.gallery
         context['image_link'] = self.image_link
         context['owner'] = self.gallery.owner == self.request.user
-        context['models'] = self.get_models
+        context['models'] = self.get_models()
         return context
 
     def get_models(self):
