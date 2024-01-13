@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView
 
@@ -8,7 +9,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class GalleryView(ListView):
+class GalleryView(UserPassesTestMixin, ListView):
     gallery = None
     image_link = True
     model = Gallery
@@ -37,11 +38,21 @@ class GalleryView(ListView):
         return models
 
     def get_queryset(self):
-        self.gallery = get_object_or_404(Gallery, pk=self.kwargs.get('gallery_id'))
         queryset = self.gallery.images_set.filter(gallery=self.gallery).filter(privacy_level='public')
         logging.warning(queryset)
         return queryset.order_by('id')
 
+    def test_func(self):
+        self.gallery = get_object_or_404(Gallery, pk=self.kwargs.get('gallery_id'))
+        if self.gallery.privacy_level == 'public':
+            return True
+        if self.request.user.is_authenticated:
+            if self.gallery.privacy_level == 'authenticated':
+                return True
+            else:  # gallery is private
+                if self.request.user == self.gallery.owner or self.request.user in self.gallery.photographer:
+                    return True
+        return False
 
 class GalleryInsertView(GalleryView):
     image_link = False

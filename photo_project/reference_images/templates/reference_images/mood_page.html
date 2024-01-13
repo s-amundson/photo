@@ -34,6 +34,7 @@
     </div>
     <div class="row mx-auto" id="selected-image"></div>
     {% if form %}
+        <a href="{% url 'reference:mood_image' %}" class="btn btn-primary">Add Image</a>
         <form method="post" enctype="multipart/form-data">{% csrf_token %}
             <div class="col">
                 {{ form.as_p }}
