@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 class GalleryView(ListView):
     gallery = None
-    image_link = False
+    image_link = True
     model = Gallery
     template_name = 'photo_app/gallery.html'
 

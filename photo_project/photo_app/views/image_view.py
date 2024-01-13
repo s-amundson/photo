@@ -160,13 +160,16 @@ class ImageView(View):
         # image_data = model_to_dict(image, exclude=['image'])
         i = Image.open(image.image)
         edata = i._getexif()
+        logger.warning(edata)
         if edata is not None:
             exif = {
                 PIL.ExifTags.TAGS[k]: v
                 for k, v in i._getexif().items()
                 if k in PIL.ExifTags.TAGS
             }
-            del exif['MakerNote']
+            if 'MakerNote' in exif:
+                del exif['MakerNote']
+
             o = exif.get('Orientation', '')
             if o == 1 or o == 3:
                 orientation = "Landscape"
