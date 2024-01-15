@@ -1,5 +1,5 @@
 
-from django.test import TestCase, Client
+from django.test import TestCase, Client, tag
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
@@ -21,6 +21,7 @@ class TestsImageComment(TestCase):
                           "privacy_level":  "private",
                           "user": 1}
 
+    # @tag('temp')
     def test_get_image_comments_staff(self):
         self.test_user = self.User.objects.get(pk=1)
         self.client.force_login(self.test_user)
@@ -28,6 +29,7 @@ class TestsImageComment(TestCase):
         self.assertEqual(len(response.context['comments']), 3)
         self.assertEqual(response.status_code, 200)
 
+    # @tag('temp')
     def test_get_image_comments_auth_self(self):
         self.test_user = self.User.objects.get(pk=2)
         self.client.force_login(self.test_user)
@@ -35,6 +37,7 @@ class TestsImageComment(TestCase):
         self.assertEqual(len(response.context['comments']), 1)
         self.assertEqual(response.status_code, 200)
 
+    # @tag('temp')
     def test_get_image_comments_auth_public(self):
         self.test_user = self.User.objects.get(pk=3)
         self.client.force_login(self.test_user)
@@ -42,10 +45,12 @@ class TestsImageComment(TestCase):
         self.assertEqual(len(response.context['comments']), 2)
         self.assertEqual(response.status_code, 200)
 
+    # @tag('temp')
     def test_get_image_no_auth(self):
         response = self.client.get(reverse('photo:image_comment', kwargs={'image_id': 1}), secure=True)
         self.assertEqual(response.status_code, 302)
 
+    # @tag('temp')
     def test_post_image_comment_auth(self):
         self.test_user = self.User.objects.get(pk=3)
         self.client.force_login(self.test_user)

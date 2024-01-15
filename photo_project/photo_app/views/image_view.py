@@ -4,8 +4,9 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
 from django.http import HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render
-from django.utils.datetime_safe import date, datetime
+from django.shortcuts import get_object_or_404
+from django.utils.datetime_safe import date
+from django.utils import timezone
 from django_sendfile import sendfile
 
 # Create your views here.
@@ -132,35 +133,16 @@ class ImageGetThumbView(ImageGetView):
         return super().get(request, image_id, thumb=True)
 
 
-class ImageView(View):
+class ImageView(UserPassesTestMixin, FormView):
+    form_class = ImageForm
+    model = Images
+    template_name = 'photo_app/image.html'
+    image = None
 
-    def get(self, request, image_id, *args, **kwargs):
-        image = get_object_or_404(Images, pk=image_id)
-        if request.user.is_staff or request.user.is_superuser:
-            images = image.gallery.images_set.all()
-        elif ImageCheckAuth().talent_is_user(image.gallery, request.user):
-            images = image.gallery.images_set.filter(privacy_level__in=['public', 'private'])
-        else:
-            images = image.gallery.images_set.filter(privacy_level='public')
-        images = images.order_by('id')
-        prev_image = None
-        next_image = None
-        img_list = list(images)
-        for i in range(len(img_list)):
-            if img_list[i] == image:
-                if i > 0:
-                    prev_image = img_list[i-1]
-                if i < len(img_list) - 1:
-                    next_image = img_list[i+1]
-        logging.warning(prev_image)
-        logging.warning(next_image)
-
-        if not ImageCheckAuth().check_auth(image, request.user):
-            return HttpResponseForbidden()
-        # image_data = model_to_dict(image, exclude=['image'])
-        i = Image.open(image.image)
+    def get_image_data(self):
+        i = Image.open(self.image.image)
         edata = i._getexif()
-        logger.warning(edata)
+        # logger.warning(edata)
         if edata is not None:
             exif = {
                 PIL.ExifTags.TAGS[k]: v
@@ -180,7 +162,7 @@ class ImageView(View):
         else:  # pragma: no cover
             exif = {}
             orientation = ''
-        image_data = {'Camera': exif.get('Model', ''),
+        return {'Camera': exif.get('Model', ''),
                       'Orientation': orientation,
                       'Taken': exif.get('DateTimeOriginal', ''),
                       'ExposureTime': exif.get('ExposureTime', ''),
@@ -190,12 +172,55 @@ class ImageView(View):
                       'Film Focal Length': exif.get('FocalLengthIn35mmFilm', ''),
                       'Height': exif.get('ExifImageHeight',''),
                       'Width': exif.get('ExifImageWidth', ''),
-                      'Filename': image.image.name.split('/')[-1]
-                      }
-        form = ImageForm(instance=image)
-        context = {'image': image, 'image_data': image_data, 'form': form, 'prev_image': prev_image,
-                   'next_image': next_image}
-        return render(request, 'photo_app/image.html', context)
+                      'Filename': self.image.image.name.split('/')[-1]
+                }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        logger.warning(context)
+        images = self.image.gallery.images_set.filter(privacy_level='public')
+        if self.request.user.is_authenticated:
+            if self.request.user.is_staff or self.request.user.is_superuser:
+                images = self.image.gallery.images_set.all()
+            # elif ImageCheckAuth().talent_is_user(image.gallery, request.user):
+            elif self.image.gallery.talent.filter(user=self.request.user).count():
+                images = self.image.gallery.images_set.filter(privacy_level__in=['public', 'private'])
+
+        images = images.order_by('id')
+        prev_image = None
+        next_image = None
+        img_list = list(images)
+        for i in range(len(img_list)):
+            if img_list[i] == self.image:
+                if i > 0:
+                    prev_image = img_list[i-1]
+                if i < len(img_list) - 1:
+                    next_image = img_list[i+1]
+
+        context["image"] = self.image
+        context['prev_image'] = prev_image
+        context['next_image'] = next_image
+        context['image_data'] = self.get_image_data()
+        return context
+
+    def test_func(self):
+        self.image = get_object_or_404(Images, pk=self.kwargs.get('image_id'))
+
+        if self.image.gallery.privacy_level == 'public' and self.image.privacy_level == 'public':
+            if self.image.gallery.public_date and self.image.gallery.public_date > timezone.now().date():
+                return False
+            return True
+        if self.request.user.is_authenticated:
+            if self.image.privacy_level == 'public' and self.image.gallery.privacy_level in ['authenticated']:
+                if self.image.gallery.public_date and self.image.gallery.public_date > timezone.now():
+                    return False
+                return True
+            else:  # gallery is private
+                if (self.request.user == self.image.gallery.owner
+                        or self.request.user in self.image.gallery.photographer.all()
+                        or self.image.gallery.talent.filter(user=self.request.user).count()):
+                    return True
+        return False
 
 
 class UpdateImageView(AddImageView):

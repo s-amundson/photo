@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Talent List
+{% endblock %}
+
+
+{% block main %}
+  {% load static %}
+  <div class="row mx-auto"><h3>Talent</h3></div>
+  <table class="table table-bordered">
+      <thead>
+          <tr>
+              <th> Talent </th>
+              <th> Name </th>
+              <th> </th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for talent in object_list %}
+              <tr>
+                  <td>{{ talent.talent.description }}</td>
+                  <td>
+                      {{ talent.user }}
+                  </td>
+                  <td>
+                      <a href="{% url 'photo:talent_update' talent.id %}" class="btn btn-primary">Edit</a>
+                  </td>
+              </tr>
+          {% empty %}
+              <tr><td colspan="3">No Talent</td></tr>
+          {% endfor %}
+      </tbody>
+  </table>
+  <div class="d-flex flex-row">
+      <a href="{% url 'photo_app:talent_add'%}" class="btn btn-primary">Add Talent</a>
+  </div>
+{% endblock %}
+

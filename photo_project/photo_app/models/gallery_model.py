@@ -4,7 +4,6 @@ from django.db import models
 
 class Gallery(models.Model):
     description = models.CharField(max_length=255, default='')
-    # display_image = models.IntegerField(blank=True, default=None, null=True)  # id of the image to display in gallery list
     display_image = models.ForeignKey('photo_app.Images', default=None, null=True, on_delete=models.SET_NULL,
                                       related_name='display')
     is_mature = models.BooleanField(default=False)
@@ -17,3 +16,4 @@ class Gallery(models.Model):
     privacy_level = models.CharField(max_length=40, null=True, choices=privacy_choices, default='private')
     release = models.ManyToManyField('photo_app.Release', related_name='releases')
     shoot_date = models.DateField(null=True, default=None)
+    talent = models.ManyToManyField('photo_app.Talent')

@@ -16,7 +16,7 @@
         {% if reference_images %}
             {% for image in reference_images %}
               <div class="col border mx-auto">
-                    <img class="rounded img-fluid float-end imgshadow m-2 reference-image" img_id="{{ image.id }}"
+                    <img class="rounded img-fluid float-end imgshadow m-2 reference-image img-thumbnail" img_id="{{ image.id }}"
                          src="{% url 'reference:image_get' image.id %}">
               </div>
             {% endfor %}

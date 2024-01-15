@@ -1,12 +1,12 @@
 import os
 
 from django.conf import settings
-from django.test import TestCase, Client
+from django.test import TestCase, Client, tag
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 
-from ..models import Images, Gallery, Release
+from ..models import Images, Gallery, Release, Talent
 import logging
 logger = logging.getLogger(__name__)
 
@@ -21,24 +21,29 @@ class TestsImage(TestCase):
         self.test_user = self.User.objects.get(pk=2)
         self.client.force_login(self.test_user)
 
+    # @tag('temp')
     def test_get_image_auth(self):
         self.test_user = self.User.objects.get(pk=1)
         self.client.force_login(self.test_user)
         response = self.client.get(reverse('photo:image', kwargs={'image_id': 1}), secure=True)
         self.assertEqual(response.status_code, 200)
 
+    # @tag('temp')
     def test_get_image_model_auth(self):
         g = Gallery.objects.get(pk=1)
-        g.release.add(Release.objects.get(pk=1))
+        # g.release.add(Release.objects.get(pk=1))
+        g.talent.add(Talent.objects.get(pk=2))
         g.save()
         response = self.client.get(reverse('photo:image', kwargs={'image_id': 1}), secure=True)
         self.assertTemplateUsed('photo_app/image.html')
         self.assertEqual(response.status_code, 200)
 
+    @tag('denied')
     def test_get_image_no_auth(self):
         response = self.client.get(reverse('photo:image', kwargs={'image_id': 1}), secure=True)
         self.assertEqual(response.status_code, 403)
 
+    @tag('denied')
     def test_get_image_model_privacy_photographer(self):
         g = Gallery.objects.get(pk=1)
         g.release.add(Release.objects.get(pk=1))
@@ -51,6 +56,7 @@ class TestsImage(TestCase):
         self.assertTemplateUsed('photo_app/image.html')
         self.assertEqual(response.status_code, 403)
 
+    # @tag('temp')
     def test_get_image_public(self):
         g = Gallery.objects.get(pk=1)
         g.privacy_level = 'public'
@@ -61,6 +67,7 @@ class TestsImage(TestCase):
         response = self.client.get(reverse('photo:image', kwargs={'image_id': 1}), secure=True)
         self.assertEqual(response.status_code, 200)
 
+    # @tag('temp')
     def test_get_image_get_public(self):
         g = Gallery.objects.get(pk=1)
         g.privacy_level = 'public'
@@ -71,6 +78,7 @@ class TestsImage(TestCase):
         response = self.client.get(reverse('photo:image_get', kwargs={'image_id': 1}), secure=True)
         self.assertEqual(response.status_code, 200)
 
+    # @tag('temp')
     def test_get_image_public_logout(self):
         g = Gallery.objects.get(pk=1)
         g.privacy_level = 'public'
@@ -82,6 +90,7 @@ class TestsImage(TestCase):
         response = self.client.get(reverse('photo:image', kwargs={'image_id': 1}), secure=True)
         self.assertEqual(response.status_code, 200)
 
+    # @tag('temp')
     def test_get_add_image(self):
         self.test_user = self.User.objects.get(pk=1)
         self.client.force_login(self.test_user)
@@ -94,6 +103,7 @@ class TestsImage(TestCase):
         response = self.client.get(reverse('photo:add_image', kwargs={'gallery_id': 1}), secure=True)
         self.assertEqual(response.status_code, 200)
 
+    # @tag('temp')
     def test_get_image_publicdate_future(self):
         g = Gallery.objects.get(pk=1)
         g.privacy_level = 'public'
@@ -104,18 +114,21 @@ class TestsImage(TestCase):
         i.save()
         self.client.logout()
         response = self.client.get(reverse('photo:image', kwargs={'image_id': 1}), secure=True)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 302)
 
+    # @tag('temp')
     def test_get_thumb_auth(self):
         self.test_user = self.User.objects.get(pk=1)
         self.client.force_login(self.test_user)
         response = self.client.get(reverse('photo:thumb', kwargs={'image_id': 1}), secure=True)
         self.assertEqual(response.status_code, 200)
 
+    # @tag('temp')
     def test_get_thumb_no_auth(self):
         response = self.client.get(reverse('photo:thumb', kwargs={'image_id': 1}), secure=True)
         self.assertEqual(response.status_code, 403)
 
+    # @tag('temp')
     def test_post_add_image(self):
         self.test_user = self.User.objects.get(pk=1)
         self.client.force_login(self.test_user)
@@ -124,8 +137,6 @@ class TestsImage(TestCase):
         g.save()
         g.release.add(Release.objects.get(pk=1))
 
-        # pic = SimpleUploadedFile("1.jpg", "file_content", content_type="video/mp4")
-        # with open() as f:
         p = os.path.join(settings.BASE_DIR, 'photo_app', 'media', '1.jpg')
         with open(p, 'rb') as f:
             response = self.client.post(reverse('photo:add_image', kwargs={'gallery_id': 1}),

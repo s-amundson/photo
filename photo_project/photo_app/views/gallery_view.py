@@ -20,22 +20,7 @@ class GalleryView(UserPassesTestMixin, ListView):
         context['gallery'] = self.gallery
         context['image_link'] = self.image_link
         context['owner'] = self.gallery.owner == self.request.user
-        context['models'] = self.get_models()
         return context
-
-    def get_models(self):
-        models = []
-        for release in self.gallery.release.all():
-            d = {}
-            if release.use_full_name:
-                d['name'] = release.talent_full_name
-                d['links'] = release.talent.links_set.all()
-            elif release.use_first_name:
-                d['name'] = release.talent_first_name
-            elif release.use_nickname:
-                d['name'] = release.talent_nickname
-            models.append(d)
-        return models
 
     def get_queryset(self):
         queryset = self.gallery.images_set.filter(gallery=self.gallery).filter(privacy_level='public')
@@ -50,9 +35,12 @@ class GalleryView(UserPassesTestMixin, ListView):
             if self.gallery.privacy_level == 'authenticated':
                 return True
             else:  # gallery is private
-                if self.request.user == self.gallery.owner or self.request.user in self.gallery.photographer:
+                if (self.request.user == self.gallery.owner
+                        or self.request.user in self.gallery.photographer.all()
+                        or self.gallery.talent.filter(user=self.request.user).count()):
                     return True
         return False
+
 
 class GalleryInsertView(GalleryView):
     image_link = False

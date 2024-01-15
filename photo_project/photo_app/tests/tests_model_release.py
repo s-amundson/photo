@@ -3,7 +3,7 @@ import os
 import tempfile
 
 from django.conf import settings
-from django.test import TestCase, Client
+from django.test import TestCase, Client, tag, override_settings
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.core import mail
@@ -13,7 +13,7 @@ from ..models import Images, Gallery, Release, User, ReleaseTemplate
 
 logger = logging.getLogger(__name__)
 
-
+@override_settings(MEDIA_ROOT='/tmp/photo/')
 class TestsModelRelease(TestCase):
     fixtures = ['f1']
     small_gif = (
@@ -34,10 +34,6 @@ class TestsModelRelease(TestCase):
                              'photographer': 1,
                              'talent': 2,
                              'shoot_date': '2020-02-02',
-                             # 'shoot_date_month': ['02'],
-                             # 'shoot_date_day': ['02'],
-                             # 'shoot_date_year': ['2020'],
-                             # 'state': 'pending',
                              'template': 1,
                              'use_first_name': True,
                              'use_nickname': True }
@@ -46,20 +42,24 @@ class TestsModelRelease(TestCase):
                                         'model_full_name': 'full'}
         self.img = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoDhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAC2AX4DASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6pooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD//Z',
 
+    # @tag('temp')
     def test_get_noauth_start(self):
         response = self.client.get(reverse('photo:model_release'), secure=True)
         self.assertEqual(response.status_code, 302)
 
+    # @tag('temp')
     def test_get_not_photographer_start(self):
         self.client.force_login(self.User.objects.get(pk=2))
         response = self.client.get(reverse('photo:model_release'), secure=True)
         self.assertEqual(response.status_code, 404)
 
+    # @tag('temp')
     def test_get_photographer_start(self):
         self.client.force_login(self.test_user) # this user is photographer
         response = self.client.get(reverse('photo:model_release'), secure=True)
         self.assertEqual(response.status_code, 200)
 
+    # @tag('temp')
     def test_get_photographer_return(self):
         r = Release(id=1, compensation=2, file=None, name='name', is_mature=False, photographer=User.objects.get(pk=1),
                     talent=User.objects.get(pk=2), shoot_date="2020-02-02", state='pending',
@@ -70,6 +70,7 @@ class TestsModelRelease(TestCase):
         response = self.client.get(reverse('photo:model_release', kwargs={'release': r.id}), secure=True)
         self.assertEqual(response.status_code, 200)
 
+    # @tag('temp')
     def test_get_photographer_return_complete(self):
         r = Release(id=1, compensation=2, file=None, name='name', is_mature=False, photographer=User.objects.get(pk=1),
                     talent=User.objects.get(pk=2), shoot_date="2020-02-02", state='complete',
@@ -80,6 +81,7 @@ class TestsModelRelease(TestCase):
         response = self.client.get(reverse('photo:model_release', kwargs={'release': r.id}), secure=True)
         self.assertEqual(response.status_code, 200)
 
+    # @tag('temp')
     def test_get_as_model(self):
         self.client.force_login(self.User.objects.get(pk=2))
         r = Release(id=1, compensation=2, file=None, name='name', is_mature=False, photographer=User.objects.get(pk=1),
@@ -93,6 +95,7 @@ class TestsModelRelease(TestCase):
         # self.assertEqual(len(response.context['release_list']), 1)
         self.assertEqual(response.status_code, 200)
 
+    # @tag('temp')
     def test_get_as_different_model(self):
         self.client.force_login(self.User.objects.get(pk=3))
         r = Release(id=1, compensation=2, file=None, name='name', is_mature=False, photographer=User.objects.get(pk=1),
@@ -104,6 +107,7 @@ class TestsModelRelease(TestCase):
         response = self.client.get(reverse('photo:model_release', kwargs={'release': r.id}), secure=True)
         self.assertEqual(response.status_code, 403)
 
+    # @tag('temp')
     def test_post_photographer_start(self):
         self.client.force_login(self.test_user) # this user is photographer
         response = self.client.post(reverse('photo:model_release'), self.release_dict, secure=True)
@@ -113,18 +117,17 @@ class TestsModelRelease(TestCase):
         self.assertEqual(ml.state, 'started')
         self.assertRedirects(response, reverse('photo:index'))
 
+    # @tag('temp')
     def test_post_photographer_start_error(self):
         self.client.force_login(self.test_user) # this user is photographer
         # set an invalid date
         self.release_dict['shoot_date'] = '13/15/23'
-        # self.release_dict['shoot_date_year'] = '2023'
-        # self.release_dict['shoot_date_month'] = '13'
-        # self.release_dict['shoot_date_day'] = '15'
         response = self.client.post(reverse('photo:model_release'), self.release_dict, secure=True)
         self.assertEqual(response.status_code, 200)
         ml = Release.objects.all()
         self.assertEqual(len(ml), 1)
 
+    # @tag('temp')
     def test_post_photographer_update(self):
         r = Release(id=2, compensation=2, file=None, name='name', is_mature=False, photographer=User.objects.get(pk=1),
                     talent=User.objects.get(pk=2), shoot_date="2020-02-02", state='pending',
@@ -133,10 +136,6 @@ class TestsModelRelease(TestCase):
         r.save()
         logging.debug(r.id)
         self.release_dict['shoot_date'] = "2020-04-04"
-        # self.release_dict['shoot_date_year'] = '2020'
-        # self.release_dict['shoot_date_month'] = '04'
-        # self.release_dict['shoot_date_day'] = '04'
-        # self.release_dict['photographer_signature'] = self.img
         self.client.force_login(self.test_user) # this user is photographer
 
         response = self.client.post(reverse('photo:model_release', kwargs={'release': r.id}), self.release_dict,
@@ -148,6 +147,7 @@ class TestsModelRelease(TestCase):
         self.assertEqual(ml.state, 'pending')
         self.assertEqual(ml.shoot_date.month, 4)
 
+    # @tag('temp')
     def test_post_model_pending(self):
         user = self.User.objects.get(pk=2)
         self.client.force_login(user)
@@ -169,6 +169,7 @@ class TestsModelRelease(TestCase):
         self.assertFalse(ml.use_full_name)
         self.assertEqual(ml.talent_first_name, user.first_name)
 
+    # @tag('temp')
     def test_post_model_update(self):
         user = self.User.objects.get(pk=2)
         self.client.force_login(user)
@@ -186,6 +187,7 @@ class TestsModelRelease(TestCase):
         self.assertFalse(ml.use_full_name)
         self.assertEqual(ml.talent_first_name, None)
 
+    # @tag('temp')
     def test_post_different_model_pending(self):
         user = self.User.objects.get(pk=3)
         self.client.force_login(user)
@@ -201,6 +203,7 @@ class TestsModelRelease(TestCase):
         ml = ml[1]
         self.assertEqual(ml.state, 'pending')
 
+    # @tag('temp')
     def test_post_photographer_agreed(self):
         self.client.force_login(self.test_user)  # this user is photographer
         p = os.path.join(settings.BASE_DIR, 'photo_app', 'fixtures', '1.jpg')

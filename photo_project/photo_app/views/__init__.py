@@ -10,5 +10,6 @@ from .model_release_view import ModelReleaseView, ModelReleaseUpdateView
 from .privacy_view import PrivacyView
 from .profile_view import ProfileFormView
 from .signup_view import SignupView
+from .talent_views import TalentCreateView, TalentListView, TalentUpdateView
 from .terms_view import TermsView
 from .release_template_view import ReleaseTemplateView

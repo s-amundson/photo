@@ -37,30 +37,28 @@
       </div>
     </div>
     <div class="row px-5">{{ gallery.description }}</div>
-    {% if models %}
-        <div class="row pt-3">
-          <div class="col">
-            <h4>Models</h4>
-          </div>
-        </div>
-        <div class="row">
-            <div class="col px-5">
-                {% for model in models %}
-                    <div class="row px-3">
-                        <h5>{{ model.name }}</h5>
-                    </div>
+    <div class="row pt-3">
+      <div class="col">
+        <h4>Talent</h4>
+      </div>
+    </div>
+    <div class="d-flex flex-column align-content-start">
 
-                    <div class="row px-3">
-                    {% for link in model.links %}
-                        <div class="col-2">
-                            <a class="px-3" href="{{ link.url }}">{{ link.category.category }}</a>
-                        </div>
-                    {% endfor %}
+            {% for talent in gallery.talent.all %}
+                <div>
+                    <div>
+                        {{ talent.talent.description }}:
+                        {{ talent.user.first_name }} {{ talent.user.last_name }}
                     </div>
-                {% endfor %}
-            </div>
-        </div>
-    {% endif %}
+                    <div>
+                        {% for link in talent.user.links_set.all %}
+                                <a class="px-3" href="{{ link.url }}">{{ link.category.category }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+    </div>
+
     <div class="row p-3"><hr/></div>
     {% if owner %}
         <button id="btn-gallery-edit" class="btn btn-primary" type="button" name="button">

@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase, Client, tag
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
@@ -16,12 +16,14 @@ class TestsReleaseTemplate(TestCase):
         self.client = Client()
         self.User = get_user_model()
 
+    # @tag('temp')
     def test_get_auth1(self):
         self.client.force_login(self.User.objects.get(pk=1))
         response = self.client.get(reverse('photo:release_preview', kwargs={'release_id': 1}), secure=True)
         self.assertTrue(response.context['release'].use_full_name)
         self.assertEqual(response.status_code, 200)
 
+    # @tag('temp')
     def test_get_auth2(self):
         self.client.force_login(self.User.objects.get(pk=2))
         s = self.client.session
@@ -38,11 +40,13 @@ class TestsReleaseTemplate(TestCase):
         self.assertEqual(response.context['release'].talent.first_name, 'Rosalva')
         self.assertEqual(response.status_code, 200)
 
+    # @tag('temp')
     def test_get_auth3(self):
         self.client.force_login(self.User.objects.get(pk=1))
         response = self.client.get(reverse('photo:release_preview'), secure=True)
         self.assertEqual(response.status_code, 403)
 
+    # @tag('temp')
     def test_get_no_auth1(self):
         self.client.force_login(self.User.objects.get(pk=3))
         s = self.client.session
