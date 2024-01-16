@@ -19,20 +19,32 @@ class GalleryListView(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['gallery_list'] = self.gallery_list
+        context['carousel_images'] = Images.objects.filter(carousel=True, privacy_level="public", )
+        if self.request.user.is_authenticated:
+            context['carousel_images'] = context['carousel_images'].filter(
+                gallery__privacy_level__in=["public", 'authenticated'])
+        else:
+            context['carousel_images'] = context['carousel_images'].filter(gallery__privacy_level="public")
+        logger.warning(context['carousel_images'])
         return context
 
     def get_queryset(self):
         if self.request.user.is_staff:
+            logger.warning('staff')
             queryset = Gallery.objects.all()
         elif self.request.user.is_authenticated:
+            logger.warning('authenticated')
             queryset = Gallery.objects.filter(
                 Q(Q(privacy_level__in=['public', 'authenticated'], public_date__lte=date.today())) |
                 Q(owner=self.request.user.id) |
                 Q(release__talent__id=self.request.user.id) |
                 Q(photographer=self.request.user))
         else:
+            logger.warning('not auth')
             queryset = Gallery.objects.filter(privacy_level='public', public_date__lte=date.today())
         self.gallery_list = []
+
+        queryset = queryset.order_by("-id")
         logging.warning(queryset)
         for g in queryset:
             if g not in self.gallery_list:

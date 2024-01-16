@@ -54,7 +54,7 @@ class TestsGallery(TestCase):
         response = self.client.get(reverse('photo:gallery_view', kwargs={'gallery_id': 3}), secure=True)
         self.assertEqual(response.status_code, 403)
 
-    @tag('temp')
+    # @tag('temp')
     def test_get_public(self):
         self.client.logout()
         response = self.client.get(reverse('photo:gallery_view', kwargs={'gallery_id': 2}), secure=True)

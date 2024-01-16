@@ -2,8 +2,8 @@ from PIL import Image
 import PIL.ExifTags
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse_lazy
-from django.views.generic.edit import FormView
-from django.http import HttpResponseForbidden
+from django.views.generic.edit import FormView, UpdateView
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.datetime_safe import date
 from django.utils import timezone
@@ -81,6 +81,22 @@ class AddImageView(UserPassesTestMixin, FormView):
         else:
             return False
 
+
+class ImageCarouselView(UpdateView):
+    model = Images
+    fields = ["carousel"]
+    template_name = 'photo_app/form_as_p.html'
+
+    def form_invalid(self, form):
+        logger.warning(form.errors)
+        return JsonResponse({'status': 'error', 'carousel': self.object.carousel})
+
+    def form_valid(self, form):
+        logger.warning(self.request.POST)
+        logger.warning(form.cleaned_data)
+        """If the form is valid, save the associated model."""
+        self.object = form.save()
+        return JsonResponse({'status': 'success', 'carousel': self.object.carousel})
 
 class ImageCheckAuth:
     def check_auth(self, image, user):

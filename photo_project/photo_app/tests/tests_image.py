@@ -1,4 +1,5 @@
 import os
+import json
 
 from django.conf import settings
 from django.test import TestCase, Client, tag
@@ -144,3 +145,27 @@ class TestsImage(TestCase):
 
         response = self.client.get(reverse('photo:image', kwargs={'image_id': 1}), secure=True)
         self.assertEqual(response.status_code, 200)
+
+    # @tag('temp')
+    def test_carousel_add(self):
+        response = self.client.post(reverse('photo:image_carousel', kwargs={'pk': 1}), {'carousel': True}, secure=True)
+        self.assertEqual(response.status_code, 200)
+        i = Images.objects.get(pk=1)
+        self.assertTrue(i.carousel)
+        content = json.loads(response.content)
+        self.assertEqual(content['status'], 'success')
+        self.assertTrue(content['carousel'])
+
+    @tag('temp')
+    def test_carousel_remove(self):
+        i = Images.objects.get(pk=1)
+        i.carousel = True
+        i.save()
+
+        response = self.client.post(reverse('photo:image_carousel', kwargs={'pk': 1}), {'carousel': False}, secure=True)
+        self.assertEqual(response.status_code, 200)
+        i = Images.objects.get(pk=1)
+        self.assertFalse(i.carousel)
+        content = json.loads(response.content)
+        self.assertEqual(content['status'], 'success')
+        self.assertFalse(content['carousel'])

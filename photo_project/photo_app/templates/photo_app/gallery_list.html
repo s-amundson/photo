@@ -14,10 +14,25 @@
 
 {% block main %}
   {% load static %}
-  <div class="'row">
-    {% if home %}
-      <p>Welcome to my site. I have created this site as a repository of my photos and to share with my friends and
-        collaborators.</p>
+    {% if home and carousel_images %}
+      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        {% for image in carousel_images %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img src="{% url 'photo_app:image_get' image.id %}"  class="mx-auto d-block img-carousel">
+          </div>
+        {% endfor %}
+
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
     {% endif %}
   </div>
   <div class="row mx-auto"><h3>Galleries</h3></div>
@@ -41,7 +56,7 @@
     {% endif %}
   </div>
   {% if user.is_staff %}
-    <div class="row">
+    <div class="row m-2">
       <div class="col">
         <button id="btn-add-gallery" class="btn btn-primary" type="button" name="button">
               Add Gallery
@@ -51,6 +66,10 @@
     <div class="row">
       <div class="col" id="div-add-gallery"></div>
     </div>
+  {% endif %}
+  {% if home %}
+    <p>Welcome to my site. I have created this site as a repository of my photos and to share with my friends and
+          collaborators.</p>
   {% endif %}
 {% endblock %}
 

@@ -34,6 +34,7 @@ class Images(models.Model):
     thumb = models.ImageField(upload_to=thumb_file_name)
     thumb_width = models.IntegerField()
     width = models.IntegerField()
+    carousel = models.BooleanField(default=False)
 
     def __str__(self):  # pragma: no cover
         return self.filename

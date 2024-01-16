@@ -1,7 +1,7 @@
 {% load static %}
 {% if object_list %}
     {% for image in object_list %}
-        <div class="col border mx-auto">
+        <div class="col border align-items-center mx-auto">
             {% if image_link %}
                 <a target="_blank" href="{% url 'photo_app:image' image.id %}">
             {% endif %}
@@ -14,6 +14,13 @@
                 </a>
             {% endif %}
         <br/>Privacy Level: {{ image.privacy_level|capfirst }}
+        {% if user.is_staff %}
+            <br/>
+            <button class="btn btn-outline-primary btn-sm carousel-btn m-1" type="button" name="button"
+                    img_id="{{ image.id }}" carousel="{{ image.carousel }}">
+                {% if image.carousel %} Remove from Carousel {% else %} Add to Carousel {% endif %}
+            </button>
+        {% endif %}
       </div>
     {% endfor %}
 
