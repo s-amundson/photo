@@ -125,7 +125,7 @@ class ImageCheckAuth:
         if not gallery.privacy_level == 'public':
             return False
         else:
-            if gallery.public_date is None or gallery.public_date <= timezone.datetime.today():
+            if gallery.public_date is None or gallery.public_date <= timezone.now().date():
                 return True
             else:
                 return False
