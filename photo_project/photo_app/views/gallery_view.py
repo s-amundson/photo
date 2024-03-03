@@ -1,47 +1,47 @@
-import os
-from PIL import Image
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.shortcuts import get_object_or_404
+from django.views.generic import ListView
 
-from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, render, redirect
-
-# Create your views here.
-from django.views import generic, View
-from ..models import Gallery, Images
-from ..forms import GalleryForm, ImageForm
+from ..models import Gallery
 import logging
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 
-class GalleryView(LoginRequiredMixin, View):
+class GalleryView(UserPassesTestMixin, ListView):
+    gallery = None
+    image_link = True
+    model = Gallery
+    template_name = 'photo_app/gallery.html'
 
-    def get(self, request, gallery_id, *args, **kwargs):
-        gallery = get_object_or_404(Gallery, pk=gallery_id)
-        if request.user.is_staff or request.user.is_superuser:
-            images = gallery.images_set.all()
-        else:
-            images = gallery.images_set.filter(private=False)
-        form = ImageForm()
-        logging.debug(gallery_id)
-        gallery_form = GalleryForm(instance=gallery)
-        owner = gallery.owner == request.user
-        logging.debug(owner)
-        logging.debug(gallery.release.all())
-        releases = gallery.release.all()
-        models = []
-        for release in releases:
-            d = {}
-            if release.use_full_name:
-                d['name'] = release.talent_full_name
-                d['links'] = release.talent.links_set.all()
-            elif release.use_first_name:
-                d['name'] = release.talent_first_name
-            elif release.use_nickname:
-                d['name'] = release.talent_nickname
-            models.append(d)
-        # context = self.get_gallery(request, gallery_id)
-        d = {'form': form, 'images': images, 'gallery': gallery, 'gallery_form': gallery_form, 'update': True,
-             'owner': owner, 'models': models}
-        return render(request, 'photo_app/gallery.html', d)
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['gallery'] = self.gallery
+        context['image_link'] = self.image_link
+        context['owner'] = self.gallery.owner == self.request.user
+        return context
+
+    def get_queryset(self):
+        queryset = self.gallery.images_set.filter(gallery=self.gallery).filter(privacy_level='public')
+        logging.warning(queryset)
+        return queryset.order_by('id')
+
+    def test_func(self):
+        self.gallery = get_object_or_404(Gallery, pk=self.kwargs.get('gallery_id'))
+        if self.gallery.privacy_level == 'public':
+            return True
+        if self.request.user.is_authenticated:
+            if self.gallery.privacy_level == 'authenticated':
+                return True
+            else:  # gallery is private
+                if (self.request.user == self.gallery.owner
+                        or self.request.user in self.gallery.photographer.all()
+                        or self.gallery.talent.filter(user=self.request.user).count()):
+                    return True
+        return False
+
+
+class GalleryInsertView(GalleryView):
+    image_link = False
+    template_name = 'photo_app/gallery_insert.html'

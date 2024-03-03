@@ -1,23 +1,41 @@
 <nav class="navbar navbar-dark bg-dark border">
-    <a class="navbar-brand" href="/"> <span class="blue">Sam's Photography</span></a>
+    {% load static %}
+    <a class="navbar-brand" href="/"><img src="{% static 'images/icons8-camera-50.png' %}" alt="Icon"> <span class="blue">Sam's Photography</span></a>
 
-    <div class="navbar-expand-sm" id="navbar">
-        <ul class="navbar-nav ml-auto mt-2">
+    <div class="navbar-expand-md" id="navbar">
+        <ul class="navbar-nav md-auto mt-2">
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'photo:terms' %}">Terms</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'photo:privacy' %}">Privacy</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'photo:about' %}">About Me</a>
+            </li>
             {% if user.is_authenticated %}
 
                 {% if user.is_staff %}
                     <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownStaff" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <a id="navbarDropdownStaff" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                         Staff Links
                       </a>
                       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <a class="dropdown-item" href="{% url 'photo:link_category-add' %}">Add Link Category</a>
+                          <a class="dropdown-item" href="{% url 'contact:contact_list' %}">Contact List</a>
+                          <a class="dropdown-item" href="{% url 'photo:talent_list' %}">Talent List</a>
+                        <div class="dropdown-divider"></div>
 
+                      </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                            Reference
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <a class="dropdown-item" href="{% url 'reference:reference_list' %}">Reference List</a>
+                          <a class="dropdown-item" href="{% url 'reference:category' %}">Category</a>
+                          <a class="dropdown-item" href="{% url 'reference:mood_list' %}">Mood List</a>
                         <div class="dropdown-divider"></div>
 
                       </div>
@@ -38,16 +56,15 @@
                     <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
                 </li>
 
-
             {% else %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'photo:index' %}">Galleries</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'account_login' %}">Login</a>
+                    <a class="nav-link captcha-link" href="{% url 'account_login' %}">Login</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'account_signup' %}">Join</a>
+                    <a class="nav-link captcha-link" href="{% url 'account_signup' %}">Join</a>
                 </li>
             {% endif %}
         </ul>

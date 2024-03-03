@@ -1,6 +1,4 @@
-from django.conf import settings
 from django.db import models
-from django.utils.datetime_safe import datetime
 
 
 class ReleaseTemplate(models.Model):

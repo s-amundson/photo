@@ -1,104 +1,61 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import PermissionDenied
-from django.forms import model_to_dict
-from django.shortcuts import render, get_object_or_404
-from django.template.loader import get_template
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.views.generic.edit import FormView
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.views.generic.base import View
+
 from django.http import JsonResponse
 import logging
-from django.http import HttpResponse, HttpResponseBadRequest
 
-from rest_framework.views import APIView
-from rest_framework import permissions, status
-from rest_framework.response import Response
-
-from ..forms import GalleryCreateForm, GalleryForm
+from ..forms import GalleryForm
 from ..models import Gallery
-from ..serializers import GallerySerializer
 
 logger = logging.getLogger(__name__)
 
 
-class GalleryFormApiView(LoginRequiredMixin, APIView):
-    permission_classes = [permissions.IsAuthenticated]
+class GalleryFormView(UserPassesTestMixin, FormView):
+    form_class = GalleryForm
+    gallery = None
+    template_name = 'photo_app/forms/gallery_form.html'
 
-    def post(self, request, gallery_id=None):
-        logging.debug('here')
-        if gallery_id is not None:
-            g = get_object_or_404(Gallery, pk=gallery_id)
-            if request.user == g.owner or request.user.is_superuser:
-                pass
-            else:
-                return HttpResponseBadRequest()
-            # serializer = GallerySerializer()
+    def form_invalid(self, form):
+        logging.warning(form.errors)
+        return JsonResponse({'status': 'ERROR', 'errors': form.errors})
+
+    def form_valid(self, form):
+        logging.warning(self.request.POST)
+        logging.info(form.cleaned_data)
+        gallery = form.save(commit=False)
+        if self.gallery is None:
+            gallery.owner = self.request.user
+        logging.debug(gallery.is_mature)
+        if gallery.is_mature and gallery.privacy_level == 'public':
+            gallery.privacy_level = 'authenticated'
+        gallery.save()
+        form.save_m2m()
+        url = reverse('photo_app:gallery_view', kwargs={'gallery_id': gallery.id})
+        return JsonResponse({'status': "SUCCESS", 'url': url})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        logging.debug(self.kwargs.get('gallery_id', None))
+        context['update'] = self.kwargs.get('gallery_id', None) is not None
+        logging.debug(context)
+        return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        if self.gallery is not None:
+            kwargs['instance'] = self.gallery
+        return kwargs
+
+    def test_func(self):
+        if self.request.user.is_authenticated:
+            gid = self.kwargs.get('gallery_id', None)
+            logging.debug(gid)
+            if gid is not None:
+                self.gallery = get_object_or_404(Gallery, pk=gid)
+                # if not (self.request.user == gid.owner or self.request.user.is_superuser):
+                #     return False
+            return self.request.user.is_staff
         else:
-            g = None
-
-        serializer = GallerySerializer(data=request.data)
-        if serializer.is_valid():
-            if gallery_id is None:
-                gallery = serializer.save()
-                gallery.owner = request.user
-                gallery.save()
-            return Response(serializer.data)
-
-        else:
-            logging.debug(serializer.errors)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class GalleryFormView(LoginRequiredMixin, View):
-    def get_instance(self, request, gallery_id):
-        if gallery_id is not None:
-            g = get_object_or_404(Gallery, pk=gallery_id)
-            logging.debug(request.user)
-            if request.user == g.owner or request.user.is_superuser:
-                pass
-            else:
-                raise PermissionDenied
-        else:
-            g = None
-        return g
-
-    def get(self, request, gallery_id=None):
-        update = False
-        if gallery_id is None:
-            form = GalleryCreateForm()
-        else:
-            try:
-                g = self.get_instance(request, gallery_id)
-            except PermissionDenied:
-                return HttpResponse("")
-            logging.debug(g)
-            form = GalleryForm(instance=g)
-            update = True
-
-        return render(request, 'photo_app/forms/gallery_form.html',
-                      {'form': form, 'update': update})
-
-    def post(self, request, gallery_id=None):
-        logging.debug(request.POST)
-        logging.debug(gallery_id)
-        if gallery_id is None:
-            form = GalleryCreateForm(request.POST)
-        else:
-            try:
-                g = self.get_instance(request, gallery_id)
-            except PermissionDenied:
-                return HttpResponseBadRequest()
-            form = GalleryForm(request.POST, instance=g)
-        # form.clean()
-        # logging.debug(form.cleaned_data)
-
-        if form.is_valid():
-            logging.debug(form.cleaned_data)
-            gallery = form.save(commit=False)
-            if gallery_id is None:
-                gallery.owner = request.user
-            gallery.save()
-            url = reverse('photo_app:gallery_view', kwargs={'gallery_id': gallery.id})
-            return JsonResponse({'status': "SUCCESS", 'url': url})
-        else:
-            logging.debug(form.errors)
-            return JsonResponse({'status': 'ERROR', 'errors': form.errors})
+            return False

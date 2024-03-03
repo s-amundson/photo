@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import json
 import os
+import sys
 from django.core.exceptions import ImproperlyConfigured
 from pathlib import Path
 
@@ -66,30 +67,28 @@ AUTHENTICATION_BACKENDS = (
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend"
 )
+
+CSRF_TRUSTED_ORIGINS = get_secret("CSRF_TRUSTED_ORIGINS")
+
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 DATABASES = {
-    'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': get_secret("DATABASE_NAME"),
-        'USER': get_secret("DATABASE_USER"),
-        'PASSWORD': get_secret("DATABASE_PASSWORD"),
-        'HOST': get_secret("DATABASE_HOST"),
-        'PORT': get_secret("DATABASE_PORT"),
-    }
+    'default': get_secret("DATABASE"),
 }
+if 'test' in sys.argv:  # or 'test_coverage' in sys.argv: #Covers regular testing and django-coverage
+    DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 2621440 * 8
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_secret("DEBUG")
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DEFAULT_FROM_EMAIL = get_secret('DEFAULT_FROM_EMAIL')
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = get_secret("EMAIL_BACKEND")
 EMAIL_DEBUG = get_secret("EMAIL_DEBUG")
 EMAIL_DEBUG_ADDRESSES = get_secret('EMAIL_DEBUG_ADDRESSES')
 EMAIL_USE_TLS = True
@@ -102,6 +101,9 @@ EMAIL_HOST_PASSWORD = get_secret('EMAIL_HOST_PASSWORD')
 # Application definition
 INSTALLED_APPS = [
     'photo_app',
+    'contact_app',
+    'recaptcha',
+    'reference_images',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -116,7 +118,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     # 'allauth.socialaccount.providers.facebook',
 
-    'rest_framework',
+    'django_sendfile',
     "sslserver",
 ]
 
@@ -145,7 +147,7 @@ LOGGING = {
     },
     'root': {
         'handlers': ['console'],
-        'level': 'DEBUG',
+        'level': 'INFO',
     },
 }
 LOGIN_REDIRECT_URL = "photo_app:profile"
@@ -157,16 +159,32 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'photo_app', 'media')
 MEDIA_URL = '/media/'
+
+RECAPTCHA_PRIVATE_KEY = get_secret('RECAPTCHA')['SECRET_KEY']
+RECAPTCHA_PUBLIC_KEY = get_secret('RECAPTCHA')['SITE_KEY']
+RECAPTCHA_SECRET_KEY_V3 = get_secret('RECAPTCHA')['SECRET_KEY_V3']
+RECAPTCHA_SITE_KEY_V3 = get_secret('RECAPTCHA')['SITE_KEY_V3']
 
 ROOT_URLCONF = 'photo_project.urls'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_secret('SECRET_KEY')
 
+if DEBUG:
+    SENDFILE_BACKEND = 'django_sendfile.backends.development'
+else:
+    SENDFILE_BACKEND = 'django_sendfile.backends.nginx'
+SENDFILE_ROOT = MEDIA_ROOT
+SENDFILE_URL = MEDIA_URL
+
+SESSION_COOKIE_AGE = get_secret('SESSION_COOKIE_AGE')
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_COOKIE_SECURE = True
 SITE_ID = 1
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -219,6 +237,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'recaptcha.context_processors.recaptcha'
             ],
         },
     },
@@ -239,8 +258,3 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-
-
-
-

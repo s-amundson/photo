@@ -1,0 +1,28 @@
+<div class="m-2">
+    {% for comment in comments %}
+        <div class="row">
+            <div class="col">{{ comment.comment }}</div>
+        </div>
+        <div class="row mb-2">
+            <div class="col">
+                <small>Date: {{ comment.comment_date }}</small>
+            </div>
+            <div class="col">
+                <small>By: {{ comment.user.first_name }} {{ comment.user.last_name }}</small>
+            </div>
+        </div>
+    {% empty %}
+        No Comments
+    {% endfor %}
+</div>
+<hr>
+<div class="row m-2" id="div-comment-form">
+    <form id="comment-form" action="{% url 'photo:image_comment' image_id %}"
+          method="post" role="form">{% csrf_token %}
+        {{ comment_form.comment.label }}{{ comment_form.comment }}
+        {{ comment_form.image }}
+        {{ comment_form.privacy_level }}
+        {{ comment_form.user }}
+        <input class="btn btn-primary m-2" type="submit" id="btn-comment" value="Add Comment" >
+    </form>
+</div>

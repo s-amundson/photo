@@ -17,12 +17,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from photo_app.views import SignupView
 
 urlpatterns = [
+    path('accounts/signup/', SignupView.as_view(), name="account_signup"),
     path('accounts/', include('allauth.urls')),
-    # path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
     path('', include('photo_app.urls', namespace='photo_app')),
+    path('contact/', include('contact_app.urls', namespace='contact')),
+    path('recaptcha/', include('recaptcha.urls', namespace='recaptcha')),
+    path('reference/', include('reference_images.urls', namespace='reference')),
 ]
 
 if settings.DEBUG:

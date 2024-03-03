@@ -1,0 +1,5 @@
+    <form id="recaptcha-form_v3" method="post" action="{% url 'recaptcha:v3' %}">
+        {% csrf_token %}
+        {{ recaptcha3_form.captcha }}
+        {{ recaptcha3_form.url }}
+    </form>
