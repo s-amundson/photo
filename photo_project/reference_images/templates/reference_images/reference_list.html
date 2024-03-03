@@ -5,13 +5,15 @@
 {% endblock %}
 
 {% block left %}
-    <h5>Add Reference</h5>
-    <div class="m-2">
-        <form method="post" enctype="multipart/form-data" action="{% url 'reference:reference_form' %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Submit">
-        </form>
+    <div class="sticky-md-top">
+        <h5>Add Reference</h5>
+        <div class="m-2 sticky-md-top">
+            <form method="post" enctype="multipart/form-data" action="{% url 'reference:reference_form' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Submit">
+            </form>
+        </div>
     </div>
 {% endblock %}
 
