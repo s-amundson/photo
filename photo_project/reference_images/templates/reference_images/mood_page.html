@@ -10,10 +10,15 @@
     <div class="row" message_text="{{ message }}" hidden id="message"><h3>"{{ message }}"</h3></div>
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
-        {% for image in object_list %}
-          <div class="carousel-item {% if forloop.first %}active{% endif %}">
-            <img src="{% url 'photo_app:image_get' image.id %}"  class="mx-auto d-block img-carousel">
-          </div>
+        {% for mood_image in object_list %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                {% if mood_image.image %}
+                    <img src="{% url 'photo_app:image_get' mood_image.image.id %}"  class="mx-auto d-block img-carousel">
+                {% elif mood_image.reference_image %}
+                    <img class="mx-auto d-block img-carousel"
+                                 src="{% url 'reference:image_get' mood_image.reference_image.id %}">
+                {% endif %}
+            </div>
         {% endfor %}
 
       </div>
