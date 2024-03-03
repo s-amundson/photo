@@ -5,7 +5,6 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import FormView, UpdateView
 from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404
-from django.utils.datetime_safe import date
 from django.utils import timezone
 from django_sendfile import sendfile
 
@@ -126,7 +125,7 @@ class ImageCheckAuth:
         if not gallery.privacy_level == 'public':
             return False
         else:
-            if gallery.public_date is None or gallery.public_date <= date.today():
+            if gallery.public_date is None or gallery.public_date <= timezone.datetime.today():
                 return True
             else:
                 return False

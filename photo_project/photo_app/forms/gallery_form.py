@@ -1,5 +1,5 @@
 from django.forms import ModelForm, TextInput, SelectDateWidget
-from django.utils.datetime_safe import date
+from django.utils import timezone
 from ..models import Gallery, Release, User
 import logging
 
@@ -35,6 +35,6 @@ class GalleryForm(ModelForm):
             self.fields['display_image'].queryset = None
         self.fields['release'].queryset = Release.objects.all().order_by('shoot_date')
         self.fields['photographer'].queryset = User.objects.filter(is_photographer=True)
-        self.fields['public_date'].initial = date.today()
-        self.fields['shoot_date'].initial = date.today()
+        self.fields['public_date'].initial = timezone.datetime.today()
+        self.fields['shoot_date'].initial = timezone.datetime.today()
 

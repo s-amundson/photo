@@ -1,5 +1,5 @@
 from django.forms import ModelForm, SelectDateWidget
-from django.utils.datetime_safe import date
+from django.utils import timezone
 from ..models import User
 import logging
 
@@ -16,10 +16,10 @@ class ProfileForm(ModelForm):
         optional_fields = ['is_model', 'dob', 'nickname']
         fields = required_fields + read_fields + optional_fields
 
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['dob'].widget = SelectDateWidget(years=range(date.today().year, date.today().year - 100, -1))
+        d = timezone.datetime.today()
+        self.fields['dob'].widget = SelectDateWidget(years=range(d.year, d.year - 100, -1))
         for f in self.Meta.required_fields:
             self.fields[f].widget.attrs.update({'class': 'form-control m-2'})
         for f in self.Meta.optional_fields:

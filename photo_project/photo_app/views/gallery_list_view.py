@@ -1,6 +1,6 @@
 from django.forms import model_to_dict
 from django.db.models import Q
-from django.utils.datetime_safe import date
+from django.utils import timezone
 from django.views.generic import ListView
 from ..models import Gallery, Images
 
@@ -35,13 +35,13 @@ class GalleryListView(ListView):
         elif self.request.user.is_authenticated:
             logger.warning('authenticated')
             queryset = Gallery.objects.filter(
-                Q(Q(privacy_level__in=['public', 'authenticated'], public_date__lte=date.today())) |
+                Q(Q(privacy_level__in=['public', 'authenticated'], public_date__lte=timezone.datetime.today())) |
                 Q(owner=self.request.user.id) |
                 Q(release__talent__id=self.request.user.id) |
                 Q(photographer=self.request.user))
         else:
             logger.warning('not auth')
-            queryset = Gallery.objects.filter(privacy_level='public', public_date__lte=date.today())
+            queryset = Gallery.objects.filter(privacy_level='public', public_date__lte=timezone.datetime.today())
         self.gallery_list = []
 
         queryset = queryset.order_by("-id")

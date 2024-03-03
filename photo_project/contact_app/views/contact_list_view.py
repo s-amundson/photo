@@ -1,7 +1,6 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
 # from django.forms import model_to_dict
 # from django.db.models import Q
-# from django.utils.datetime_safe import date
 from django.views.generic import ListView
 from ..forms import ContactSearchForm
 from ..models import Contact

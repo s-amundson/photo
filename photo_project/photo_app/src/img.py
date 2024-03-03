@@ -2,7 +2,7 @@ import io
 
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.utils.datetime_safe import datetime
+from django.utils import timezone
 from PIL import Image
 
 import logging
@@ -21,7 +21,7 @@ class Img:
         # logging.debug(self.exif)
         self.taken = self.exif.get(306, None)
         if self.taken is not None:
-            self.taken = datetime.strptime(self.taken, '%Y:%m:%d %H:%M:%S') #“2017:09:29 17:36:00”
+            self.taken = timezone.datetime.strptime(self.taken, '%Y:%m:%d %H:%M:%S') #“2017:09:29 17:36:00”
 
         self.img.thumbnail((200, 200))
         byte_arr = io.BytesIO()
