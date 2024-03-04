@@ -99,10 +99,13 @@ a {
 .carousel-item img {
   object-fit: cover;
   object-position: center;
-  height: 50vh;
+  height: 60vh;
   overflow: hidden;
 }
-
+.carousel-indicators {
+    position: relative;
+    top: 100%;
+}
 .carousel-indicators .active {
      background-color: #f00;
 }

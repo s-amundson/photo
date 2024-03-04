@@ -9,29 +9,29 @@
 {% block main %}
     <div class="row" message_text="{{ message }}" hidden id="message"><h3>"{{ message }}"</h3></div>
     <div id="carouselMood" class="row carousel slide" data-bs-ride="carousel">
-        <div class="carousel-indicators">
+
+        <div class="carousel-inner">
+            {% for mood_image in object_list %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    {% if mood_image.image %}
+                        <img src="{% url 'photo_app:image_get' mood_image.image.id %}"  class="mx-auto d-block img-carousel">
+                    {% elif mood_image.reference_image %}
+                        <img class="mx-auto d-block img-carousel"
+                                 src="{% url 'reference:image_get' mood_image.reference_image.id %}">
+                    {% endif %}
+                    <div class="carousel-caption d-none d-md-block">
+                        <p>{{ mood_image.comment }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        <div class="carousel-indicators mx-auto">
             {% for mood_image in object_list %}
                 <button type="button" data-bs-target="#carouselMood" data-bs-slide-to="{{ forloop.counter0 }}"
                         class="{% if forloop.first %} active {% endif %} carousel-button"
                         aria-current="true" aria-label="Slide {{ forloop.counter }}" ></button>
             {% endfor %}
-      </div>
-      <div class="carousel-inner">
-        {% for mood_image in object_list %}
-            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                {% if mood_image.image %}
-                    <img src="{% url 'photo_app:image_get' mood_image.image.id %}"  class="mx-auto d-block img-carousel">
-                {% elif mood_image.reference_image %}
-                    <img class="mx-auto d-block img-carousel"
-                                 src="{% url 'reference:image_get' mood_image.reference_image.id %}">
-                {% endif %}
-                <div class="carousel-caption d-none d-md-block">
-                    <p>{{ mood_image.comment }}</p>
-                </div>
-            </div>
-        {% endfor %}
-
-      </div>
+        </div>
+        </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carouselMood" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
