@@ -8,7 +8,14 @@
 
 {% block main %}
     <div class="row" message_text="{{ message }}" hidden id="message"><h3>"{{ message }}"</h3></div>
-    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div id="carouselMood" class="row carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            {% for mood_image in object_list %}
+                <button type="button" data-bs-target="#carouselMood" data-bs-slide-to="{{ forloop.counter0 }}"
+                        class="{% if forloop.first %} active {% endif %} carousel-button"
+                        aria-current="true" aria-label="Slide {{ forloop.counter }}" ></button>
+            {% endfor %}
+      </div>
       <div class="carousel-inner">
         {% for mood_image in object_list %}
             <div class="carousel-item {% if forloop.first %}active{% endif %}">
@@ -18,6 +25,9 @@
                     <img class="mx-auto d-block img-carousel"
                                  src="{% url 'reference:image_get' mood_image.reference_image.id %}">
                 {% endif %}
+                <div class="carousel-caption d-none d-md-block">
+                    <p>{{ mood_image.comment }}</p>
+                </div>
             </div>
         {% endfor %}
 
@@ -31,29 +41,7 @@
         <span class="visually-hidden">Next</span>
       </button>
     </div>
-    <div class="row" id="mood-images-div">
-        {% if object_list %}
-            {% for mood_image in object_list %}
-                <div class="col border mx-auto">
-                    <div class="mood-image" img_id="{{ mood_image.id }}">
-                        {% if mood_image.image %}
-                            <img class="m-2 img-fluid"
-                                 src="{% url 'photo_app:image_get' mood_image.image.id %}">
-                        {% elif mood_image.reference_image %}
-                            <img class="rounded m-2 img-thumbnail img-fluid"
-                                 src="{% url 'reference:image_get' mood_image.reference_image.id %}">
-                        {% endif %}
-                        <p>{{ mood_image.comment }}</p>
-                    </div>
-                    {% if form %}
-                        <a href="{% url 'reference:mood_image' mood_image.id %}" class="btn btn-primary">Edit</a>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        {% else %}
-            <p id="no-image">There are no images.</p>
-        {% endif %}
-    </div>
+
     <div class="row mx-auto" id="selected-image"></div>
     {% if form %}
         <a href="{% url 'reference:mood_image' %}" class="btn btn-primary">Add Image</a>

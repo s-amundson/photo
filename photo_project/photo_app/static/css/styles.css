@@ -87,3 +87,21 @@ a {
 	max-width: min(100%, 500px);
 	height: auto;
 }
+
+.carousel {
+    overflow: hidden;
+    padding-bottom: 4rem;
+}
+.carousel-caption { top: 100%; }
+.carousel-inner { overflow: visible; }
+.carousel-control-next, .carousel-control-prev { bottom: 4rem; }
+.carousel-item img {
+  object-fit: cover;
+  object-position: center;
+  height: 75vh;
+  overflow: hidden;
+}
+
+.carousel-indicators .active {
+     background-color: #f00;
+}
