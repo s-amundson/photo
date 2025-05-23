@@ -14,7 +14,7 @@ services:
     image: ../postgres:latest
     restart: 'no' #always
     env_file:
-      - photo_project.env
+      - ../photo_project.env
     ports:
       - 5432:5432
     volumes:
@@ -27,7 +27,7 @@ services:
       dockerfile: docker_photo_deploy/Dockerfile
     command: gunicorn photo_project.wsgi:application --bind 0.0.0.0:8080 --workers=4
     env_file:
-      - photo_project.env
+      - ../photo_project.env
     ports:
       - 8080:8080
     depends_on:
