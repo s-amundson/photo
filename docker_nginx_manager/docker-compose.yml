@@ -1,0 +1,49 @@
+services:
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      # These ports are in format <host-port>:<container-port>
+      - '80:80' # Public HTTP Port
+      - '443:443' # Public HTTPS Port
+      - '81:81' # Admin Web Port
+      # Add any other Stream port you want to expose
+      # - '21:21' # FTP
+#    environment:
+#      # Postgres parameters:
+#      DB_POSTGRES_HOST: 'db'
+#      DB_POSTGRES_PORT: '5432'
+#      DB_POSTGRES_USER: 'npm'
+#      DB_POSTGRES_PASSWORD: 'npmpass'
+#      DB_POSTGRES_NAME: 'npm'
+#      # Uncomment this if IPv6 is not enabled on your host
+#      # DISABLE_IPV6: 'true'
+    env_file:
+      - ../photo_project.env
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    depends_on:
+      - db
+
+  db:
+    container_name: postgres_photo
+    image: postgres:latest
+    env_file:
+      - ../photo_project.env
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+networks:
+  default:
+    name: my-app-net
+#    external: true
+
+volumes:
+#  media:
+#    name: photo-media
+  postgres-data:
+#  staticfiles:
+#    name: photo-static

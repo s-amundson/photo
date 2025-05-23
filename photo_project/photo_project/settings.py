@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import json
 import os
 import sys
+
+from django.conf.global_settings import DATABASES
 from django.core.exceptions import ImproperlyConfigured
 from pathlib import Path
 
@@ -31,13 +33,12 @@ def get_secret(setting, secrets=secret_settings):
         raise ImproperlyConfigured("Set the {} setting".format(setting))
 
 
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
-ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # ACCOUNT_FORMS = {'signup': 'student_app.forms.SignUpForm'}
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -73,8 +74,16 @@ CSRF_TRUSTED_ORIGINS = get_secret("CSRF_TRUSTED_ORIGINS")
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 DATABASES = {
-    'default': get_secret("DATABASE"),
+    'default': {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get('DJANGO_DB'),
+        "USER": os.environ.get('POSTGRES_USER'),
+        "PASSWORD": os.environ.get('POSTGRES_PASSWORD'),
+        "HOST": "db",
+        "PORT": "5432"
+  },
 }
+
 if 'test' in sys.argv:  # or 'test_coverage' in sys.argv: #Covers regular testing and django-coverage
     DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
 
