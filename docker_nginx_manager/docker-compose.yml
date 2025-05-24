@@ -38,8 +38,11 @@ services:
 
 networks:
   default:
-    name: my-app-net
-#    external: true
+    name: "my-app-net"
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.16.57.0/24
 
 volumes:
 #  media:

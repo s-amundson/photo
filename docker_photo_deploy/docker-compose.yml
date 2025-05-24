@@ -37,7 +37,7 @@ services:
       - media:/home/app/web/photo_app/media
 
   nginx:
-    container_name: nginx
+    container_name: nginx_photo
 
     image: nginx:mainline-alpine
     restart: 'no' #always
