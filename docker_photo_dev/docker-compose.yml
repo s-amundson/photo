@@ -1,19 +1,14 @@
 services:
-  photo_db:
-    extends:
-      service: db
-      file: ../docker_nginx_manager/docker-compose.yml
-
-
-#    container_name: postgresdb
-#    image: postgres:17.5
-#    restart: 'no' #always
-#    env_file:
-#      - ../photo_project.env
-#    ports:
-#      - 5432:5432
-#    volumes:
-#      - postgres-data:/var/lib/postgresql/data
+  db:
+    container_name: postgresdb
+    image: postgres:17.5
+    restart: 'no' #always
+    env_file:
+      - ../photo_project.env
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
 
   web:
     container_name: django_photo_dev

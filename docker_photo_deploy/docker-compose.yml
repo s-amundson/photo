@@ -9,16 +9,10 @@ services:
       - ./data/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
-  db:
-    container_name: postgres_photo
-    image: postgres:17.5
-    restart: 'no' #always
-    env_file:
-      - ../photo_project.env
-    ports:
-      - 5432:5432
-    volumes:
-      - postgres-data2:/var/lib/postgresql/data
+  photo_db:
+    extends:
+      service: db
+      file: ../docker_nginx_manager/docker-compose.yml
 
   photo:
     container_name: photo_django
@@ -56,7 +50,7 @@ services:
 networks:
   default:
     name: my-app-net
-#    external: true
+    external: true
 
 volumes:
   media:
