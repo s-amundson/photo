@@ -34,7 +34,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres-data2:/var/lib/postgresql/data
 
 networks:
   default:
@@ -44,6 +44,6 @@ networks:
 volumes:
 #  media:
 #    name: photo-media
-  postgres-data:
+  postgres-data2:
 #  staticfiles:
 #    name: photo-static

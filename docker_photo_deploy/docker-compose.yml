@@ -11,14 +11,14 @@ services:
 
   db:
     container_name: postgres_photo
-    image: ../postgres:latest
+    image: postgres:17.5
     restart: 'no' #always
     env_file:
       - ../photo_project.env
     ports:
       - 5432:5432
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres-data2:/var/lib/postgresql/data
 
   photo:
     container_name: photo_django
@@ -61,6 +61,6 @@ networks:
 volumes:
   media:
     name: photo-media
-  postgres-data:
+  postgres-data2:
   staticfiles:
     name: photo-static
