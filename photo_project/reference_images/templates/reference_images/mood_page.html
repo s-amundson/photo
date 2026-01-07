@@ -9,7 +9,7 @@
 {% block main %}
     <div class="row" message_text="{{ message }}" hidden id="message"><h3>"{{ message }}"</h3></div>
     <p>Select images:</p>
-    <div class="d-md-inline-flex mood-images">
+    <div class="d-md-inline-flex flex-wrap mood-images">
 
         {% for mood_image in object_list %}
             <div class="card m-1" style="width: 18rem;">
@@ -33,7 +33,7 @@
 
     <div class="row mx-auto" id="selected-image"></div>
     {% if form %}
-        <a href="{% url 'reference:mood_image' %}" class="btn btn-primary">Add Image</a>
+        <a href="{% url 'reference:mood_image' %}?next={{ request.path }}" class="btn btn-primary">Add Image</a>
         <form method="post" enctype="multipart/form-data">{% csrf_token %}
             <div class="col">
                 {{ form.as_p }}

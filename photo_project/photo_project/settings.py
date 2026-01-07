@@ -179,7 +179,7 @@ LOGGING = {
         '': {'handelers': ['console'], 'level': 'CRITICAL'},
         'contact_app': logger_default,
         'photo_app': logger_default,
-        'main': logger_default,
+        'reference_images': logger_default,
         'payment': logger_default,
         'program_app': logger_default,
         'membership': logger_default,

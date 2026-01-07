@@ -55,6 +55,7 @@ class MoodImageView(StaffMixin, FormView):
 
     def form_valid(self, form):
         form.save()
+        self.success_url = self.request.GET.get('next', self.success_url)
         return super().form_valid(form)
 
 

@@ -42,8 +42,8 @@ services:
     image: nginx:mainline-alpine
     restart: 'no' #always
     ports:
-      - 80:8001
-      - 443:8002
+      - 80:80
+      - 443:443
     volumes:
       - ../nginx:/etc/nginx
       - staticfiles:/photo-app/static/

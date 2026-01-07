@@ -11,7 +11,7 @@
         </form>
 
         <div class="col">
-            {% if form.instance %}
+            {% if form.instance.id %}
                 <img class="rounded img-fluid float-end imgshadow m-2" src="{% url 'reference:image_get' form.instance.id %}">
             {% endif %}
         </div>
