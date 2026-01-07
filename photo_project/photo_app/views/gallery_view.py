@@ -23,7 +23,12 @@ class GalleryView(UserPassesTestMixin, ListView):
         return context
 
     def get_queryset(self):
-        queryset = self.gallery.images_set.filter(gallery=self.gallery).filter(privacy_level='public')
+        queryset = self.gallery.images_set.filter(gallery=self.gallery)
+        if not self.request.user.is_authenticated:
+            queryset = queryset.filter(privacy_level='public')
+        else:
+            if self.gallery.privacy_level == 'authenticated':
+                pass
         logging.warning(queryset)
         return queryset.order_by('id')
 
@@ -35,6 +40,8 @@ class GalleryView(UserPassesTestMixin, ListView):
             if self.gallery.privacy_level == 'authenticated':
                 return True
             else:  # gallery is private
+                logger.debug(self.request.user)
+                logger.debug(self.gallery.owner)
                 if (self.request.user == self.gallery.owner
                         or self.request.user in self.gallery.photographer.all()
                         or self.gallery.talent.filter(user=self.request.user).count()):

@@ -219,8 +219,9 @@ class ImageView(UserPassesTestMixin, FormView):
         return context
 
     def test_func(self):
+        logger.warning(self.kwargs.get('image_id'))
         self.image = get_object_or_404(Images, pk=self.kwargs.get('image_id'))
-
+        logger.warning(self.image)
         if self.image.gallery.privacy_level == 'public' and self.image.privacy_level == 'public':
             if self.image.gallery.public_date and self.image.gallery.public_date > timezone.now().date():
                 return False

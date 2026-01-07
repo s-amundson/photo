@@ -3,70 +3,75 @@
     <a class="navbar-brand" href="/"><img src="{% static 'images/icons8-camera-50.png' %}" alt="Icon"> <span class="blue">Sam's Photography</span></a>
 
     <div class="navbar-expand-md" id="navbar">
-        <ul class="navbar-nav md-auto mt-2">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'photo:terms' %}">Terms</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'photo:privacy' %}">Privacy</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'photo:about' %}">About Me</a>
-            </li>
-            {% if user.is_authenticated %}
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <ul class="navbar-nav md-auto mt-2">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'photo:terms' %}">Terms</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'photo:privacy' %}">Privacy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'photo:about' %}">About Me</a>
+                </li>
+                {% if user.is_authenticated %}
 
-                {% if user.is_staff %}
-                    <li class="nav-item dropdown">
-                      <a id="navbarDropdownStaff" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
-                        Staff Links
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item" href="{% url 'photo:link_category-add' %}">Add Link Category</a>
-                          <a class="dropdown-item" href="{% url 'contact:contact_list' %}">Contact List</a>
-                          <a class="dropdown-item" href="{% url 'photo:talent_list' %}">Talent List</a>
-                        <div class="dropdown-divider"></div>
+                    {% if user.is_staff %}
+                        <li class="nav-item dropdown">
+                          <a id="navbarDropdownStaff" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                            Staff Links
+                          </a>
+                          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="{% url 'photo:link_category-add' %}">Add Link Category</a>
+                              <a class="dropdown-item" href="{% url 'contact:contact_list' %}">Contact List</a>
+                              <a class="dropdown-item" href="{% url 'photo:talent_list' %}">Talent List</a>
+                            <div class="dropdown-divider"></div>
 
-                      </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
-                            Reference
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item" href="{% url 'reference:reference_list' %}">Reference List</a>
-                          <a class="dropdown-item" href="{% url 'reference:category' %}">Category</a>
-                          <a class="dropdown-item" href="{% url 'reference:mood_list' %}">Mood List</a>
-                        <div class="dropdown-divider"></div>
+                          </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                                Reference
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="{% url 'reference:reference_list' %}">Reference List</a>
+                              <a class="dropdown-item" href="{% url 'reference:category' %}">Category</a>
+                              <a class="dropdown-item" href="{% url 'reference:mood_list' %}">Mood List</a>
+                            <div class="dropdown-divider"></div>
 
-                      </div>
-                    </li>
-                {% endif %}
-                {% if user.is_photographer %}
+                          </div>
+                        </li>
+                    {% endif %}
+                    {% if user.is_photographer %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'photo:model_release' %}">Model Release</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'photo:model_release' %}">Model Release</a>
+                        <a class="nav-link" href="{% url 'photo:profile' %}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'photo:index' %}">Galleries</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
+                    </li>
+
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'photo:index' %}">Galleries</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link captcha-link" href="{% url 'account_login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link captcha-link" href="{% url 'account_signup' %}">Join</a>
                     </li>
                 {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'photo:profile' %}">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'photo:index' %}">Galleries</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
-                </li>
-
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'photo:index' %}">Galleries</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link captcha-link" href="{% url 'account_login' %}">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link captcha-link" href="{% url 'account_signup' %}">Join</a>
-                </li>
-            {% endif %}
-        </ul>
+            </ul>
+        </div>
     </div>
 </nav>

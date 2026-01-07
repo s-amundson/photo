@@ -1,4 +1,4 @@
-from django.forms import ModelForm, SelectDateWidget
+from django.forms import ModelForm, SelectDateWidget, CheckboxInput
 from django.utils import timezone
 from ..models import User
 import logging
@@ -6,7 +6,13 @@ import logging
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-
+class MyCheckbox(CheckboxInput):
+    def __init__(self, attrs=None):
+        # Use slightly better defaults than HTML's 20x2 box
+        default_attrs = {"class": "m-2"}
+        if attrs:
+            default_attrs.update(attrs)
+        super().__init__(default_attrs)
 class ProfileForm(ModelForm):
 
     class Meta:
@@ -28,4 +34,4 @@ class ProfileForm(ModelForm):
 
         self.fields['dob'].label = "Date of Birth"
         self.fields['is_model'].label = "I am a Model"
-        self.fields['is_model'].widget.attrs.update({'class': 'm-2'})
+        self.fields['is_model'].widget.attrs.update({'class': 'form-check-input'})

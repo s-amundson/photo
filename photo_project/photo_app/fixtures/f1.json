@@ -19,7 +19,7 @@
  {"model": "photo_app.talent", "pk": 1, "fields": {"talent": 1, "user":  1}},
  {"model": "photo_app.talent", "pk": 2, "fields": {"talent": 2, "user":  2}},
  {"model": "sites.site", "pk": 1, "fields": {"domain": "example.com", "name": "example.com"}},
- {"model": "account.emailaddress", "pk": 1, "fields": {"user": 1, "email": "EmilyNConlan@einrot.com", "verified": true, "primary": true}},
- {"model": "account.emailaddress", "pk": 2, "fields": {"user": 2, "email": "RosalvaAHall@superrito.com", "verified": true, "primary": true}},
- {"model": "account.emailaddress", "pk": 3, "fields": {"user": 3, "email": "CharlesNWells@einrot.com", "verified": true, "primary": true}}
+ {"model": "account.emailaddress", "pk": 1, "fields": {"user": 1, "email": "emilynconlan@einrot.com", "verified": true, "primary": true}},
+ {"model": "account.emailaddress", "pk": 2, "fields": {"user": 2, "email": "rosalvaahall@superrito.com", "verified": true, "primary": true}},
+ {"model": "account.emailaddress", "pk": 3, "fields": {"user": 3, "email": "charlesnwells@einrot.com", "verified": true, "primary": true}}
 ]

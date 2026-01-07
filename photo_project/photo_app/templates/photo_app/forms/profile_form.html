@@ -44,9 +44,13 @@
         <div class="row p-2">{{ form.dob.label }}</div>
         <div class="d-flex flex-row p-2"> {{ form.dob }}</div>
     </div>
-    <div class="input-group input-group-md">
-        {{ form.is_model }}{{ form.is_model.label }}
+    <div class="form-check">
+        {{form.is_model}}
+      <label class="form-check-label" for="{{form.is_model.auto_id}}">
+        {{ form.is_model.label }}
+      </label>
     </div>
+
     <div class="row d-flex flex-row input-group input-group-md p-2">
         {{ form.nickname.label }}
         {{ form.nickname }}

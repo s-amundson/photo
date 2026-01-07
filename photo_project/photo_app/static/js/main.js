@@ -7,6 +7,10 @@ $(document).ready(function(){
     $.cookieConsent({
         message: 'This website uses cookies. By using this website you consent to our use of these cookies.'
     });
+
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        console.log('popover');
 });
 
 async function get_links(user_id) {

@@ -15,6 +15,7 @@ urlpatterns = [
     path('image_carousel/', ImageCarouselView.as_view(), name='image_carousel'),
     path('image_carousel/<int:pk>/', ImageCarouselView.as_view(), name='image_carousel'),
     path('image_comment/<int:image_id>/', ImageCommentView.as_view(), name='image_comment'),
+    path('image_get/', ImageGetView.as_view(), name='image_get'),
     path('image_get/<int:image_id>/', ImageGetView.as_view(), name='image_get'),
     path('image_update/<int:image_id>/', UpdateImageView.as_view(), name='image_update'),
     path('link_category/add/', LinkCategoryCreateView.as_view(), name='link_category-add'),

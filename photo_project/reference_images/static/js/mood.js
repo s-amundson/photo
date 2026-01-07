@@ -3,6 +3,7 @@ $(document).ready(function() {
     $(".gallery").click(function () {
         $.get($(this).attr("url"), function(data, status){
             $("#gallery-images").html(data);
+            $("#gallery-images").find("img").addClass("gallery-image")
             image_event();
         });
     });
@@ -30,17 +31,17 @@ $(document).ready(function() {
             $("#reference-image-input-div").show();
         }
     });
-    $(".mood-image").click(function () {
+    $(".mood-image").each(function() {
         let selected_array = $("#id_mood_image").val();
         if ($.inArray("" + $(this).attr("img_id"), selected_array) >= 0) {
-            selected_array.pop($(this).attr("img_id"));
-            $(this).css("background-color", "#212529");
+            $(this).parents(".card").addClass("border-success")
         } else {
-            selected_array.push("" + $(this).attr("img_id"))
-            $(this).css("background-color", "#343a40");
+            $(this).parents(".card").removeClass("border-success")
         }
-        $("#id_mood_image").val(selected_array);
-    });
+    })
+
+    $(".mood-image").click(update_selection);
+
     $("#id_mood_image").change(function(){
         let selected_array = $("#id_mood_image").val();
         $(".mood-image").each(function(i, el ) {
@@ -72,4 +73,16 @@ function image_event() {
         $("#selected-image").html($(this).clone().width("500"));
         $("#reference-image-input-div").hide();
     });
+}
+function update_selection() {
+    let selected_array = $("#id_mood_image").val();
+    if ($.inArray("" + $(this).attr("img_id"), selected_array) >= 0) {
+        selected_array = $(selected_array).not([$(this).attr("img_id")])
+        $(this).parents(".card").removeClass("border-success")
+    } else {
+        selected_array.push("" + $(this).attr("img_id"))
+        // $(this).css("background-color", "#343a40");
+        $(this).parents(".card").addClass("border-success")
+    }
+    $("#id_mood_image").val(selected_array);
 }

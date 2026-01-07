@@ -6,6 +6,7 @@
         let url_gallery_form = "{% url 'photo_app:gallery_form' gallery.id %}";
         let url_image_carousel = "{% url 'photo_app:image_carousel' %}";
         let gallery_id = {{ gallery.id }};
+        let url_image_get = "{% url 'photo_app:image_get'%}"
     </script>
 {% endblock %}
 {% block title %}
@@ -67,6 +68,26 @@
         </button>
         <div id="div-add-gallery"></div>
     {% endif %}
+
+    <!-- Modal -->
+    <div class="modal fade modal-xl" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="imageModalLabel">Modal title</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
 {% endblock %}
 
 {% block right %}

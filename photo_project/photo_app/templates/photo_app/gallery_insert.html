@@ -1,27 +1,28 @@
 {% load static %}
 {% if object_list %}
     {% for image in object_list %}
-        <div class="col border align-items-center mx-auto">
+
+        <div class="card text-bg-dark mb-3" style="width: 18rem;" data-bs-toggle="popover" title="{{image.filename}}">
             {% if image_link %}
-                <a target="_blank" href="{% url 'photo_app:image' image.id %}">
+<!--                <a target="_blank" href="{% url 'photo_app:image' image.id %}" role="button">-->
+                <button type="button" class="btn img-btn" data-bs-toggle="modal" data-bs-target="#imageModal" img_id="{{ image.id }}">
             {% endif %}
-            <img class="gallery-image" src="{% url 'photo_app:thumb' image.id %}" img_id="{{ image.id }}"><br/>
-            {{ image.filename }}
+            <img class="card-img-top" src="{% url 'photo_app:thumb' image.id %}" img_id="{{ image.id }}">
             {% if image_link %}
-                </a>
-                <a class="pr-4" href="{% url 'photo_app:image_get' image.id %}" download="">
-                    <img src="{% static 'images/icons8-download-48.png' %}" width="24" height="24" alt="Download">
-                </a>
+<!--                </a>-->
+                </button>
             {% endif %}
-        <br/>Privacy Level: {{ image.privacy_level|capfirst }}
-        {% if user.is_staff %}
-            <br/>
+          <div class="card-body">
+
+            <p class="card-text">Privacy Level: {{ image.privacy_level|capfirst }}</p>
             <button class="btn btn-outline-primary btn-sm carousel-btn m-1" type="button" name="button"
                     img_id="{{ image.id }}" carousel="{{ image.carousel }}">
                 {% if image.carousel %} Remove from Carousel {% else %} Add to Carousel {% endif %}
             </button>
-        {% endif %}
-      </div>
+
+          </div>
+        </div>
+
     {% endfor %}
 
 {% else %}

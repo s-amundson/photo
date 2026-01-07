@@ -20,6 +20,12 @@ $(document).ready(function() {
         console.log($(this).attr("img_id"))
         post_carousel($(this))
     });
+    $(".img-btn").click(function() {
+        console.log($(this).attr("img_id"))
+        $("#imageModal").show();
+        let url =
+        $(".modal-body").html('<img src=' + url_image_get + $(this).attr("img_id") + ' class="img-fluid">')
+    });
 });
 
 function add_image(data) {
