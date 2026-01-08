@@ -8,7 +8,7 @@
 
 {% block main %}
     <div class="row" message_text="{{ message }}" hidden id="message"><h3>"{{ message }}"</h3></div>
-    <p>Select images:</p>
+    {% if form %}<p>Select images:</p>{% endif %}
     <div class="d-md-inline-flex flex-wrap mood-images">
 
         {% for mood_image in object_list %}
