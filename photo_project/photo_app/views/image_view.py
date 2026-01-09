@@ -59,9 +59,12 @@ class AddImageView(UserPassesTestMixin, FormView):
             record = form.save(commit=False)
             record.gallery = self.gallery
             record.image = form.cleaned_data['image']
+            record.privacy_level = form.cleaned_data['privacy_level']
             img.update_record(record)
         else:
-            form.save()
+            record = form.save()
+            record.privacy_level = form.cleaned_data['privacy_level']
+            record.save()
 
         return super().form_valid(form)
 
@@ -149,10 +152,15 @@ class ImageGetThumbView(ImageGetView):
 
 
 class ImageView(UserPassesTestMixin, FormView):
-    form_class = ImageForm
+    form_class = ImageUpdateForm
     model = Images
     template_name = 'photo_app/image.html'
     image = None
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = self.image
+        return kwargs
 
     def get_image_data(self):
         i = Image.open(self.image.image)

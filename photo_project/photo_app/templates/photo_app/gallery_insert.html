@@ -19,7 +19,11 @@
                     img_id="{{ image.id }}" carousel="{{ image.carousel }}">
                 {% if image.carousel %} Remove from Carousel {% else %} Add to Carousel {% endif %}
             </button>
-
+              {% if image_link %}
+                  <p>
+                    <a target="_blank" href="{% url 'photo_app:image' image.id %}">Image and Details</a>
+                  </p>
+              {% endif %}
           </div>
         </div>
 

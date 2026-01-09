@@ -39,13 +39,15 @@ class ImageForm(ModelForm):
         fields = required_fields + optional_fields
 
 
-class ImageUpdateForm(ImageForm):
+class ImageUpdateForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        for f in self.Meta.fields:
+            self.fields[f].required = False
+        self.fields['privacy_level'].initial = self.instance.privacy_level
 
     class Meta:
         model = Images
-        required_fields = []
-        optional_fields = ['raw_image', 'image', 'privacy_level']
-        fields = required_fields + optional_fields
+        fields = ['raw_image', 'image', 'privacy_level']
+

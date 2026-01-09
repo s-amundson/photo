@@ -45,7 +45,7 @@ class Img:
     def update_record(self, record):
         record.width, record.height = self.img.size
         name = record.image.name.split('/')
-        logging.info(name)
+        logger.info(name)
         record.filename = name[-1]
         record.thumb_width = 200
         record.orientation = self.exif.get(274, 0)
