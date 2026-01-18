@@ -1,9 +1,10 @@
-from PIL import Image
+from PIL import Image, ImageOps
 import PIL.ExifTags
+import io
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormView, UpdateView
-from django.http import HttpResponseForbidden, JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django_sendfile import sendfile
@@ -149,6 +150,38 @@ class ImageGetView(View):
 class ImageGetThumbView(ImageGetView):
     def get(self, request, image_id):
         return super().get(request, image_id, thumb=True)
+
+
+class ImageInstagramView(View):
+    def get(self, request, image_id):
+        obj = get_object_or_404(Images, pk=image_id)
+
+        if ImageCheckAuth().check_auth(obj, request.user):
+            logger.debug(obj.width)
+            # Open image from ImageField
+            img = Image.open(obj.image.file).convert("RGB")
+
+            # resize the image to fit keeping aspect ratio and add black borders
+            img_with_border = ImageOps.pad(
+                img,
+                (1080, 1350),
+                method=Image.LANCZOS,
+                # color="white",  # border color
+                centering=(0.5, 0.5),
+            )
+
+            # Save to memory
+            buffer = io.BytesIO()
+            img_with_border.save(buffer, format="JPEG", quality=95)
+            buffer.seek(0)
+
+            response = HttpResponse(buffer, content_type="image/jpeg")
+            response["Content-Disposition"] = (
+                f'attachment; filename="instagram_{obj.filename}.jpg"'
+            )
+
+            return response
+        return HttpResponseForbidden()
 
 
 class ImageView(UserPassesTestMixin, FormView):

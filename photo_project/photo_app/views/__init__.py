@@ -4,7 +4,7 @@ from .gallery_list_view import GalleryListView
 from .gallery_view import GalleryInsertView, GalleryView
 from .home_view import HomeView
 from .image_comment_view import ImageCommentView
-from .image_view import AddImageView, ImageCarouselView, ImageGetView, ImageGetThumbView, ImageView, UpdateImageView
+from .image_view import AddImageView, ImageCarouselView, ImageGetView, ImageGetThumbView, ImageInstagramView, ImageView, UpdateImageView
 from .links_views import LinkCategoryCreateView, LinkCategoryUpdateView, LinksFormView, LinksTableView
 from .model_release_view import ModelReleaseView, ModelReleaseUpdateView
 from .privacy_view import PrivacyView

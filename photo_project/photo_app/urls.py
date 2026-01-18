@@ -5,6 +5,7 @@ urlpatterns = [
     path('', HomeView.as_view(), name='index'),
     path('add_image/<int:gallery_id>/', AddImageView.as_view(), name='add_image'),
     path('about/', AboutView.as_view(), name='about'),
+    path('download_instagram/<int:image_id>/', ImageInstagramView.as_view(), name='download_instagram'),
     path('gallery_form/', GalleryFormView.as_view(), name='gallery_form'),
     path('gallery_form/<int:gallery_id>/', GalleryFormView.as_view(), name='gallery_form'),
     path('gallery_insert_view/<int:gallery_id>/', GalleryInsertView.as_view(), name='gallery_insert_view'),

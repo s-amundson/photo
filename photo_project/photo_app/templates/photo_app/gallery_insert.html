@@ -23,6 +23,14 @@
                   <p>
                     <a target="_blank" href="{% url 'photo_app:image' image.id %}">Image and Details</a>
                   </p>
+                <p>
+                    <a class="pr-4" href="{% url 'photo_app:download_instagram' image.id %}"
+                       download="instagram_{{image.filename}}.jpg"
+                       data-bs-toggle="popover" title="Image resized and padded for Instgram 1080x1350">
+                        <img src="{% static 'images/icons8-download-48.png' %}" width="24" height="24" alt="Download">
+                        Instagram Download
+                    </a>
+                </p>
               {% endif %}
           </div>
         </div>
