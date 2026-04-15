@@ -128,7 +128,7 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount.providers.facebook',
 
     'django_sendfile',
-    "sslserver",
+    # "sslserver",
 ]
 logger_default = {
         'handlers': ['console'],

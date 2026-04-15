@@ -3,7 +3,7 @@ import io
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils import timezone
-from PIL import Image
+from PIL import Image, ImageOps
 
 import logging
 logger = logging.getLogger(__name__)
@@ -22,7 +22,10 @@ class Img:
         self.taken = self.exif.get(306, None)
         if self.taken is not None:
             self.taken = timezone.datetime.strptime(self.taken, '%Y:%m:%d %H:%M:%S') #“2017:09:29 17:36:00”
-
+        try:
+            ImageOps.exif_transpose(self.img, in_place=True)
+        except Exception as e:
+            logger.error(e)
         self.img.thumbnail((200, 200))
         byte_arr = io.BytesIO()
         self.img.save(byte_arr, format=self.img.format)

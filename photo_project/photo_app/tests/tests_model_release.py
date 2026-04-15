@@ -220,6 +220,6 @@ class TestsModelRelease(TestCase):
         ml = Release.objects.all()
         self.assertEqual(len(ml), 2)
         ml = ml[1]
-        self.assertNotEquals(ml.file, None)
+        self.assertNotEqual(ml.file, None)
         self.assertEqual(ml.state, 'pending')
 
