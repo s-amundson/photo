@@ -28,8 +28,8 @@ services:
     command: gunicorn photo_project.wsgi:application --bind 0.0.0.0:8080 --workers=4
     env_file:
       - ../photo_project.env
-    ports:
-      - 8080:8080
+#    ports:
+#      - 8080:8080
     depends_on:
       - db
     volumes:
