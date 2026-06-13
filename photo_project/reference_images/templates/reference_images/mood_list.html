@@ -13,6 +13,7 @@
         <thead>
             <tr>
                 <th> ID </th>
+                <th> Title </th>
                 <th> UUID </th>
                 <th> Public </th>
             </tr>
@@ -21,6 +22,7 @@
             {% for mood in object_list %}
                 <tr>
                     <td>{{ mood.id }}</td>
+                    <td>{{ mood.title }}</td>
                     <td>
                         <a href="{% url 'reference:mood_page' mood.random_url %}">{{ mood.random_url }}</a>
                         <a href="{% url 'reference:mood_form' mood.id %}" class="btn btn-primary">Edit</a>

@@ -3,6 +3,7 @@ Django==6.0.3
 django-allauth==65.16.0
 django-ipware==7.0.1
 django-sendfile2==0.7.2
+django-bootstrap5==26.2
 #django-sslserver==0.22
 gunicorn==25.3.0
 phonenumbers==9.0.28

@@ -40,7 +40,8 @@ $(document).ready(function() {
         }
     })
 
-    $(".mood-image").click(update_selection);
+    // $(".mood-image").click(update_selection);
+    $(".mood-card").click(update_selection_card);
 
     $("#id_mood_image").change(function(){
         let selected_array = $("#id_mood_image").val();
@@ -52,6 +53,7 @@ $(document).ready(function() {
             }
         });
     });
+    $("#id_mood_image").parent().hide();
 });
 
 function hide_select_images(hide) {
@@ -74,15 +76,18 @@ function image_event() {
         $("#reference-image-input-div").hide();
     });
 }
-function update_selection() {
+
+function update_selection_card() {
     let selected_array = $("#id_mood_image").val();
-    if ($.inArray("" + $(this).attr("img_id"), selected_array) >= 0) {
-        selected_array = $(selected_array).not([$(this).attr("img_id")])
-        $(this).parents(".card").removeClass("border-success")
+    let image = $(this).find("img");
+
+    if ($.inArray("" + image.attr("img_id"), selected_array) >= 0) {
+        selected_array = $(selected_array).not([image.attr("img_id")])
+        image.parents(".card").removeClass("border-success")
     } else {
-        selected_array.push("" + $(this).attr("img_id"))
+        selected_array.push("" + image.attr("img_id"))
         // $(this).css("background-color", "#343a40");
-        $(this).parents(".card").addClass("border-success")
+        image.parents(".card").addClass("border-success")
     }
     $("#id_mood_image").val(selected_array);
 }

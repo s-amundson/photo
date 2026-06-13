@@ -24,3 +24,5 @@ class Mood(models.Model):
     mood_image = models.ManyToManyField(MoodImage)
     random_url = models.UUIDField(default=uuid.uuid4)
     is_public = models.BooleanField(default=True)
+    title = models.CharField(max_length=100, null=True, default=None)
+    description = models.TextField(null=True, blank=True)

@@ -10,7 +10,7 @@ class MoodForm(MyModelForm):
 
     class Meta(MyModelForm.Meta):
         model = Mood
-        required_fields = ['mood_image']
+        required_fields = ['title', 'description', 'mood_image']
         read_fields = []
         optional_fields = ['is_public']
         fields = required_fields + read_fields + optional_fields
